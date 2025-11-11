@@ -1,4 +1,4 @@
-# Teilaufgabe Schüler 1  
+# Teilaufgabe Wieser
 \textauthor{Wieser}
 
 ## Theoretische Grundlagen der Kernel-Treiberentwicklung

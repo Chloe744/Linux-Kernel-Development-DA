@@ -1,3 +1,11 @@
 # Einleitung
-Hier schreiben Sie eine Einleitung zu Ihrem Thema
-Das ist quasi der Problemaufriss
+
+Der Linux-Kernel ist eines der größten und erfolgreichsten Open-Source-Projekte weltweit. Seine Entwicklung basiert auf einem kollaborativen Modell, bei dem Entwicklerinnen und Entwickler aus unterschiedlichen Ländern, Organisationen und Unternehmen gemeinsam an einer frei zugänglichen Codebasis arbeiten. Dieses offene Entwicklungsmodell ermöglicht eine hohe Transparenz, langfristige Wartbarkeit sowie eine kontinuierliche Weiterentwicklung durch die Gemeinschaft. Open Source stellt damit eine wesentliche Grundlage für nachhaltige und gemeinschaftlich getragene Softwareentwicklung dar.
+
+Traditionell werden Linux-Kernelmodule und Gerätetreiber in der Programmiersprache C entwickelt. C erlaubt eine sehr systemnahe Programmierung und bietet hohe Performance, ist jedoch anfällig für Fehler wie Speicherlecks, Pufferüberläufe oder Race-Conditions. Solche Fehler sind im Kernelspace besonders kritisch, da sie potenziell das gesamte System destabilisieren oder sicherheitsrelevante Schwachstellen verursachen können.
+
+Als Reaktion auf diese Problematik wurde im Rahmen des Rust-for-Linux-Projekts die Programmiersprache Rust schrittweise in den Linux-Kernel integriert. Rust verfolgt einen modernen Ansatz zur Speicher- und Thread-Sicherheit und zielt darauf ab, viele Fehlerklassen bereits zur Compile-Zeit zu verhindern. Nach einer mehrjährigen Einführungs- und Evaluierungsphase wurde Rust im Dezember 2025 offiziell als stabiler Bestandteil des Linux-Kernels akzeptiert und ist damit nicht länger ausschließlich als experimentelles Feature zu betrachten [@thenewstack_rust_2025; @heise_rust_kernel_2025].
+
+Die Einführung von Rust im Linux-Kernel war innerhalb der Open-Source-Community von intensiven und teilweise kontroversen Diskussionen begleitet. Während einige Kernel-Maintainer den zusätzlichen Wartungsaufwand sowie die Koexistenz mehrerer Programmiersprachen kritisch betrachteten, betonten andere die langfristigen Vorteile in Bezug auf Sicherheit, Codequalität und Wartbarkeit. Diese Debatten verdeutlichen, dass technologische Entscheidungen im Open-Source-Umfeld nicht isoliert getroffen werden, sondern das Ergebnis kollektiver Aushandlungsprozesse innerhalb der Entwicklergemeinschaft sind.
+
+Diese Diplomarbeit beschäftigt sich mit der Untersuchung und Analyse der Linux-Treiberentwicklung. Anhand zweier funktional identischer Kernelmodule, eines in C und eines in Rust, sollen Unterschiede im Entwicklungsprozess, in der Code-Struktur sowie in sicherheitsrelevanten Aspekten systematisch untersucht und verglichen werden.

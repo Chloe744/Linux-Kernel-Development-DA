@@ -151,7 +151,7 @@ impl Drop for HelloRust {
 - **`[no_std]` (Rust):** Kompilieren ohne Rust-Standardbibliothek; Nutzung von `core`/`alloc`.  
 - **`Arc<T>` / `Box<T>` (Rust):** Referenzgezählte bzw. besitzende Zeigerarten mit definierten Lebensdauern.  
 - **`Result<T,E>` / `Option<T>` (Rust):** Typisierte Fehler-/Optionalitätsbehandlung statt globaler Errorcodes.  
-- **Netlink:** Socket-basierte Schnittstelle für Kernel↔Userspace-Kommunikation (z. B. Netzwerk-Konfiguration).
+- **Netlink:** Socket-basierte Schnittstelle für Kernel Userspace-Kommunikation (z. B. Netzwerk-Konfiguration).
 
 ---
 

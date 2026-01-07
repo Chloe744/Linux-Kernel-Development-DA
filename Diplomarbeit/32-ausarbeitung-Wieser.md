@@ -31,7 +31,7 @@ Seit Kernel 6.1 ist Rust als **experimentelle** Zweitsprache im Mainline-Kernel 
 
 #### Herausforderungen  
 - **Unvollständige Abdeckung** aller Kernel-Subsysteme  
-- **Toolchain-Voraussetzungen** (`CONFIG_RUST=y`, `rustc` nightly, `#![no_std]`)  
+- **Toolchain-Voraussetzungen** (`CONFIG_RUST=y`, `rustc` nightly, `[no_std]`)  
 - **Ökosystem/Prozess**: Integration in C-dominierte Maintainer-Workflows
 
 ---
@@ -67,7 +67,7 @@ clean:
 
 ### Besonderheiten beim Rust-Build  
 - Kein `cargo` im Kernel; stattdessen **KBuild ruft `rustc` (nightly)** auf  
-- **`#![no_std]`**, Nutzung von `core`/`alloc` (Kernel-Allocator)  
+- **`[no_std]`**, Nutzung von `core`/`alloc` (Kernel-Allocator)  
 - Rust-Module über **Makros/Bindings** (z. B. `module!`, `kernel::printk!`)  
 - Templates/Guides im *Rust-for-Linux*-Projekt
 
@@ -148,7 +148,7 @@ impl Drop for HelloRust {
 - **Spinlock / Mutex / RCU:** Synchronisationsmechanismen für nebenläufigen Kernelcode.  
 - **Ownership / Borrowing / Lifetimes (Rust):** Regeln, die Speicher-/Aliasierungsfehler zur Compile-Zeit vermeiden.  
 - **`unsafe` (Rust):** Markierung für Operationen außerhalb der Sprachgarantien (z. B. rohe Pointer, HW-Zugriff).  
-- **`#![no_std]` (Rust):** Kompilieren ohne Rust-Standardbibliothek; Nutzung von `core`/`alloc`.  
+- **`[no_std]` (Rust):** Kompilieren ohne Rust-Standardbibliothek; Nutzung von `core`/`alloc`.  
 - **`Arc<T>` / `Box<T>` (Rust):** Referenzgezählte bzw. besitzende Zeigerarten mit definierten Lebensdauern.  
 - **`Result<T,E>` / `Option<T>` (Rust):** Typisierte Fehler-/Optionalitätsbehandlung statt globaler Errorcodes.  
 - **Netlink:** Socket-basierte Schnittstelle für Kernel↔Userspace-Kommunikation (z. B. Netzwerk-Konfiguration).

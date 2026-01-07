@@ -61,7 +61,7 @@ clean:
 ### Buildprozess eines Moduls
 1. Präprozessor  
 2. Kompilation  
-3. Verlinkung → `.ko` (Kernel Object)  
+3. Verlinkung -> `.ko` (Kernel Object)  
 4. (optional) Signierung  
 5. Laden/Entladen mit `insmod`/`modprobe`, Status via `lsmod`, `modinfo`, Logs via `dmesg`
 

@@ -1,10 +1,11 @@
 # Zielsetzung
-Die Zielsetzung beschreibt das allgemeine Ziel der Diplomarbeit. Dabei sollten folgende Themen behandelt werden:
 
-* Was ist der aktuelle Stand in der Firma / am Projekt an dem Sie arbeiten?
-* Was ist die Motiavation hinter dieser Arbeit?
-* Was möchten Sie erreichen ?
-* Was möchten Sie nicht erreichen ? (Nicht-Ziele)
-* Was ändert sich wenn Sie diese Arbeit schreiben ?
+Der aktuelle Stand im Projekt ist durch eine wachsende Bedeutung von Linux als Open-Source-Betriebssystem geprägt. Die Entwicklung von Linux-Gerätetreibern erfolgt traditionell in der Programmiersprache C, welche zwar eine hohe Kontrolle über Hardware und Systemressourcen ermöglicht, jedoch auch anfällig für typische Fehler in der Speicher- und Nebenläufigkeitsverwaltung ist. Parallel dazu wurde mit Rust eine moderne Programmiersprache in den Linux-Kernel integriert, die neue Ansätze zur Erhöhung von Sicherheit und Codequalität verfolgt.
 
-Die konkreten Ausarbeitungen sind in den n- Unterfiles (je Schüler eines) abzubilden. 
+Die Motivation für diese Diplomarbeit liegt im Interesse an Open-Source-Software und an systemnaher Programmierung. Insbesondere soll nachvollzogen werden, wie sich der Entwicklungsprozess von Linux-Treibern gestaltet und welche Unterschiede sich durch den Einsatz verschiedener Programmiersprachen ergeben. Ziel ist es, sowohl theoretische Grundlagen als auch praktische Aspekte der Linux-Kernel- und Treiberentwicklung zu verstehen und nachvollziehbar darzustellen.
+
+Das Hauptziel dieser Arbeit ist die Untersuchung und der Vergleich der Linux-Treiberentwicklung anhand zweier funktional identischer Kernelmodule. Eines dieser Module wird in der Programmiersprache C und das andere in Rust implementiert. Auf diese Weise sollen Unterschiede im Entwicklungsprozess, in der Code-Struktur, in der Speicherverwaltung sowie in sicherheitsrelevanten Aspekten analysiert werden. Zusätzlich sollen zentrale Konzepte der Linux-Kernelentwicklung, wie der Unterschied zwischen Kernelspace und Userspace, typische Fehlerquellen und bewährte Vorgehensweisen, dokumentiert werden.
+
+Nicht Ziel dieser Arbeit ist die Entwicklung eines komplexen oder produktionsreifen Hardwaretreibers für den realen Einsatz. Ebenso ist es nicht vorgesehen, vollständige oder herstellerspezifische Hardwareunterstützung zu implementieren. Der Fokus liegt vielmehr auf einem didaktischen und vergleichenden Ansatz, der die Grundlagen der Treiberentwicklung vermittelt.
+
+Durch die Durchführung dieser Arbeit soll ein fundiertes Verständnis für die Architektur des Linux-Kernels und die Entwicklung von Kernelmodulen erlangt werden. Darüber hinaus soll aufgezeigt werden, inwiefern Rust als moderne Programmiersprache eine sinnvolle Ergänzung zur bestehenden C-basierten Treiberentwicklung darstellen kann. Die gewonnenen Erkenntnisse sollen als Grundlage für weiterführende Arbeiten im Bereich der System- und Kernelprogrammierung dienen.

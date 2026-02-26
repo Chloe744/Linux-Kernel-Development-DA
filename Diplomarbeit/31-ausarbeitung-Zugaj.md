@@ -104,14 +104,14 @@ struct file_operation fops = {
 
 Wenn ein Character Gerät erreicht werden will, muss eine Geräte File in /dev sein, diese Dateien sind jedoch abstrakt, offen und operieren in Kernel Space. Um einen fertigen Treiber ins System einzufügen, muss es erst in den Kernel registriert werden:
 
-```{caption="Gerät-Registrierung - register_chrdev" .c}
+```{caption="Gerät-Registrierung - register\_chrdev" .c}
 int register_chrdev(unsigned int major, const char *name, 
 struct file_operations *fops);
 ```
 
 Damit die erstellte Geräte Datei alle "Minor" Nummern verwendet gibt es zwei bessere Interfaces die sich nur darin unterscheiden, ob man die "Major" Nummer kennt oder eine dynamisch zugewiesene haben will:
 
-```{caption="Gerät-Registrierung - register_chrdev_region & alloc_chrdev_region" .c}
+```{caption="Gerät-Registrierung - register\_chrdev\_region \& alloc\_chrdev\_region" .c}
 int register_chrdev_region(dev_t from, unsigned count,
 const char *name); 
 
@@ -139,7 +139,7 @@ Der Linux Kernel hat einen sehr strikten Coding Style, welcher in dem offizielle
 
 ```{caption="Coding Style - Einrückungen" .c}
 if(i == 1){
-        printf("i ist 1\n"); <-- 8 Zeichen abstand statt 4.
+        printf("i ist 1\n"); // <-- 8 Zeichen abstand statt 4.
         return i;
 }
 ```
@@ -148,11 +148,11 @@ if(i == 1){
 
 ```{caption="Coding Style - Klammern bei Funktionen" .c}
 static int myIntFunktion(int var)
-{ <--
+{ // <--
         //code 
 }
 
-static struct my_struct ={ <--
+static struct my_struct ={ // <--
         //code
 }
 ```

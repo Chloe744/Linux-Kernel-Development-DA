@@ -57,7 +57,7 @@ Treiber sind ein integraler Bestandteil des Systems. Systemaufrufe aus dem Users
 
 Das Linux Kernel Buildsystem basiert auf `make` und dem KBuild System. Externe Module, die nicht direkt in den Kernel Quellcode integriert sind, werden als Out of Tree Module gegen die installierten Kernel Header und die passende Kernel Konfiguration gebaut [@docs_kbuild_external_modules].
 
-```makefile
+```text
 obj-m += hello_rust.o
 
 all:
@@ -79,7 +79,7 @@ Rust Module werden im Kernel nicht mit Cargo gebaut, sondern über KBuild. Der R
 
 ### Rust for Linux Projekt
 
-Das Rust for Linux Projekt verfolgt das Ziel, Kernelmodule und Treiber sicherer zu implementieren, ohne die Kontrolle und Performance systemnaher Entwicklung zu verlieren [@docs_kernel_rust_index] [@docs_kernel_rust_general_info] [@docs_kernel_rust_quickstart]. Rust war innerhalb des Kernels eine Lange Zeit im Experimentellen Zustand, wie es bereits C++ vorher war. Mit Ende 2025 hat Rust jedoch offiziellen Support im Linux Kernel erhalten und ist damit auch die erste weitere Programmiersprache der dies gelungen ist [thenewstack_rust_2025] [@heise_rust_kernel_2025] [@lwn_rust_debate_2025].
+Das Rust for Linux Projekt verfolgt das Ziel, Kernelmodule und Treiber sicherer zu implementieren, ohne die Kontrolle und Performance systemnaher Entwicklung zu verlieren [@docs_kernel_rust_index] [@docs_kernel_rust_general_info] [@docs_kernel_rust_quickstart]. Rust war innerhalb des Kernels eine Lange Zeit im Experimentellen Zustand, wie es bereits C++ vorher war. Mit Ende 2025 hat Rust jedoch offiziellen Support im Linux Kernel erhalten und ist damit auch die erste weitere Programmiersprache der dies gelungen ist [@thenewstack_rust_2025] [@heise_rust_kernel_2025] [@lwn_rust_debate_2025].
 
 ### Aufbau eines Rust Kernelmoduls
 

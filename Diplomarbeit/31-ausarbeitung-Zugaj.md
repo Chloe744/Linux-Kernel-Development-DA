@@ -27,7 +27,7 @@ Damit ein Modul funktioniert und richtig geladen werden kann, muss es mindestens
 
 Um die Kompilierung von den Quelltextdateien zu Programmmodulen bzw. Objekten zu steuern und nach Belieben anzupassen, verwendet man ein Makefile. Mit Makefile kann eine beliebige Anzahl an Quelltextdateien kompilieren aber auch miteinander zu einem einzelnen Programm linken, das alles funktioniert mit den sogenannten Targets, welche mit einem Doppelpunkt sichtbar markiert sind. Sie zeigen, welche Dateien kompiliert und miteinander verbunden werden sollen, da man auch ein Objekt aus mehreren Quelltextdateien erstellen kann.
 
-```{caption="Makefile - Grundstruktur" .make}
+```makefile
 obj_name := sourcefile_name.o
 
 [target]: #dependent   
@@ -40,7 +40,7 @@ Wichtig bei Makefiles zu beachten ist, dass statt Abständen Tabs verwendet werd
 
 Damit die Module fehlerfrei funktionieren, muss man die benötigten Header Files für den Kernel installieren. Die Header Files sind im Grunde Interfaces, welche Funktionen definieren, damit der Compiler weiß, ob diese richtig auf Basis der Signatur benutzt werden. Diese Header Files werden dann direkt als Erweiterung für den Kernel installiert, auf Ubuntu funktioniert das mit den Commands:
 
-```{caption="Installation der Kernel Header Files" .bash}
+```bash
 sudo apt-get update 
 apt-cache search linux-headers-`uname -r`
 sudo apt-get install linux-headers-`uname -r`
@@ -60,7 +60,7 @@ In Linux teilen die meisten Treibermodule einen vorgesehenen Aufbau an Funktione
 
 Treiber Dateien oder wie in Linux genannt Driver Files repräsentieren je eine Art von Hardware, die mit dem Betriebssystem interagieren will bzw. kann, diese Driver Files stellen die Mittel zur Verfügung, damit mit der Hardware kommuniziert werden kann. Driver Files unter Linux befinden sich im /dev Folder und sind wie folgt aufgebaut:
 
-```{caption="Beispiel eines Device Files in /dev" .bash}
+```bash
 brw-rw----  1 root  disk  8, 1 Apr  9  2025 /dev/sda1
 ```
 
@@ -74,7 +74,7 @@ Die Struktur der Datei Operatoren (File operators) ist definiert unter (include/
 
 Durch gcc (Gnu Compiler Collection) Erweiterungen ist es heutzutage deutlich einfacher, etwas zu der Struktur zuzuweisen:
 
-```{caption="File Operations Struktur - gcc-Erweiterung" .c}
+```c
 struct file_operation fops = {
   read: device_read, 
 
@@ -88,7 +88,7 @@ struct file_operation fops = {
 
 Der Kompatibilität halber ist es empfohlen, dass die "fops" Instanz so implementiert werden soll:
 
-```{caption="File Operations Struktur - empfohlene Implementierung" .c}
+```c
 struct file_operation fops = {
   .read = device_read, 
 
@@ -104,14 +104,14 @@ struct file_operation fops = {
 
 Wenn ein Character Gerät erreicht werden will, muss eine Geräte File in /dev sein, diese Dateien sind jedoch abstrakt, offen und operieren in Kernel Space. Um einen fertigen Treiber ins System einzufügen, muss es erst in den Kernel registriert werden:
 
-```{caption="Gerät-Registrierung - register\_chrdev" .c}
+```c
 int register_chrdev(unsigned int major, const char *name, 
 struct file_operations *fops);
 ```
 
 Damit die erstellte Geräte Datei alle "Minor" Nummern verwendet gibt es zwei bessere Interfaces die sich nur darin unterscheiden, ob man die "Major" Nummer kennt oder eine dynamisch zugewiesene haben will:
 
-```{caption="Gerät-Registrierung - register\_chrdev\_region \& alloc\_chrdev\_region" .c}
+```c
 int register_chrdev_region(dev_t from, unsigned count,
 const char *name); 
 
@@ -137,7 +137,7 @@ Der Linux Kernel hat einen sehr strikten Coding Style, welcher in dem offizielle
 
 **Einrückungen** sind 8 Zeichen lang damit man sie gut erkennen kann.
 
-```{caption="Coding Style - Einrückungen" .c}
+```c
 if(i == 1){
         printf("i ist 1\n"); // <-- 8 Zeichen abstand statt 4.
         return i;
@@ -146,7 +146,7 @@ if(i == 1){
 
 **Funktionen** haben die Öffnungsklammer am Anfang der nächsten Linie und alle nicht-Funktionen haben sie am Ende der gleichen Zeile nach dem Vorbild von Kernighan und Ritchie.
 
-```{caption="Coding Style - Klammern bei Funktionen" .c}
+```c
 static int myIntFunktion(int var)
 { // <--
         //code 
@@ -159,7 +159,7 @@ static struct my_struct ={ // <--
 
 **Typedefs** sollten zur Verständlichkeit des Codes nicht verwendet werden!
 
-```{caption="Coding Style - Typedefs" .c}
+```c
 vps_t a; //schlecht
 
 struct virtual_container *a; //in ordnung
@@ -226,7 +226,7 @@ Alle unter dem Standard-Ziel "all:" stehenden Commands werden ausgelöst sobald 
 
 Ein Problem was bei mir auftrat war, dass mein Kernel mit GNU Compiler Collection Version 12 (gcc-12) installiert wurde und daher versucht, den gleichen Compiler für Module zu benutzen. Die einfachste Lösung ist es, die gcc-Version die vom Kernel benutzt wird zu installieren:
 
-```{caption="Installation der passenden gcc-Version" .bash}
+```bash
 sudo apt update
 sudo apt install gcc-12
 ```

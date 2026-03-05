@@ -57,7 +57,7 @@ Treiber sind ein integraler Bestandteil des Systems. Systemaufrufe aus dem Users
 
 Das Linux Kernel Buildsystem basiert auf `make` und dem KBuild System. Externe Module, die nicht direkt in den Kernel Quellcode integriert sind, werden als Out of Tree Module gegen die installierten Kernel Header und die passende Kernel Konfiguration gebaut [@docs_kbuild_external_modules].
 
-```makefile
+```text
 obj-m += hello_rust.o
 
 all:

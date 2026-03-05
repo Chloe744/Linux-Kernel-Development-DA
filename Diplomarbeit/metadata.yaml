@@ -21,7 +21,7 @@ da-author:
 - vorname: Moritz 
   nachname: Zugaj
   klasse: 5AHWIN
-  thema: Theoretische Ausarbeitung der Linux Kernel Developments und die entwicklung eines Test Treibers in Rust
+  thema: Theoretische Ausarbeitung der Linux Kernel Developments und die entwicklung eines Test Treibers in C
   ki-tools:
   - name: 
     zweck: 

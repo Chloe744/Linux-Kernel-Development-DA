@@ -136,6 +136,272 @@ Rust erzwingt eine explizite Behandlung von Besitz und Lebensdauern. Das reduzie
 
 Fehlerbehandlung erfolgt über typisierte Rückgabewerte, wodurch Fehlersituationen sichtbar bleiben. Synchronisationsmechanismen sind so gestaltet, dass fehlerhafte Nebenläufigkeit erschwert wird [@docs_kernel_rust_general_info] [@lwn_rust_debate_2025].
 
+## Setup, Kernel-Build und Rust-Modul-Entwicklung
+
+### Ziel des praktischen Teils
+
+Im praktischen Teil dieser Arbeit wird untersucht, wie sich die Entwicklung eines einfachen Linux Kernel Treibers in der Programmiersprache **Rust** im Vergleich zu **C** gestaltet.
+
+Dazu wurden zwei funktional identische Kernelmodule entwickelt:
+
+- ein Character Device Treiber in **C**
+- ein Character Device Treiber in **Rust**
+
+Beide Treiber implementieren dieselben grundlegenden Funktionen:
+
+- open
+- release
+- read
+- write
+
+Der Fokus liegt dabei nicht auf der Entwicklung eines komplexen Hardwaretreibers, sondern auf der praktischen Untersuchung des Entwicklungsprozesses, der Buildumgebung sowie der Toolchain, die für Programmieren im Linux Kernel erforderlich ist.
+
+Da mein Projektpartner Ubuntu Linux verwendete, entschied ich mich bewusst für eine andere Distribution als Entwicklungsumgebung. Da Arch und auf Arch basierende Distributionen wie Manjaro meist sehr aktuelle Versionen des Kernel oder Entwicklungswerkzeugen besitzt entschied ich mir dafür.
+
+Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt.
+
+## Besonderheiten von Rust im Linux Kernel
+
+Im Vorfeld ist es wichtig zu verstehen, dass Rust im Linux Kernel nicht als vollständig eigenständige Sprache agiert. Rust Code im Kernel ist eng mit der bestehenden C Infrastruktur verbunden. Viele Funktionen und Schnittstellen, die von Rust Code genutzt werden, sind weiterhin in C implementiert.
+
+Rust Code greift dabei häufig über sogenannte *Foreign Function Interfaces (FFI)* auf bestehende Kernel Funktionen zu.
+
+Damit Rust auf C Code zugreifen kann, müssen FFI Bindings erzeugt werden. Diese werden automatisch mit dem Tool *bindgen* generiert.
+
+bindgen analysiert C Headerdateien und erzeugt daraus entsprechende Rust Strukturen und Funktionssignaturen.
+
+Für diesen Prozess wird zusätzlich die *LLVM / Clang* Toolchain benötigt, da bindgen intern auf *libclang* basiert.
+
+## Vorbereitung der Entwicklungsumgebung
+
+Bevor Kernelmodule entwickelt werden können, muss zunächst geprüft werden, welche Kernelversion auf dem System läuft.
+
+```
+uname -r
+6.18.12-1-MANJARO
+```
+
+Dieser Befehl gibt die aktuell laufende Kernelversion aus.
+
+Kernelmodule werden üblicherweise gegen den *Buildtree* des aktuell laufenden Kernels kompiliert.
+
+Dieser befindet sich normalerweise unter:
+
+```
+/lib/modules/$(uname -r)/build
+```
+
+`$()` wird im Terminal zur Befehlsausführung innerhalb eines Strings verwendet. Der darin stehende Befehl wird ausgeführt und dessen Ausgabe an dieser Stelle eingefügt.
+
+## Entscheidung für einen eigenen Kernel Build
+
+Bei der Untersuchung der standardmäßig installierten Kernelkonfiguration von Manjaro zeigte sich zunächst, dass Rust grundsätzlich vom Kernel unterstützt wird. In der Konfiguration war die Option `HAVE_RUST` bereits auf `y` gesetzt. Diese Option wird automatisch aktiviert, wenn die verwendete Architektur Rust grundsätzlich unterstützt.
+
+Gleichzeitig war die eigentliche Kerneloption `RUST`, welche die Rust-Unterstützung im Kernelbuild aktiviert, auf `n` gesetzt. Das bedeutet, dass Rust zwar theoretisch von der Architektur unterstützt wird, aber im konkreten Kernelbuild nicht aktiviert war.
+
+Dadurch konnten Rust-basierte Kernelkomponenten oder module nicht kompiliert werden, obwohl entsprechende Einträge in der Konfiguration sichtbar waren. Zusätzlich hängen mehrere Rust bezogene Optionen im Kernel von weiteren Voraussetzungen ab, wie einer kompatiblen Toolchain und korrekt gesetzten Abhängigkeiten innerhalb der Kernelkonfiguration.
+
+Aus diesem Grund habe ich mich entschieden, den Linux Kernel selbst zu kompilieren. Dadurch konnte ich die Kernelkonfiguration vollständig kontrollieren und Rustunterstützung gezielt aktivieren.
+
+## Eigenes Kernel kompilieren
+```
+git clone https://github.com/torvalds/linux.git
+```
+Mit `git clone` wird der Linux Kernel Quellcode von GitHub heruntergeladen.
+
+Um eine stabile Ausgangsbasis zu erhalten, kann die Konfiguration des aktuell laufenden Kernels übernommen werden.
+
+```
+/proc/config.gz
+```
+
+Diese Datei enthält die Konfiguration des aktuell laufenden Kernels.
+
+Die Konfiguration kann mit folgendem Befehl extrahiert werden:
+
+```
+zcat /proc/config.gz > .config
+```
+
+Damit wird eine `.config` Datei erzeugt, die als Grundlage für den eigenen Kernel Build verwendet werden kann.
+
+## Kernelkonfiguration anpassen
+
+Die Kernelkonfiguration kann anschließend angepasst werden:
+
+```
+make menuconfig
+```
+
+Dieser Befehl öffnet eine textbasierte Konfigurationsoberfläche.
+
+Hier können verschiedene Kerneloptionen aktiviert oder deaktiviert werden.
+
+Um Rust-Unterstützung zu aktivieren, muss die Option `RUST` auf `y` gesetzt werden. Zusätzlich sollten alle damit verbundenen Optionen überprüft und entsprechend angepasst werden.
+
+## Rust Verfügbarkeit prüfen
+
+Der Kernel bietet einen speziellen Test, um zu überprüfen, ob die Rust Toolchain korrekt erkannt wird.
+
+```
+make LLVM=1 rustavailable
+```
+
+Dieser Befehl prüft:
+
+- rustc (rust compiler) Version
+- bindgen Verfügbarkeit
+- clang / llvm Installation
+- rust source Komponenten
+
+Während dieser Überprüfung traten bei mir verschiedene Fehlermeldungen auf.
+
+## Rust Toolchain Setup
+
+Für die Arbeit mit Rust im Linux Kernel wird eine funktionierende Rust Toolchain benötigt.
+
+Das umfasst:
+
+- rustc
+- cargo
+- rust-src
+- bindgen
+
+Die aktuelle Rust Version kann mit folgendem Befehl geprüft werden:
+
+```
+rustc --version
+1.74.1
+```
+
+Da bestimmte Kernelversionen nur mit bestimmten Rust Versionen kompatibel sind, wird rustup verwendet, um eine passende Rust Version festzulegen.
+
+```
+rustup override set 1.x.x
+```
+
+Dieser Befehl legt fest, dass im aktuellen Verzeichnis diese Rust Version verwendet wird.
+
+Zusätzlich muss die Rust Standardbibliothek als Source Code verfügbar sein.
+
+```
+rustup component add rust-src
+```
+
+Ohne diese Komponente können bestimmte Kernel Builds nicht durchgeführt werden.
+
+## bindgen
+
+Die jetzige bindgen Version kann mit folgendem Befehl geprüft werden:
+
+```
+bindgen --version
+0.59.2
+```
+
+Falls bindgen über cargo installiert wurde, muss der Cargo Binary Pfad zum PATH hinzugefügt werden.
+
+```
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
+## Kernel Build
+
+Nachdem alle Voraussetzungen erfüllt waren, konnte der Kernel Build gestartet werden.
+
+```
+make LLVM=1 -j$(nproc)
+```
+
+
+Der Befehl `make` startet den Kompilierungsprozess anhand der im Projekt enthaltenen Makefiles. Der Parameter `LLVM=1` sorgt dafür, dass clang / llvm für den Build verwendet werden. Der Parameter `-j$(nproc)` startet einen parallelen Build mit allen verfügbaren CPU Kernen.
+
+## Kernel Installation
+
+Nach erfolgreichem Build kann der Kernel installiert werden.
+
+```
+sudo make modules_install
+sudo make install
+```
+
+Diese Befehle installieren:
+
+- Kernel Module
+- Kernel Image
+- Bootloader Einträge
+
+Nach einem Neustart kann geprüft werden, ob der neue Kernel aktiv ist.
+
+```
+uname -r
+7.0.0-rc1-MANJARO
+```
+Der neue Kernel erschien aber nicht direkt im Bootmenü. Ich musste den Bootloader manuell aktualisieren, damit der neue Kernel als Startoption verfügbar war. Nach der Aktualisierung konnte der neue Kernel ausgewählt und gestartet werden.
+
+## Externe Kernelmodule kompilieren
+
+Kernelmodule können außerhalb des Kernel Source Trees entwickelt werden.
+
+Dies wird als **Out-of-tree Build** bezeichnet.
+
+```
+make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
+```
+
+Der Parameter `-C /lib/modules/$(uname -r)/build` weist `make` an, zunächst in das Buildverzeichnis des aktuell laufenden Kernels zu wechseln. Dort befindet sich der Kernel Buildtree mit den benötigten Makefiles und Konfigurationsdateien.
+
+Mit `M=$(pwd)` wird dem Kernel Buildsystem mitgeteilt, dass sich der Quellcode des zu kompilierenden Moduls im aktuellen Verzeichnis befindet (`pwd` gibt den aktuellen Ordner aus).
+
+Der Parameter `modules` gibt schließlich an, dass nur die in diesem Verzeichnis enthaltenen Kernelmodule gebaut werden sollen und nicht der komplette Kernel.
+
+
+## Aufgetretene Probleme
+
+Während der praktischen Umsetzung traten mehrere Probleme auf.
+Diese standen hauptsächlich im Zusammenhang mit der Rust Toolchain.
+
+### bindgen nicht gefunden
+
+Ein häufiger Fehler war:
+
+```
+Rust bindings generator 'bindgen' could not be found
+```
+
+Dies bedeutet, dass bindgen nicht installiert oder nicht im PATH vorhanden ist.
+
+### Rust Versionskonflikte
+
+Mehrfach traten Konflikte zwischen Kernelversion und rustc Version auf.
+
+```
+rustc is too old
+rustc is too new
+```
+
+Dies zeigt, dass bestimmte Kernelversionen nur mit bestimmten Rust Versionen getestet wurden.
+
+### Unknown unstable option
+
+```
+unknown unstable option: no-jump-tables
+```
+
+Dieser Fehler entsteht, wenn der Kernel Buildprozess Rust Compiler Optionen verwendet, die von der aktuell installierten Rust Version nicht unterstützt werden.
+
+### Weitere Compiler Probleme
+
+Zusätzlich traten Fehler im Zusammenhang mit:
+
+- libbpf
+- BTF Debug Informationen
+- C23 Compiler Optionen
+
+auf.
+
+Diese Fehler entstehen häufig durch Unterschiede in Compiler Versionen oder Build Flags.
+
 ## Begriffs und Abkürzungsverzeichnis
 
 *LKM*  
@@ -174,4 +440,10 @@ Fehler in nebenläufigen Programmen, bei dem mehrere Threads gleichzeitig auf di
 *Adressraum*  
 Bereich von Speicheradressen, den ein Programm oder der Kernel verwenden kann. Im Userspace hat jeder Prozess einen eigenen virtuellen Adressraum. Im Kernelspace teilen sich Kernel und Treiber einen gemeinsamen Adressraum mit privilegiertem Zugriff.
 
+LLVM (*Low Level Virtual Machine*) ist eine modulare Compilerinfrastruktur, die aus verschiedenen Komponenten besteht und von vielen modernen Programmiersprachen verwendet wird. LLVM stellt unter anderem Backend-Technologien bereit, die für die Codeoptimierung und die Generierung von Maschinencode zuständig sind.
 
+*Clang* ist ein Frontend für die Programmiersprachen C, C++ und Objective-C, das auf LLVM aufbaut. Es übernimmt das Parsen und Analysieren von Quellcode und übersetzt diesen in eine Zwischendarstellung, die anschließend von LLVM weiter verarbeitet wird.
+
+*libclang* ist eine Bibliothek, die Funktionen von Clang als Programmierschnittstelle bereitstellt. Werkzeuge wie *bindgen* können damit C-Headerdateien analysieren und deren Strukturen automatisiert in andere Formate – in diesem Fall Rust-Bindings – übersetzen.
+
+*Buildtree* bezeichnet im Kontext des Linux-Kernels das Verzeichnis, das alle für den Kompilierungsprozess benötigten und während des Builds erzeugten Dateien enthält. Dazu gehören beispielsweise generierte Headerdateien, Objektdateien, Konfigurationsdateien sowie Makefiles und weitere Buildskripte. Der Buildtree stellt somit die Arbeitsumgebung des Kernel-Buildsystems dar. Bei der Entwicklung externer Kernelmodule wird in der Regel der Buildtree des aktuell laufenden Kernels verwendet, um sicherzustellen, dass das Modul mit derselben Kernelkonfiguration und denselben Headerdateien kompiliert wird wie der Kernel selbst. Dieser befindet sich üblicherweise im Verzeichnis `/lib/modules/<kernelversion>/build`.

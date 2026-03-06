@@ -1,4 +1,3 @@
-
 # Zusammenfassung
 \textauthor{Amadeo Wieser}
 Im Rahmen dieser Diplomarbeit wurde die Entwicklung von Linux-Kernel-Treibern untersucht und analysiert. Ausgangspunkt der Arbeit war die Frage, inwiefern sich die klassische Treiberentwicklung in der Programmiersprache C von einer Implementierung in der modernen Systemsprache Rust unterscheidet. Dabei sollte nicht nur ein theoretischer Vergleich erfolgen, sondern auch eine praktische Umsetzung, um den Entwicklungsprozess sowie mögliche Herausforderungen nachvollziehen zu können.

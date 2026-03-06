@@ -3,7 +3,7 @@
 
 ## Theoretische Grundlagen der Kernel Treiberentwicklung
 
-### Einführung
+#### Einführung
 
 Der Kernel ist das Herzstück eines Betriebssystems. Er verwaltet alle zentralen Elemente wie Hardware, Prozesse, Speicher und stellt grundlegende Dienste bereit.
 
@@ -14,19 +14,19 @@ Da Treiber im Kernelspace ausgeführt werden, haben sie einen direkten Einfluss 
 
 Ziel dieses Kapitels ist es, die wichtigsten Konzepte der Linux-Treiberentwicklung verständlich darzustellen. Darauf aufbauend soll der spätere Vergleich einer Implementierung in C mit einer Implementierung in Rust nachvollziehbar werden.
 
-### Kernelspace und Userspace
+#### Kernelspace und Userspace
 
 Ein wesentliches Konzept moderner Betriebssysteme ist die Trennung zwischen Userspace und Kernelspace. Anwendungen im Userspace werden mit eingeschränkten Rechten ausgeführt. Fehler in einer Anwendung betreffen normalerweise nur den eigenen Prozess. Der Kernelspace ist dagegen privilegiert. Code im Kernelspace hat direkten Zugriff auf Hardware und Speicher. Fehler können daher das gesamte System destabilisieren oder sicherheitsrelevante Schwachstellen verursachen.
 
 Treiber und Kernelmodule werden im Linux-System typischerweise im Kernelspace ausgeführt. Aus diesem Grund sind Themen wie Speicherverwaltung, Synchronisation nebenläufiger Abläufe, der Umgang mit Interrupts und saubere Fehlerbehandlung besonders wichtig [@docs_driver_basics].
 
-### Aufbau eines Kernelmoduls
+#### Aufbau eines Kernelmoduls
 
 Linux unterstützt Erweiterungen durch *Loadable Kernel Modules*. Solche Module können zur Laufzeit geladen und entladen werden. Dadurch lassen sich Funktionen nachrüsten, ohne das System neu zu starten.
 
 Ein Kernelmodul folgt meist einem klaren Ablauf. Beim Laden wird eine Initialisierung ausgeführt, in der Ressourcen angefordert und Schnittstellen registriert werden. Danach stellt das Modul seine Funktionalität bereit, zum Beispiel über Dateioperationen oder über die Anbindung an ein Kernel-Subsystem. Beim Entladen muss die gesamte Registrierung zurückgenommen und belegter Speicher wieder freigegeben werden. Für die Moduleinbindung werden in C unter anderem `module_init` und `module_exit` verwendet [@docs_driver_basics]. Das Erstellen und Bauen von Modulen erfolgt über *KBuild* [@docs_kbuild_external_modules].
 
-### Rust im Linux Kernel
+#### Rust im Linux Kernel
 
 Rust wurde entwickelt, um systemnahe Programmierung mit erhöhten Sicherheitsgarantien zu ermöglichen. Konzepte wie *Ownership*, *Borrowing* und *Lifetimes* sollen typische Fehlerklassen wie *Use after free*, *ungültige Zeigerzugriffe* oder *Datenrennen* bereits zur Compile Zeit reduzieren.
 
@@ -34,13 +34,13 @@ Rust ist seit Linux Kernel Version 6.1 im Mainline Kernel enthalten. Nach einer 
 
 Die Rust-Schnittstellen im Kernel sind vorhanden und werden weiter ausgebaut. Gleichzeitig sind nicht alle Subsysteme vollständig über Rust erreichbar. Die offizielle Kernel-Dokumentation enthält alle grundlegenden Informationen für den Einstieg in die Rust-Kernel-Entwicklung und alle Programmiernormen, welche befolgt werden müssen[@docs_kernel_rust_index] [@docs_kernel_rust_quickstart].
 
-### Vorteile von Rust im Kernelkontext
+#### Vorteile von Rust im Kernelkontext
 
 Ein zentraler Vorteil von Rust liegt in der strikten Typ und Speichersicherheit. Viele Fehler, die in C erst zur Laufzeit auftreten, werden durch den Rust-Compiler verhindert oder zumindest schwerer möglich gemacht. Gerade im Kernelspace ist das besonders hilfreich.
 
 Rust bietet zudem eine klare Strukturierung durch Module, Traits und explizite Fehlerbehandlung mit `Result` und `Option`, was Wartbarkeit und Lesbarkeit verbessert.
 
-### Herausforderungen bei der Nutzung von Rust
+#### Herausforderungen bei der Nutzung von Rust
 
 Der Einsatz von Rust im Linux-Kernel ist mit Voraussetzungen verbunden. Die Kernel-Konfiguration muss Rust Unterstützung aktivieren, und die Toolchain muss zu Kernel und Buildsystem passen. Informationen dazu findet man wieder in den Rust-Dokumentationen [@docs_kernel_rust_quickstart]. Zusätzlich ist zu beachten, dass C- und Rust-Code im Kernel koexistieren. Das beeinflusst Workflows, Reviews und Schnittstellen, da der Kernel auf C ausgerichtet ist.
 
@@ -53,7 +53,7 @@ Treiber sind ein integraler Bestandteil des Systems. Systemaufrufe aus dem Users
 
 ## Kernel-Buildsystem und Modulkompilierung
 
-### KBuild und externe Module
+#### KBuild und externe Module
 
 Das Linux-Kernel Buildsystem basiert auf `make` und dem KBuild-System. Externe Module, die nicht direkt in den Kernel-Quellcode integriert sind, werden als Out-of-Tree-Module gegen die installierten Kernel-Header und die passende Kernel-Konfiguration gebaut [@docs_kbuild_external_modules].
 
@@ -67,21 +67,21 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
 
-### Buildprozess eines Moduls
+#### Buildprozess eines Moduls
 
 Der Buildprozess umfasst Vorverarbeitung, Kompilation und das Erzeugen einer Kernel Objektdatei. Danach kann ein Modul geladen und entladen werden. Für die Praxis sind Werkzeuge wie `insmod`, `modprobe`, `lsmod`, `modinfo` und `dmesg` relevant, da sie Laden, Status und Logs sichtbar machen [@docs_kbuild_external_modules].
 
-### Besonderheiten beim Rust-Build
+#### Besonderheiten beim Rust-Build
 
 Rust-Module werden im Kernel nicht mit Cargo gebaut, sondern über KBuild. Der Rust-Compiler wird dabei vom Kernel-Buildsystem angesteuert. Rust-Code im Kernel wird ohne die Rust-Standardbibliothek kompiliert. Stattdessen werden `core` und, falls Heap genutzt wird, `alloc` verwendet [@rust_alloc_docs] [@docs_kernel_rust_index] [@docs_kernel_rust_general_info].
 
 ## Praktische Arbeit in Rust
 
-### Rust-for-Linux-Projekt
+#### Rust-for-Linux-Projekt
 
 Das Rust-for-Linux-Projekt verfolgt das Ziel, Kernelmodule und Treiber sicherer zu implementieren, ohne die Kontrolle und Performance systemnaher Entwicklung zu verlieren [@docs_kernel_rust_index] [@docs_kernel_rust_general_info] [@docs_kernel_rust_quickstart]. Rust war innerhalb des Kernels lange Zeit im experimentellen Zustand. Mit Ende 2025 hat Rust jedoch offiziellen Support im Linux-Kernel erhalten und ist damit auch die erste weitere Programmiersprache, der dies gelungen ist [@thenewstack_rust_2025] [@heise_rust_kernel_2025] [@lwn_rust_debate_2025].
 
-### Aufbau eines Rust-Kernelmoduls
+#### Aufbau eines Rust-Kernelmoduls
 
 Im Gegensatz zu C nutzt Rust kein Header-System. Die Strukturierung erfolgt über Module. Die Registrierung geschieht über ein zentrales Makro, während Initialisierung und Aufräumen über definierte Schnittstellen abgebildet werden[@docs_kernel_rust_index] [@docs_kernel_rust_quickstart].
 
@@ -130,13 +130,13 @@ Das Modul besteht aus mehreren klar getrennten Teilen.
 
 6. `Drop` wird beim Entladen des Moduls ausgeführt. Hier können Ressourcen freigegeben werden. Im Beispiel wird ebenfalls nur geloggt.
 
-### Rust-spezifische Eigenschaften im Kernel
+#### Rust-spezifische Eigenschaften im Kernel
 
 Rust erzwingt eine explizite Behandlung von Besitz und Lebensdauern. Das reduziert typische Speicherfehler, die in C durch rohe Pointer entstehen können. Für hardwarenahe Operationen ist weiterhin `unsafe` möglich,; es wird aber bewusst markiert und kann dadurch in Reviews leichter geprüft werden.
 
 Fehlerbehandlung erfolgt über typisierte Rückgabewerte, wodurch Fehlersituationen sichtbar bleiben. Synchronisationsmechanismen sind so gestaltet, dass fehlerhafte Nebenläufigkeit erschwert wird [@docs_kernel_rust_general_info] [@lwn_rust_debate_2025].
 
-### Beispiel eines Rust-Character-Device-Treibers
+## Beispiel eines Rust-Character-Device-Treibers
 
 Im Rahmen des praktischen Teils dieser Arbeit habe ich einen einfachen Character-Device-Treiber in Rust geschrieben. Ziel dieses Treibers ist es, eine vergleichbare Funktionalität des C-Treibers meines Projektpartners in Rust umzusetzen. Der Treiber ermöglicht es, über eine Gerätedatei Daten in einen Kernelpuffer zu schreiben und wieder auszulesen. Er implementiert die grundlegenden Dateioperationen `open`, `release`, `read` und `write`.
 
@@ -520,7 +520,7 @@ Mit `M=$(pwd)` wird dem Kernel-Buildsystem mitgeteilt, dass sich der Quellcode d
 Der Parameter `modules` gibt schließlich an, dass nur die in diesem Verzeichnis enthaltenen Kernelmodule gebaut werden sollen und nicht der komplette Kernel.
 
 
-### Aufgetretene Probleme
+#### Aufgetretene Probleme
 
 Während der praktischen Umsetzung traten mehrere Probleme auf.
 Diese standen hauptsächlich im Zusammenhang mit der Rust-Toolchain.
@@ -566,7 +566,7 @@ auf.
 
 Diese Fehler entstehen häufig durch Unterschiede in Compiler-Versionen oder Build-Flags.
 
-### Glossar
+## Glossar
 
 *LKM*  
 Loadable Kernel Module. Zur Laufzeit ladbares Kernelmodul zur Erweiterung der Kernel-Funktionalität.

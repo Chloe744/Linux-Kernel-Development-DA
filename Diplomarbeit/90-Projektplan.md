@@ -1,48 +1,68 @@
 # Projekthandbuch
-\textauthor{Schueler XY}
+\textauthor{Schueler Amadeo Wieser}
 
 ## Entwicklungsplan
 
 ### Projektauftrag
 
-Hier beschreiben Sie die allgemeinen Informationen zu Ihrem Maturaprojekt. Hier beschreiben sie den Projektkontext, nämlich die Ausgangssituation und Problembeschreibung
+Im Linux Kernel werden Treiber traditionell in der Programmiersprache C entwickelt. C bietet dabei direkten Zugriff auf Hardware und Speicher, bringt jedoch auch Risiken mit sich, da Fehler wie ungültige Speicherzugriffe oder Datenrennen schwer zu erkennen sein können und das gesamte System beeinträchtigen können.
+
+Mit der Integration von Rust in den Linux Kernel wurde ein neuer Ansatz eingeführt, der darauf abzielt, die Entwicklung von Kernelcode sicherer zu machen. Rust besitzt Mechanismen zur Speichersicherheit und zur Kontrolle von Nebenläufigkeit, die viele typische Fehler bereits während der Kompilierung verhindern können.
+
+Im Rahmen dieser Diplomarbeit wurde untersucht, wie sich die Entwicklung eines Linux Kernel Treibers in C im Vergleich zu einer Implementierung in Rust gestaltet. Dazu wurden zwei funktional identische Kernelmodule entwickelt und praktisch getestet. Ziel war es, Unterschiede im Entwicklungsprozess, im Aufbau des Codes sowie in der Toolchain und den benötigten Entwicklungsumgebungen zu analysieren.
+
+Die Arbeit konzentriert sich dabei nicht auf die Entwicklung eines komplexen Hardwaretreibers, sondern auf einen didaktischen Vergleich zweier Implementierungen eines einfachen Character Device Treibers. Dadurch soll nachvollziehbar werden, welche Vorteile und Herausforderungen sich beim Einsatz von Rust im Linux Kernel ergeben und wie sich die Entwicklung im Vergleich zur klassischen C Implementierung gestaltet.
 
 
 #### Projektziele
 
-Das Projektziel beschreibt den erwünschten Zustand (Sollzustand) nach dem erfolgreichen Abschluss des Projektes. Das Ziel wird wohlbedacht formuliert und durch aktives Handeln aller Projektbeteiligten erreicht. Projektziele sollten gemeinsam mit allen Projektbeteiligten erarbeitet werden.
+Das zentrale Ziel dieser Diplomarbeit ist die praktische Untersuchung der Linux-Treiberentwicklung und der Vergleich zweier Programmiersprachen im Kernelkontext. Dazu sollen zwei funktional vergleichbare Kernelmodule entwickelt werden: ein Treiber in der Programmiersprache C sowie ein äquivalenter Treiber in Rust.
+
+Ein wichtiger Teil der Arbeit besteht darin, ein grundlegendes Verständnis der Linux-Kernelarchitektur und der Mechanismen zur Treiberintegration zu erlangen. Dazu gehören insbesondere Konzepte wie Kernelspace und Userspace, Speicherverwaltung, Geräte-Registrierung sowie typische Schnittstellen zwischen Hardware und Betriebssystem.
+
+Darüber hinaus soll untersucht werden, wie sich die Entwicklung eines Kernelmoduls in Rust im Vergleich zur klassischen Implementierung in C gestaltet. Dabei werden sowohl der Entwicklungsprozess als auch Unterschiede in der Speicherverwaltung, der Codequalität, der Fehlersicherheit sowie der verwendeten Toolchain analysiert.
+
+Ein weiteres Ziel ist die systematische Dokumentation des Entwicklungsprozesses. Dazu zählen typische Fehlerquellen, Debugging-Strategien sowie praktische Erfahrungen beim Kompilieren und Testen von Kernelmodulen. Die gewonnenen Erkenntnisse sollen anschließend in der schriftlichen Arbeit zusammengeführt und in Form eines strukturierten Vergleichs dargestellt werden.
+
+Langfristig soll die Arbeit aufzeigen, welche Rolle Rust künftig in der Linux-Kernelentwicklung spielen könnte und welche Vorteile beziehungsweise Herausforderungen sich bei der Verwendung dieser Sprache im Kernelkontext ergeben.
 
 #### Nicht-Ziele bzw. nicht Inhalte
 
-Nicht-Ziele sind aus mehreren Gründen wichtig. Erstens helfen sie beim Erwartungsmanagement. Zweitens schaffen sie Klarheit darüber, was erledigt werden soll. Und drittens erhöhen Nicht-Ziele die Transparenz. Denn wenn man schon früh im Projekt explizit die Bereiche definiert, die das Projekt nicht bearbeiten soll, kann dadurch eine Diskussion über genau diese Randbereiche entstehen. 
+Diese Diplomarbeit verfolgt nicht das Ziel, einen vollständig produktionsreifen Hardwaretreiber für ein reales Gerät zu entwickeln. Stattdessen wird ein bewusst vereinfachter Character Device Treiber implementiert, der primär als Demonstrations- und Vergleichsbeispiel dient.
+
+Ebenso liegt der Fokus der Arbeit nicht auf der Entwicklung komplexer Hardwarekommunikation oder spezifischer Treiber für bestimmte Geräteklassen. Die Implementierungen dienen vielmehr dazu, grundlegende Mechanismen der Kernelmodulentwicklung verständlich darzustellen.
+
+Darüber hinaus ist es nicht Ziel dieser Arbeit, den Linux Kernel selbst zu verändern oder bestehende Kernelkomponenten zu ersetzen. Rust wird im Rahmen des Projekts ausschließlich verwendet, um einen vergleichbaren Treiber zu implementieren und dessen Entwicklung mit einer klassischen C-Implementierung zu vergleichen.
+
+Auch eine vollständige Performanceanalyse oder Benchmark-Messung der beiden Implementierungen ist nicht Bestandteil dieser Arbeit. Der Schwerpunkt liegt stattdessen auf dem Entwicklungsprozess, der Struktur des Codes sowie den praktischen Erfahrungen bei der Umsetzung.
 
 #### Projektnutzen
 
-Wie soll ein Außenstehender ein Projekt genehmigen, wenn nicht klar formuliert ist, WARUM das Projekt überhaupt durchgeführt werden soll? Auch hier ist es wichtig, möglichst konkret zu werden. Einen Projektnutzen z.B. mit „neueste Technik“ zu bezeichnen, ist nicht ausreichend.
+Der Nutzen dieser Diplomarbeit liegt vor allem in der praktischen Untersuchung eines aktuellen Themas der Systemprogrammierung. Mit der Integration von Rust in den Linux Kernel ist erstmals eine neue Programmiersprache offiziell Teil des Kernels geworden. Dadurch entsteht ein relevantes Forschungs- und Entwicklungsfeld, das sowohl für die Open-Source-Community als auch für zukünftige Entwickler von großer Bedeutung ist.
+
+Durch die Entwicklung zweier funktional vergleichbarer Kernelmodule in C und Rust wird ein direkter Vergleich der beiden Ansätze möglich. Die Arbeit zeigt dabei nicht nur theoretische Unterschiede zwischen den Programmiersprachen, sondern dokumentiert auch die praktischen Herausforderungen beim Aufbau der Entwicklungsumgebung, beim Kompilieren des Kernels sowie bei der Implementierung eines Treibers.
+
+Für die Schule entsteht dadurch eine nachvollziehbare Dokumentation der Linux-Treiberentwicklung, die als Lernmaterial für zukünftige Schüler oder Projekte dienen kann. Besonders im Bereich der Systemprogrammierung ist praxisnahes Beispielmaterial selten, weshalb eine verständliche Aufarbeitung dieses Themas einen zusätzlichen Mehrwert bietet.
+
+Darüber hinaus liefert die Arbeit einen Einblick in moderne Entwicklungen der Kernelprogrammierung und zeigt, inwiefern Rust als sichere Systemprogrammiersprache langfristig zur Verbesserung der Stabilität und Sicherheit des Linux Kernels beitragen könnte.
 
 #### Projektauftraggeber/in
 
-Hier beschreiben Sie wer der Projektauftraggeber ist. Falls es eine externe Firma ist können Sie hier eine kurze Beschreibung des Unternehmens (sofern Projektrelevant) einfügen.
+Die Diplomarbeit wird in Zusammenarbeit mit der FH Joanneum durchgeführt. Der externe Betreuer der Arbeit ist Thomas Strametz, während die Betreuer der HTL Leoben Ing. DI Dr. Christian Schindler und Mag. Anja Lube sind.
 
 #### Projekttermine
 
-Welche Termine sind Fixtermine und was sollte an diesen Terminen stattfinden ? Beispiele hierfür sind z.B: Präsentationen, Projektende, Zwischenabgaben, fest eingeplante Besprechungen / Reviews (die auch Projektrelevant sind) die auf keinen Fall vergessen werden dürfen
-
-
-
 | Termin     | Inhalt                          |
 |-----------:|:--------------------------------|
-| 2020-12-24 | Weihnachten                     |
-| 20XX-12-24 | Projektstart                    |
-| 20XX-10-24 | Projektpräsentation             |
-| 20XX-10-24 | Erreichung Meilenstein I        |
-| 20XX-10-24 | Erste Zwischenpräsentation      |
-| 20XX-10-24 | Erreichung Meilenstein II       |
-| 20XX-10-24 | Erreichung Meilenstein III      |
-| 20XX-10-24 | Zweite Zwischenpräsentation     |
-| 20XX-10-24 | Abgabe Endversion an Betreuer   |
-| 20XX-10-24 | Abgabe Gebundene Version        |
-| 20XX-10-24 | ...                             |
+| 12.09.2025 | DA-Portal befüllt |
+| 10.11.2025 | 1. DA-Präsentation |
+| 09.01.2026 | DA-Erstversion elektronisch an Betreuer übermittelt |
+| 26.02.2026 | 2. DA-Präsentation |
+| 06.03.2026 | DA-Abgabe |
+| 23.03.2026 | DA-Durchsicht mit Betreuer |
+| 27.03.2026 | DA-Portal mit Hr. Messner abgeschlossen |
+| 07.04.2026 | Abgabe – Bibliotheksversion der DA |
+| 08.04.2026 | 3. DA-Präsentation |
 
 : Projektterminübersicht
 
@@ -53,203 +73,274 @@ Hier dokumentieren Sie welche Kosten fallen Für Ihr Projekt an und wer kommt f�
 
 | Meilenstein  | Kostenart | Menge  | Preis   | Gesamtkosten | Deckung durch |
 |:-------------|:---------:|:------:|--------:|-------------:|---------------|
-| Prototyp     | Personal  |  10.00 |   15.00 | 150.00      | Schüler       |
-| Prototyp     | Hardware  |  1     |  254.00 | 254.00      | Projektpartner|
-| DA-Schreiben | Druck     |  3     |   26.00 |  53.00      | Schüler       |
+| Gebundene DA-Abgabe | Druck | 3 | 27.90€ | 83,70€ | Schüler |
 
  : Geplante Projektkosten
  
-Am ende sollten Sie eine Projektkostensumme ermitteln und hier angeben damit man sagen kann
-__Das Projekt kostet in Summe so und so viel Euro__. 
-
+Tatsächlich angefallene Kosten:
 
 Am Ende der Diplomarbeit fügen Sie hier noch eine Liste der tatsächlich angefallenen Kosten ein.
 
 #### Projektrisiken
 
-Hier geben Sie an welche Risiken auf Ohr Projekt zutreffen können, und auch wie wahrscheinlich es ist das dieses Risiko eintritt.
-Eine Übersicht über Risiken finden sie hier: https://projekte-leicht-gemacht.de/blog/pm-in-der-praxis/130-projektrisiken-beispiele/
-
-Hier ein Beispiel:
-
-| Risiko         | EW  | Auswirkungen     | Maßnahmen     |
-|:--------------:|:---:| :----------------|:--------------|
-| Überziehen der Kosten | 15% | Erhöhte Kosten für Schüler | Budgetierung |
-| Ungenaue Schätzungen | 30% | Ungenaue Schätzungen führen zu Problem bezüglich Terminen und Budget. | Schätzungen mit Fachkollegen absprechen|
-| Verzögerungen beim Aufbau von Hard- und Software | 10% | Prototyp wird nicht rechtzeitig zur Endpräsentation fertig | Früh genug anfangen |
+| Risiko | EW | Auswirkungen | Maßnahmen |
+|:--------------:|:---:|:----------------|:--------------|
+| Toolchain- oder Versionskonflikte (Rust, Kernel, Compiler) | 35% | Kernel oder Treiber lassen sich nicht kompilieren | Verwendung dokumentierter Versionen und schrittweise Anpassung der Toolchain |
+| Fehler im Kernelmodul | 25% | Systemabstürze oder Kernel Panics während Tests | Entwicklung und Tests ausschließlich in einer virtuellen Maschine |
+| Hoher Zeitaufwand beim Debugging | 30% | Verzögerungen im Projektfortschritt | Frühzeitiges Testen einzelner Komponenten und regelmäßige Zwischentests |
+| Unterschiede zwischen Linux Distributionen | 20% | Unterschiedliches Verhalten von Kernel oder Toolchain | Nutzung dokumentierter Kernelversionen und Anpassung der Entwicklungsumgebung |
+| Verzögerungen im Projektablauf | 15% | Projektabschnitte können nicht rechtzeitig abgeschlossen werden | Regelmäßige Abstimmung im Team und frühzeitige Planung der Arbeitsschritte |
 
 : Projektrisiken
 
 ### Projektorganisation
 
 #### Projektbeteiligte
-Hier wird definiert wer (welche Personen) an diesem Projekt beteiligt im Prinzip beteiligt ist.
 
 | Vorname     | Nachname     | Organisation | Kontaktinfos      |
 |:------------|:-------------|:-------------|:------------------|
-| Joltawan    | Barodscheff  | HTL Leoben   | jb@htl-leoben.at  |
-| Frank       | Borland      | Firma XY     | frank@borla.nd    |
-| ...         | ...          | ...          | ...               |
+| Amadeo    | Wieser  | HTL Leoben   | wieser1806@gmail.com  |
+| Moritz    | Zugaj  | HTL Leoben   | zugajmor@gmail.com  |
+| Christian | Schindler| HTL Leoben | schr@O365.htl-leoben.at |
+| Anja    | Lube  | HTL Leoben   | Lan@O365.htl-leoben.at  |
+| Thomas  | Strametz  | FH Joanneum  | thomas.strametz2@fh-joanneum.at
+ |
 
 : Projektbeteiligte
 
-Unter Kontaktinfos können neben der Emailadresse natürlich auch noch andere Informationen wie Telefonnunmmer, Postanschrift, usw. stehen. ... Im Prinzip alles was notwendig ist um die Person zu erreichen wenn es notwendig ist. 
-
 #### Projektrollen
-
-Hier werden den Kontakten von oben konkrete Rollen zuewiesen.
 
 | Projektrolle           | Rollenbeschreibung     | Name              |
 |------------------------|------------------------|-------------------|
-| Projektleiter | Verantwortlicher für Einhaltung des Projektrahmens | Joltawan Barodscheff |
-| Auftraggeber | Auftraggeber der internen Diplomarbeit | Frank Borland |
-| Betreuer | Schulischer Betreuer | G. Hutter |
-| Betreuer | Schulischer Betreuer | A. Poetscher |
+| Projektleiter | Verantwortlicher für Einhaltung des Projektrahmens | Amadeo Wieser  |
+| Auftraggeber | Auftraggeber der externen Diplomarbeit | Thomas Strametz |
+| Betreuer | Schulischer Betreuer | Ing. DI Dr. C. Schindler |
+| Betreuer | Schulischer Betreuer | MAG. A. Lube |
 
 : Projektrollen
 
-Gerne können Sie hier auch noch zusätzlich eine Grafik oder ein Organisationsdiagramm einbauen.
-
-![Projektorganisationsdiagramm](img/projektorganisation.png){width=50%}
-
 ### Vorgehen bei Änderungen
 
-Hier dokumentieren sie betreffend des Meilensteinplans oder der Anwendungsfälle: 
+Damit Änderungen im Projekt strukturiert erfolgen können, wurde ein einheitliches Vorgehen definiert. Änderungen können beispielsweise Anpassungen am Zeitplan, an einzelnen Meilensteinen oder an der technischen Umsetzung betreffen.
 
-* Wer wird informiert, 
-* wer muss zustimmen, 
-* wo werden die Änderungen wie vermerkt?
+* Wer wird informiert
+    * Alle Projektbeteiligten
+    * Schulische Betreuer
 
-Das dient in erster Linie dazu um ein einheitliches Vorgehen definiert zu haben.
+* Wer muss zustimmen
+    * Projektteam gemeinsam
+    * Hauptbetreuer der Diplomarbeit
+
+* Wo werden Änderungen dokumentiert
+    * Änderungen am Quellcode werden im Github Repository über Commits dokumentiert
+    * Größere Änderungen am Projektumfang oder an der technischen Umsetzung werden zusätzlich in der schriftlichen Arbeit festgehalten
+    * Anpassungen am Zeitplan werden im Projektdokument entsprechend aktualisiert
+
+Dieses Vorgehen stellt sicher, dass alle Projektmitglieder über Änderungen informiert sind und Entscheidungen nachvollziehbar dokumentiert werden.
 
 ## Meilensteine
 
-Der Begriff taucht im Projektmanagement sehr häufig auf. Meilensteine sind wichtige Punkte im Projektverlauf. Oft werden sie auch als Prüfpunkte bezeichnet.
+### 12.09.2025: Eintragung im DA-Portal abgeschlossen
 
-Generell kann ein Meilenstein ein Ereignis sein, an dem
+- Projektidee und Themenbeschreibung wurden im Diplomarbeitsportal eingetragen
+- Projektteam und Betreuer wurden im System erfasst
+- Grundlegende Projektdaten wurden dokumentiert
 
-* etwas abgeschlossen ist,
-* etwas begonnen wird oder
-* über die weitere Vorgehensweise entschieden wird
+### 10.11.2025: Erste Projektpräsentation
 
-Meilensteine werden meist am Ende von Projektphasen definiert. Auch innerhalb von Phasen kann es zusätzliche Meilensteine geben.
+- Vorstellung des aktuellen Projektstandes vor Schülern und Lehrpersonen
+- Präsentation der Projektidee und der geplanten technischen Umsetzung
+- Rückmeldungen und Verbesserungsvorschläge des Betreuers wurden aufgenommen
 
-Meilensteine verlaufen nie über eine Zeitdauer. Nie. Sie sind lediglich Entscheidungspunkte
+### 09.01.2026: Erste Version der Diplomarbeit fertiggestellt
 
-Hier ein Beispiel wie die Meilensteine im Fall einer aussehen können
+- Erste vollständige Version der schriftlichen Arbeit wurde erstellt
+- Dokument wurde elektronisch an den Betreuer übermittelt
+- Feedback für weitere Überarbeitungsschritte wurde eingeholt
 
-### 2020-09-15: Projektmanagement abgeschlossen
+### 26.02.2026: Zweite Projektpräsentation
 
-- Projekthandbuch ist fertig
-- Serverinfrastruktur ist hergestellt
-- Bestellungen sind abgessendet
+- Präsentation des aktuellen Fortschritts der Diplomarbeit
+- Vorstellung der praktischen Umsetzung und der bisherigen Ergebnisse
+- Präsentation wurde auf Basis des Feedbacks der ersten Präsentation verbessert
 
-### 2020-11-01: Genehmigung der DA
+### 06.03.2026: Fertigstellung der Diplomarbeit
 
-- Einreichen des Antrags durch die Schüler/innen
-- DA Dokumentation wurde ausgefüllt und unterschrieben
+- Schriftliche Arbeit wurde final überarbeitet
+- Korrekturen und Verbesserungen wurden eingearbeitet
+- Diplomarbeit liegt in abgabefertiger Form vor
 
-### 2020-11-26: Literaturrecherche abgeschlossen
+### 23.03.2026: Durchsicht mit dem Betreuer
 
-- Literatur zum Thema XY gesucht und in bibtex vermerkt
-- Aktellen Stand der Forschung erhoben
-- Verschriftlichung des Literaturteils begonnen 
+- Gemeinsame Durchsicht der Diplomarbeit mit dem Betreuer
+- Letzte inhaltliche und formale Anpassungen wurden besprochen
+- Freigabe für die endgültige Abgabe wurde erteilt
 
-### 2020-12-17: Prototyp ist funktionell
+### 27.03.2026: Abschluss im DA-Portal
 
-- DB mit Tabelle für Benutzer.
-- DB Kommunikation zur Anwendung (inkl. Dokumentation)
-- Es gibt in der Anwendung einen /Admin/ Benutzer. Dieser Benutzer kann weitere Benutzer in den Rollen /Lehrende/ und bzw. oder /Studierende/ anlegen.
-      
-### 2021-01-10: Applikation fertiggestellt
+- Alle notwendigen Einträge im Diplomarbeitsportal wurden finalisiert
+- Abschluss des Projekts im Portal gemeinsam mit dem Betreuer durchgeführt
 
-- Lehrende sind dazu in der Lage Tests anzulegen.
-- Studenten können einen ihnen zugewiesenen Test absolvieren.
+### 07.04.2026: Abgabe der Bibliotheksversion
 
-### 2021-01-10: Review und Überarbeitung fertig
+- Gebundene Version der Diplomarbeit wurde abgegeben
+- Bibliotheksversion wurde offiziell eingereicht
 
-- Der Quellcode ist gemeinsam mit den Projektpartnern reviewt
-- Quellcodedokumentation abgeschlossen (Javadoc)
-- Projekt baut auf eigenem Buildserver (Continous Integration)
+### 08.04.2026: Abschlusspräsentation
 
-### 2021-02-03: Diploarbeit fertig verschriftlicht 
-
-- Stilfehler sind behoben
-- DA Dokumentationsblatt ist unterschrieben, eingescannt und im Hauptdokument enthalten 
-- Praxisteil ist ebgeschlossen und verschriftlicht
-- Informationen sind im DA Portal eingegeben
-- Unterschriebene DA Betreuungsprotokolle sind in der DA enthalten
-- DA liegt dem Betreuer in ausgedruckter Form vor
+- Präsentation der finalen Diplomarbeit vor Lehrpersonen und Mitschülern
+- Vorstellung der Ergebnisse und Erkenntnisse des Projekts
+- Letzte Rückmeldungen zur Diplomarbeit erhalten
     
 
 ## Anwendungsfälle
 
-Hier beschreiben Sie die Anwendungsfälle (=UseCases) Ihrer Anwendung / Diplomarbeit. Dabei sollte die Beschreibung auf hohem Niveau (also ohne implementierungsspezifische Details) erfolgen und typischerweise so benannt sein, wie die Ziele aus Sicht der Akteure heißen: Mitglied anmelden, Geld abheben, Auto zurückgeben.
+Da es sich bei dieser Diplomarbeit nicht um eine klassische Benutzeranwendung handelt, sondern um eine technische Untersuchung der Linux-Kernel-Treiberentwicklung, beziehen sich die Anwendungsfälle auf typische Interaktionen mit Kernelmodulen und deren Entwicklungsprozess.
 
-Jeder Anwendungsfall wird im selben Muster beschrieben. In den folgenden Absätzen ist zuerst eine allgemeine Beschreibung eines solchen Anwendungsfalls zu finden und dann ein Beispiel dazu.
-
-Damit man auch versteht wer mit welchem Anwendungsfall agiert bietet es sich an hier eine Übersichtsgrafik zu erstellen:
-
-![Übersicht Anwendungsfälle](img/anwendungsfalldiagramm.png){width=60%}
+Die beschriebenen Anwendungsfälle stellen daher typische Szenarien dar, die während der Entwicklung, dem Laden und der Verwendung eines Kernel-Treibers auftreten.
 
 \newpage
-### Anwendungsfallname
-Anwendungsfälle haben einen eindeutigen Namen aus dem man auf den Inhalt des Anwendungsfalls schließen kann. Wenn Sie agil arbeiten dann stellt ein Anwendungsfall eine UserStory dar welche im Backlog liegt und im Laufe des Projekts (in einem Sprint) abgearbeitet wird.
+
+### Kernelmodul kompilieren
 
 #### Kurzbeschreibung
-Hier erfolgt eine kurze Beschreibung, was im Anwendungsfall passiert. Kurz bedeutet, dass es zwei oder drei Zeilen sind, selten mehr.
-      
+Der Entwickler kompiliert ein Kernelmodul (in C oder Rust) mithilfe des Linux Kernel Buildsystems.
+
 #### Trigger
-Der fachliche Grund bzw. die Gründe dafür, dass dieser Anwendungsfall ausgeführt 
+Der Entwickler startet den Buildprozess über ein Makefile.
 
 #### Vorbedingung
-Alle Bedingungen, die erfüllt sein müssen, damit dieser Anwendungsfall ausgeführt werden kann. Gibt es keine Vorbedingungen, so steht hier "keine".
-      
+* Linux Kernel Quellen sind vorhanden
+* Kernel Buildtree ist verfügbar
+* Compiler und Toolchain sind korrekt installiert
+
 #### Nachbedingung
-Der Zustand, der nach einem erfolgreichen Durchlauf des Anwendungsfalls erwartet wird.
+Eine kompilierte Kernelmodul-Datei (.ko) wurde erzeugt.
 
 #### Akteure
-Akteure sind beteiligte Personen oder Systeme außerhalb (!) des beschriebenen Systems. Z. B. Anwender, angemeldeter Anwender, Kunde, System, Abrechnungsprozess.
+* Entwickler
 
 #### Standardablauf
-Hier wird das typische Szenario dargestellt, das leicht zu verstehen oder der am häufigsten vorkommende Fall ist. An seinem Ende steht die Zielerreichung des Primärakteurs. Die Ablaufschritte werden nummeriert und meist in strukturierter Sprache beschrieben. Ablaufpläne können jedoch ebenfalls benutzt werden, wenn es angebracht erscheint. Mittels der UML können diese Ablaufschritte in Aktivitätsdiagrammen oder Anwendungsfall-orientierten Sequenzdiagrammen dargestellt werden.
+
+1. Entwickler wechselt in das Verzeichnis des Kernelmoduls
+2. Der Buildbefehl wird ausgeführt
+3. Das Kernel Buildsystem kompiliert den Quellcode
+4. Das fertige Kernelmodul wird erzeugt
 
 #### Fehlersituationen
-Dies sind Szenarien, die sich außerhalb des Standardablaufs auch bei der (versuchten) Zielerreichung des Anwendungsfalls ereignen können. Sie werden meistens als konditionale Verzweigungen der normalen Ablaufschritte dargestellt. An ihrem Ende steht ein Misserfolg, die Zielerreichung des Primärakteurs oder eine Rückkehr zum Standardablauf.
+
+* Fehlende Abhängigkeiten
+* Fehler im Quellcode
+* Inkompatible Kernelversion
 
 #### Systemzustand im Fehlerfall
-Der Zustand, der nach einem erfolglosen Durchlauf des Anwendungsfalls erwartet wird.
-
+Das Kernelmodul wird nicht erstellt und der Buildprozess bricht mit einer Fehlermeldung ab.
 
 \newpage
-### Benutzer Anlegen
+
+### Kernelmodul laden
 
 #### Kurzbeschreibung
-Der Benutzer "Admin" kann auf Anfrage einen neuen Benutzer als "Lehrende" und bzw. oder "Studierende" anlegen
+Ein zuvor kompiliertes Kernelmodul wird in den laufenden Linux Kernel geladen.
 
 #### Trigger
-Admin legt auf Anfrage eines Benutzers einen neuen Account an
+Der Entwickler oder Administrator lädt das Modul manuell.
 
 #### Vorbedingung
-Benutzer als "Admin" angemeldet
-      
+* Kernelmodul wurde erfolgreich kompiliert
+* Benutzer besitzt Administratorrechte
+
 #### Nachbedingung
-Es existiert ein Eintrag in der DB Benutzer Tabelle für den neu erstellten Benutzer. (Dieser kann sich anschließend in der Anwendung anmelden)
+Das Kernelmodul ist im Kernel aktiv und kann verwendet werden.
 
 #### Akteure
-* Admin
+* Administrator
+* Entwickler
+
+#### Standardablauf
+
+1. Das Kernelmodul wird mit einem entsprechenden Systembefehl geladen
+2. Der Kernel initialisiert das Modul
+3. Die Modul-Initialisierungsfunktion wird ausgeführt
+4. Das Modul registriert seine Funktionalität im Kernel
 
 #### Fehlersituationen
-Admin bricht die Aktion ab
+
+* Modul ist nicht kompatibel mit der Kernelversion
+* Modul enthält Fehler im Initialisierungscode
 
 #### Systemzustand im Fehlerfall
-Benutzer wird nicht angelegt und wird verworfen
+Das Modul wird nicht geladen und der Kernel bleibt unverändert.
 
-#### Standardablauf:
+\newpage
 
-1. Admin drückt Button, um einen neuen Benutzer anzulegen
-2. Es öffnet sich ein Formular, indem die nötigen Benutzer-Informationen eingegeben werden (Name, Adresse, Telephonnummer, E-Mail, Geburtsdatum, Passwort-Hash, Rolle). Der neue Benutzer muss mindestens einer der Rollen "Lehrende" und "Studierende" angehören
+### Zugriff auf das Gerät über den Treiber
 
-#### Alternativabläufe:
+#### Kurzbeschreibung
+Ein Programm im Userspace greift über eine Gerätedatei auf den implementierten Kernel-Treiber zu.
 
-* Admin drückt den Button, um die Aktion abzubrechen 
+#### Trigger
+Ein Userspace Programm öffnet die entsprechende Gerätedatei.
+
+#### Vorbedingung
+* Kernelmodul ist geladen
+* Gerätedatei wurde erstellt
+* Treiber ist korrekt registriert
+
+#### Nachbedingung
+Der Treiber verarbeitet die Anfrage und führt die entsprechende Operation aus.
+
+#### Akteure
+* Userspace Programm
+* Linux Kernel
+* Kernel Treiber
+
+#### Standardablauf
+
+1. Ein Programm öffnet die Gerätedatei
+2. Der Kernel leitet die Anfrage an den Treiber weiter
+3. Der Treiber verarbeitet die Operation
+4. Das Ergebnis wird an das Userspace Programm zurückgegeben
+
+#### Fehlersituationen
+
+* Gerätedatei existiert nicht
+* Treiber reagiert mit einem Fehlercode
+
+#### Systemzustand im Fehlerfall
+Die Operation wird abgebrochen und eine Fehlermeldung wird zurückgegeben.
+
+\newpage
+
+### Vergleich der Implementierungen
+
+#### Kurzbeschreibung
+Die Implementierungen des Treibers in C und Rust werden hinsichtlich Struktur, Speicherverwaltung und Sicherheitsmechanismen analysiert.
+
+#### Trigger
+Durchführung der Analysephase im Rahmen der Diplomarbeit.
+
+#### Vorbedingung
+* Beide Treiberimplementierungen existieren
+* Die Treiber sind kompilierbar und testbar
+
+#### Nachbedingung
+Unterschiede und Gemeinsamkeiten der Implementierungen werden dokumentiert.
+
+#### Akteure
+* Entwickler
+* Diplomarbeitsteam
+
+#### Standardablauf
+
+1. Analyse des C-Treibers
+2. Analyse des Rust-Treibers
+3. Vergleich der Implementierungsansätze
+4. Dokumentation der Unterschiede und Erkenntnisse
+
+#### Fehlersituationen
+
+* Eine Implementierung kann nicht erfolgreich getestet werden
+
+#### Systemzustand im Fehlerfall
+Die Analyse wird angepasst oder auf theoretischer Ebene fortgeführt.

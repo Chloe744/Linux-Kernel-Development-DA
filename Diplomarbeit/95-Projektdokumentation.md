@@ -1,52 +1,98 @@
 \newpage
 ## Dokumentation
 
-Im Abschnitt Projektdokumentation können Sie mit Hilfe eines Projektmanagementwerkzeuges Ihrer Wahl die Projektumsetzung dokumentieren. (Also ein fortlaufender Projektfortschrittsbericht)
+Die Projektdokumentation beschreibt den Fortschritt der Diplomarbeit über den gesamten Projektzeitraum hinweg. Da es sich bei dieser Arbeit hauptsächlich um ein Analyse- und Entwicklungsprojekt im Bereich der Systemprogrammierung handelt, wurde der Fortschritt in mehreren Projektphasen dokumentiert.
 
-Normalerweise werden Sie die UserStories in mehrere SubTasks zerreissen und dann in einem agilen verfahen (Scrum, Kanban, was auch immer ihnen am geeignetsten erscheint) abarbeiten. Dazu können Sie natürlich eine Softwahre Ihrer Wahl verwenden.
+Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inhaltlichen Arbeitsschritten der Diplomarbeit.
 
-Am Ende sollten sie aber für jeden Projektabschnitt (Das ist die Zeit zwischen den Meilensteinen) eine Dokumentation entstehen aus der ersichtlich ist
-
-* Berichtszeitraum
-* Durchgeführte Arbeiten im Berichtszeitraum sowie die Aufwände der einzelnen Personen
-* Projektstatus (Im Plan, Schwierigkeiten, Risiko)
-* Gesamtstatus sowie die möglicherweise notwendigen Maßnahmen für
-    - Leistungsziele
-    - Terminziele
-    - Kostenziele
-    - Teamarbeit
-* Nächste Schritte und notwendige Entscheidungen
-
-Im folgenden Abschnitt ist ein solcher Fortschritt illustriert. 
-
-### Projektfortschritt 01. Juni bis 05. August 2020
+### Projektfortschritt September 2025 bis November 2025
 
 #### Gesamtstatus
 
-* Das Projekt befindet sich derzeit im Plan. 
-* Es wurden alle Teile bestellt und die Hardware dimensioniert
-* Bei den Lieferungen hat es leichte Verspätungen gegeben
+* Projektidee und Themenbereich wurden definiert
+* Grundlagen zur Linux Kernelarchitektur wurden recherchiert
+* Erste Literatur zum Thema Rust im Linux Kernel wurde gesammelt
+* Projektbeschreibung wurde im DA-Portal eingetragen
 
-
-| Dimension           | Status            |  Maßnahmen             |
+| Dimension | Status | Maßnahmen |
 |:--------------------|:------------------|:-----------------------|
-| Leistungsziele      | In Ordnung        | keine                  |
-| Terminziele         | Verzug durch Lieferprobleme | Bei restlichen Teilen Expresslieferung|
-| Kostenziele | Teile im Budget, Batterie sehr teuer | Günstigere Teile bei der restlichen Hardware verwenden |
-| Teamarbeit | optimal | keine |
+| Leistungsziele | im Plan | keine |
+| Terminziele | im Plan | regelmäßige Abstimmung im Projektteam |
+| Kostenziele | keine relevanten Kosten | keine |
+| Teamarbeit | gut | regelmäßige Kommunikation |
 
-:Projektstatus am 2020-08-05
+: Projektstatus November 2025
 
 #### Notwendige Entscheidungen
 
-* Die Zusammenbauphase muss etwas verschoben werden und startet nun um 14 Tage später. Das hat keinen Einfluss auf den Endtermin.
+* Festlegung der konkreten technischen Umsetzung
 
 #### Nächste Schritte
 
-* Abklären ob die Expressbestellungen im Budget sind
-* Start dder Implementierungsphase
+* Aufbau der Entwicklungsumgebung
+* Vorbereitung der Linux Kernel Quellen
+* erste Tests mit Kernelmodulen
 
-: Projektstatus Stand 05. August 2020
+: Projektstatus Stand November 2025
 
 
+### Projektfortschritt November 2025 bis Januar 2026
 
+#### Gesamtstatus
+
+* Entwicklungsumgebung für Linux Kernelentwicklung eingerichtet
+* Linux Kernel Quellen heruntergeladen
+* eigener Kernel mit aktivierter Rust Unterstützung kompiliert
+* Grundlagen der Kernelmodulentwicklung praktisch getestet
+
+| Dimension | Status | Maßnahmen |
+|:--------------------|:------------------|:-----------------------|
+| Leistungsziele | im Plan | keine |
+| Terminziele | teilweise verzögert | zusätzlicher Zeitaufwand für Kernelkompilierung |
+| Kostenziele | keine Kosten entstanden | keine |
+| Teamarbeit | gut | regelmäßige Abstimmung über Fortschritte |
+
+: Projektstatus Januar 2026
+
+#### Notwendige Entscheidungen
+
+* Anpassung der Entwicklungsumgebung aufgrund von Toolchain-Problemen
+* Auswahl kompatibler Versionen von Rust und Kernel
+
+#### Nächste Schritte
+
+* Implementierung des Character Device Treibers in C
+* Analyse der Kernel APIs
+
+: Projektstatus Stand Januar 2026
+
+
+### Projektfortschritt Januar 2026 bis Februar 2026
+
+#### Gesamtstatus
+
+* C-Treiber wurde implementiert und getestet
+* Rust Treiber wurde entwickelt
+* mehrere Kompilierungsversuche mit verschiedenen Toolchain Versionen durchgeführt
+* Unterschiede zwischen den Implementierungen wurden analysiert
+
+| Dimension | Status | Maßnahmen |
+|:--------------------|:------------------|:-----------------------|
+| Leistungsziele | weitgehend erreicht | weitere Analyse durchführen |
+| Terminziele | leicht verzögert | zusätzliche Arbeitszeit für Debugging |
+| Kostenziele | keine Kosten entstanden | keine |
+| Teamarbeit | sehr gut | Aufteilung der Aufgaben zwischen den Projektpartnern |
+
+: Projektstatus Februar 2026
+
+#### Notwendige Entscheidungen
+
+* Schwerpunkt der Arbeit stärker auf Analyse und Vergleich legen
+* Dokumentation der praktischen Erfahrungen mit Rust im Kernel
+
+#### Nächste Schritte
+
+* Vergleich der beiden Implementierungen
+* Fertigstellung der schriftlichen Arbeit
+
+: Projektstatus Stand Februar 2026

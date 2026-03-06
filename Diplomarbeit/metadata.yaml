@@ -33,9 +33,11 @@ da-betreuer:
 - paraffe: LAN
   name: MAG. Anja Lube, BA
 
-da-kurzfassung-de: Hier kommt eine deutsche Kurzfassung hin.
+da-kurzfassung-de:  
+Diese Diplomarbeit beschäftigt sich mit der Entwicklung von Linux-Kernel-Treibern und untersucht die Unterschiede zwischen einer Implementierung in der Programmiersprache C und einer Implementierung in Rust. Dazu wurden zwei funktional vergleichbare Character-Device-Treiber entwickelt und analysiert. Neben der praktischen Umsetzung wurden auch der Entwicklungsprozess, die benötigte Toolchain sowie typische Herausforderungen bei der Kernelentwicklung untersucht. Während der C-Treiber relativ unkompliziert umgesetzt werden konnte, zeigte sich bei der Rust-Implementierung ein deutlich höherer Aufwand bei der Einrichtung der Entwicklungsumgebung. Die Arbeit zeigt, dass Rust großes Potenzial für die zukünftige Kernelentwicklung besitzt, sich jedoch aktuell noch in einer frühen Integrationsphase befindet.
 
-da-kurzfassung-en: Hier kommt eine englische Kurzfassung hin.
+da-kurzfassung-en:  
+This diploma thesis examines the development of Linux kernel drivers and compares implementations written in the programming languages C and Rust. For this purpose, two functionally equivalent character device drivers were developed and analyzed. In addition to the practical implementation, the development process, required toolchains, and typical challenges in kernel development were investigated. While the C driver could be implemented relatively easily, the Rust implementation required significantly more effort in setting up the development environment. The results indicate that Rust has strong potential for future kernel development, although its integration into the Linux kernel is still in an early stage.
 
 
 da-kiquellen:

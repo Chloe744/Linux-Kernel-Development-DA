@@ -1,4 +1,6 @@
+
 # Analytischer Vergleich zwischen C und Rust im Linux-Kernel
+\textauthor{Amadeo Wieser, Moritz Zugaj}
 
 Nachdem wir sowohl ein Kernelmodul in C als auch ein Kernelmodul in Rust implementiert haben, kann die praktische Erfahrungen der beiden Ansätze miteinander verglichen werden. Ziel dieses Kapitels ist es, Unterschiede im Entwicklungsprozess, in der Toolchain, im Aufbau der Treiber sowie in der praktischen Umsetzung zu analysieren.
 
@@ -136,6 +138,8 @@ Gerade im Kernelspace, wo Fehler das gesamte Betriebssystem zum Absturz bringen 
 | Speicherverwaltung | manuell | Ownership System |
 | Fehlersicherheit | gering | deutlich höher |
 | Integration in Kernel | vollständig etabliert | noch in Entwicklung, Abhängigkeit von C |
+
+: Vergleich zwischen C und Rust Kernelmodulen
 
 ## Praktische Erfahrungen
 

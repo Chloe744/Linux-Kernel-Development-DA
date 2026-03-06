@@ -2,11 +2,11 @@
 # Analytischer Vergleich zwischen C und Rust im Linux-Kernel
 \textauthor{Amadeo Wieser, Moritz Zugaj}
 
-Nachdem wir sowohl ein Kernelmodul in C als auch ein Kernelmodul in Rust implementiert haben, kann die praktische Erfahrungen der beiden Ansätze miteinander verglichen werden. Ziel dieses Kapitels ist es, Unterschiede im Entwicklungsprozess, in der Toolchain, im Aufbau der Treiber sowie in der praktischen Umsetzung zu analysieren.
+Nachdem wir sowohl ein Kernelmodul in C als auch ein Kernelmodul in Rust implementiert haben, können die praktischen Erfahrungen der beiden Ansätze miteinander verglichen werden. Ziel dieses Kapitels ist es, Unterschiede im Entwicklungsprozess, in der Toolchain, im Aufbau der Treiber sowie in der praktischen Umsetzung zu analysieren.
 
 ## Vergleich der Implementierung
 
-Sowohl der C Treiber als auch der Rust Treiber implementieren die gleiche grundlegende Funktionalität. In beiden Fällen handelt es sich um einen einfachen Character Device Treiber mit folgenden Funktionen:
+Sowohl der C-Treiber als auch der Rust-Treiber implementieren die gleiche grundlegende Funktionalität. In beiden Fällen handelt es sich um einen einfachen Character-Device-Treiber mit folgenden Funktionen:
 
 - open
 - release
@@ -19,7 +19,7 @@ Das Ziel war es, eine möglichst vergleichbare Implementierung zu erstellen, dam
 
 Der erste Unterschied zeigt sich bereits bei der Definition des Kernelmoduls.
 
-C verwendet klassische Makros zur Registrierung des Moduls welche alle genau eine Funktion haben.
+C verwendet klassische Makros zur Registrierung des Moduls, die alle genau eine Funktion haben.
 
 ```c
 MODULE_LICENSE("GPL");
@@ -70,7 +70,7 @@ impl FileOperations for CharTestFile {
 }
 ```
 
-Statt Funktionspointer in einer Struktur zu speichern, implementiert Rust also eine Schnittstelle (Trait), welche die benötigten Funktionen vorgibt.
+Statt Funktionspointer in einer Struktur zu speichern, implementiert Rust also eine Schnittstelle (Trait), die benötigten Funktionen vorgibt.
 
 ### Zugriff auf Userspace Speicher
 
@@ -92,11 +92,11 @@ Diese abstrahierten Funktionen reduzieren das Risiko von typischen Speicherfehle
 
 Der größte Unterschied zwischen beiden Ansätzen zeigt sich im Entwicklungsaufwand.
 
-Die Entwicklung eines einfachen Kernelmoduls in C ist relativ unkompliziert. Die notwendigen Werkzeuge sind in den meisten Linux Distributionen bereits vorhanden und die Dokumentation ist sehr umfangreich.
+Die Entwicklung eines einfachen Kernelmoduls in C ist relativ unkompliziert. Die notwendigen Werkzeuge sind in den meisten Linux-Distributionen bereits vorhanden und die Dokumentation ist sehr umfangreich.
 
-Rust hingegen erfordert eine deutlich komplexere Entwicklungsumgebung. Neben dem Rust Compiler müssen zusätzliche Komponenten installiert und korrekt konfiguriert werden.
+Rust hingegen erfordert eine deutlich komplexere Entwicklungsumgebung. Neben dem Rust-Compiler müssen zusätzliche Komponenten installiert und korrekt konfiguriert werden.
 
-Zusätzlich musste der Linux Kernel mit aktivierter Rust Unterstützung selbst kompiliert werden.
+Zusätzlich musste der Linux-Kernel mit aktivierter Rust-Unterstützung selbst kompiliert werden.
 
 Ein großer Teil der praktischen Arbeit bestand daher zunächst darin, eine funktionierende Entwicklungsumgebung einzurichten.
 
@@ -104,17 +104,17 @@ Ein großer Teil der praktischen Arbeit bestand daher zunächst darin, eine funk
 
 Die Toolchain stellt einen weiteren großen Unterschied zwischen C und Rust dar.
 
-C Kernelmodule werden direkt über das etablierte Kernel Buildsystem kompiliert. Der Buildprozess basiert auf dem Kbuild System und verwendet typischerweise den GNU Compiler (gcc).
+C-Kernelmodule werden direkt über das etablierte Kernel-Buildsystem kompiliert. Der Buildprozess basiert auf dem Kbuild-System und verwendet typischerweise den GNU-Compiler (gcc).
 
-Rust Module hingegen benötigen zusätzliche Schritte, da Rust nicht direkt Teil der ursprünglichen Kernel Toolchain war. Auch wenn Rust mittlerweile offiziell in den Kernel integriert wurde, basiert ein großer Teil der Infrastruktur weiterhin auf C.
+Rust-Module hingegen benötigen zusätzliche Schritte, da Rust nicht direkt Teil der ursprünglichen Kernel-Toolchain war. Auch wenn Rust mittlerweile offiziell in den Kernel integriert wurde, basiert ein großer Teil der Infrastruktur weiterhin auf C.
 
-Besonders wichtig ist dabei das Tool **bindgen**. Dieses Tool analysiert C Headerdateien und erzeugt daraus Rust Bindings, damit Rust Code auf bestehende C Funktionen zugreifen kann. 
+Besonders wichtig ist dabei das Tool **bindgen**. Dieses Tool analysiert C-Headerdateien und erzeugt daraus Rust-Bindings, damit Rust-Code auf bestehende C-Funktionen zugreifen kann. 
 
-Dadurch entsteht eine enge Verbindung zwischen Rust und der bestehenden C Infrastruktur des Kernels.
+Dadurch entsteht eine enge Verbindung zwischen Rust und der bestehenden C-Infrastruktur des Kernels.
 
 ## Sicherheit und Speicherverwaltung
 
-Das zentrales Ziel der Integration von Rust in den Linux Kernel ist die Verbesserung der Speichersicherheit.
+Das zentrale Ziel der Integration von Rust in den Linux-Kernel ist die Verbesserung der Speichersicherheit.
 
 C bietet sehr große Freiheiten beim Umgang mit Speicher. Diese Freiheit kann jedoch auch zu Fehlern führen. Typische Probleme sind beispielsweise:
 
@@ -123,9 +123,9 @@ C bietet sehr große Freiheiten beim Umgang mit Speicher. Diese Freiheit kann je
 - Nullpointer Dereferenzen
 - Race Conditions
 
-Bei Rust können viele dieser Fehler bereits zur Compilezeit verhindert werden. Durch das sogenannte Ownership System und den Borrow Checker wird sichergestellt, dass Speicher korrekt verwaltet wird.
+Bei Rust können viele dieser Fehler bereits zur Compilezeit verhindert werden. Durch das sogenannte Ownership-System und den Borrow-Checker wird sichergestellt, dass Speicher korrekt verwaltet wird.
 
-Dadurch können eine große von Speicherfehlern vermieden werden, bevor der Code überhaupt ausgeführt wird.
+Dadurch können viele große Speicherfehler vermieden werden, bevor der Code überhaupt ausgeführt wird.
 
 Gerade im Kernelspace, wo Fehler das gesamte Betriebssystem zum Absturz bringen können, stellt das einen erheblichen Vorteil dar.
 
@@ -143,24 +143,24 @@ Gerade im Kernelspace, wo Fehler das gesamte Betriebssystem zum Absturz bringen 
 
 ## Praktische Erfahrungen
 
-Die praktische Umsetzung zeigt deutlich, dass Rust im Linux Kernel bereits nutzbar ist, sich jedoch noch in einer relativ frühen Entwicklungsphase befindet.
+Die praktische Umsetzung zeigt deutlich, dass Rust im Linux-Kernel bereits nutzbar ist, sich jedoch noch in einer relativ frühen Entwicklungsphase befindet.
 
-Während der C Treiber ohne größere Probleme kompiliert und getestet werden konnte, traten beim Rust Modul mehrfach Kompatibilitätsprobleme mit der Toolchain auf.
+Während der C-Treiber ohne größere Probleme kompiliert und getestet werden konnte, traten beim Rust-Modul mehrfach Kompatibilitätsprobleme mit der Toolchain auf.
 
 Besonders Versionsunterschiede führten wiederholt zu Buildfehlern während der Entwicklung.
 
 ## Fazit
 
-Wir beide sind fest der Überzeugung, dass Rust im Linux Kernel großes Potenzial besitzt und langfristig eine immer wichtigere Rolle in der Kernelentwicklung spielen wird.
+Wir beide sind fest der Überzeugung, dass Rust im Linux-Kernel großes Potenzial besitzt und langfristig eine immer wichtigere Rolle in der Kernelentwicklung spielen wird.
 
 Die Sprache bietet durch ihr Speichersicherheitsmodell klare Vorteile gegenüber C und kann helfen, viele typische Fehler bereits zur Compilezeit zu verhindern.
 
-Beim Schreiben des eigentlichen Codes bemerkt man eine Sache schnell, C in Linux hat zwar starke Programmierguidelines gibt dem Entwickler aber immernoch viel Freiheit was zu vielen vermeidbaren Fehlern führen kann. Durch das Ownership-System, den Borrow-Checker und das Typsystem zwingt Rust den Entwickler dazu, viele potenzielle Fehler bereits während der Implementierung zu berücksichtigen. Dies kann den Entwicklungsprozess zwar verlangsamen, führt jedoch langfristig zu robusterem und besser überprüfbarem Code.
+Beim Schreiben des eigentlichen Codes bemerkt man eine Sache schnell, C in Linux hat zwar starke Programmierguidelines, gibt dem Entwickler aber immer noch viel Freiheit, was zu vielen vermeidbaren Fehlern führen kann. Durch das Ownership-System, den Borrow-Checker und das Typsystem zwingt Rust den Entwickler dazu, viele potenzielle Fehler bereits während der Implementierung zu berücksichtigen. Dies kann den Entwicklungsprozess zwar verlangsamen, führt jedoch langfristig zu robusterem und besser überprüfbarem Code.
 
-Gleichzeitig zeigt die praktische Umsetzung jedoch, dass die Entwicklung von Rust Kernelmodulen derzeit noch mit einem deutlich höheren Aufwand verbunden ist. Besonders die Einrichtung der Toolchain und die Kompatibilität zwischen verschiedenen Komponenten stellt aktuell eine riesige Herausforderung dar.
+Gleichzeitig zeigt die praktische Umsetzung jedoch, dass die Entwicklung von Rust-Kernelmodulen derzeit noch mit einem deutlich höheren Aufwand verbunden ist. Besonders die Einrichtung der Toolchain und die Kompatibilität zwischen verschiedenen Komponenten stellt aktuell eine riesige Herausforderung dar.
 
-Eines der größten Probleme ist, dass Rust im Kernel weiterhin stark mit C verbunden ist. Durch die Verwendung von FFI Schnittstellen greift Rust häufig auf bestehende C Implementierungen zurück. Rust ersetzt den bestehenden C Code im Kernel daher momentan nicht vollständig, sondern ergänzt diesen nur.
+Eines der größten Probleme ist, dass Rust im Kernel weiterhin stark mit C verbunden ist. Durch die Verwendung von FFI-Schnittstellen greift Rust häufig auf bestehende C-Implementierungen zurück. Rust ersetzt den bestehenden C-Code im Kernel daher momentan nicht vollständig, sondern ergänzt diesen nur.
 
-Seit Dezember 2025 ist Rust offiziell Teil des Linux Kernels und wird nicht mehr als experimentelles Feature betrachtet. Dennoch wird es vermutlich noch einige Zeit dauern, bis Rust in größerem Umfang für Kernelentwicklung eingesetzt wird.
+Seit Dezember 2025 ist Rust offiziell Teil des Linux-Kernels und wird nicht mehr als experimentelles Feature betrachtet. Dennoch wird es vermutlich noch einige Zeit dauern, bis Rust in größerem Umfang für Kernelentwicklung eingesetzt wird.
 
-Langfristig wird Rust sicher einen wichtigen Beitrag dazu leisten, die Stabilität und Sicherheit des Linux Kernels weiter zu verbessern.
+Langfristig wird Rust sicher einen wichtigen Beitrag dazu leisten, die Stabilität und Sicherheit des Linux-Kernels weiter zu verbessern.

@@ -1,17 +1,17 @@
 # Projekthandbuch
-\textauthor{Schueler Amadeo Wieser}
+\textauthor{Amadeo Wieser}
 
 ## Entwicklungsplan
 
 ### Projektauftrag
 
-Im Linux Kernel werden Treiber traditionell in der Programmiersprache C entwickelt. C bietet dabei direkten Zugriff auf Hardware und Speicher, bringt jedoch auch Risiken mit sich, da Fehler wie ungültige Speicherzugriffe oder Datenrennen schwer zu erkennen sein können und das gesamte System beeinträchtigen können.
+Im Linux-Kernel werden Treiber traditionell in der Programmiersprache C entwickelt. C bietet dabei direkten Zugriff auf Hardware und Speicher, bringt jedoch auch Risiken mit sich, da Fehler wie ungültige Speicherzugriffe oder Datenrennen schwer zu erkennen sein können und das gesamte System beeinträchtigen können.
 
-Mit der Integration von Rust in den Linux Kernel wurde ein neuer Ansatz eingeführt, der darauf abzielt, die Entwicklung von Kernelcode sicherer zu machen. Rust besitzt Mechanismen zur Speichersicherheit und zur Kontrolle von Nebenläufigkeit, die viele typische Fehler bereits während der Kompilierung verhindern können.
+Mit der Integration von Rust in den Linux-Kernel wurde ein neuer Ansatz eingeführt, der darauf abzielt, die Entwicklung von Kernelcode sicherer zu machen. Rust besitzt Mechanismen zur Speichersicherheit und zur Kontrolle von Nebenläufigkeit, die viele typische Fehler bereits während der Kompilierung verhindern können.
 
-Im Rahmen dieser Diplomarbeit wurde untersucht, wie sich die Entwicklung eines Linux Kernel Treibers in C im Vergleich zu einer Implementierung in Rust gestaltet. Dazu wurden zwei funktional identische Kernelmodule entwickelt und praktisch getestet. Ziel war es, Unterschiede im Entwicklungsprozess, im Aufbau des Codes sowie in der Toolchain und den benötigten Entwicklungsumgebungen zu analysieren.
+Im Rahmen dieser Diplomarbeit wurde untersucht, wie sich die Entwicklung eines Linux-Kernel-Treibers in C im Vergleich zu einer Implementierung in Rust gestaltet. Dazu wurden zwei funktional identische Kernelmodule entwickelt und praktisch getestet. Ziel war es, Unterschiede im Entwicklungsprozess, im Aufbau des Codes sowie in der Toolchain und den benötigten Entwicklungsumgebungen zu analysieren.
 
-Die Arbeit konzentriert sich dabei nicht auf die Entwicklung eines komplexen Hardwaretreibers, sondern auf einen didaktischen Vergleich zweier Implementierungen eines einfachen Character Device Treibers. Dadurch soll nachvollziehbar werden, welche Vorteile und Herausforderungen sich beim Einsatz von Rust im Linux Kernel ergeben und wie sich die Entwicklung im Vergleich zur klassischen C Implementierung gestaltet.
+Die Arbeit konzentriert sich dabei nicht auf die Entwicklung eines komplexen Hardwaretreibers, sondern auf einen didaktischen Vergleich zweier Implementierungen eines einfachen Character-Device-Treibers. Dadurch soll nachvollziehbar werden, welche Vorteile und Herausforderungen sich beim Einsatz von Rust im Linux-Kernel ergeben und wie sich die Entwicklung im Vergleich zur klassischen C-Implementierung gestaltet.
 
 
 #### Projektziele
@@ -26,25 +26,25 @@ Ein weiteres Ziel ist die systematische Dokumentation des Entwicklungsprozesses.
 
 Langfristig soll die Arbeit aufzeigen, welche Rolle Rust künftig in der Linux-Kernelentwicklung spielen könnte und welche Vorteile beziehungsweise Herausforderungen sich bei der Verwendung dieser Sprache im Kernelkontext ergeben.
 
-#### Nicht-Ziele bzw. nicht Inhalte
+#### Nicht-Ziele bzw. Nichtinhalte
 
-Diese Diplomarbeit verfolgt nicht das Ziel, einen vollständig produktionsreifen Hardwaretreiber für ein reales Gerät zu entwickeln. Stattdessen wird ein bewusst vereinfachter Character Device Treiber implementiert, der primär als Demonstrations- und Vergleichsbeispiel dient.
+Diese Diplomarbeit verfolgt nicht das Ziel, einen vollständig produktionsreifen Hardwaretreiber für ein reales Gerät zu entwickeln. Stattdessen wird ein bewusst vereinfachter Character-Device-Treiber implementiert, der primär als Demonstrations- und Vergleichsbeispiel dient.
 
 Ebenso liegt der Fokus der Arbeit nicht auf der Entwicklung komplexer Hardwarekommunikation oder spezifischer Treiber für bestimmte Geräteklassen. Die Implementierungen dienen vielmehr dazu, grundlegende Mechanismen der Kernelmodulentwicklung verständlich darzustellen.
 
-Darüber hinaus ist es nicht Ziel dieser Arbeit, den Linux Kernel selbst zu verändern oder bestehende Kernelkomponenten zu ersetzen. Rust wird im Rahmen des Projekts ausschließlich verwendet, um einen vergleichbaren Treiber zu implementieren und dessen Entwicklung mit einer klassischen C-Implementierung zu vergleichen.
+Darüber hinaus ist es nicht Ziel dieser Arbeit, den Linux-Kernel selbst zu verändern oder bestehende Kernelkomponenten zu ersetzen. Rust wird im Rahmen des Projekts ausschließlich verwendet, um einen vergleichbaren Treiber zu implementieren und dessen Entwicklung mit einer klassischen C-Implementierung zu vergleichen.
 
 Auch eine vollständige Performanceanalyse oder Benchmark-Messung der beiden Implementierungen ist nicht Bestandteil dieser Arbeit. Der Schwerpunkt liegt stattdessen auf dem Entwicklungsprozess, der Struktur des Codes sowie den praktischen Erfahrungen bei der Umsetzung.
 
 #### Projektnutzen
 
-Der Nutzen dieser Diplomarbeit liegt vor allem in der praktischen Untersuchung eines aktuellen Themas der Systemprogrammierung. Mit der Integration von Rust in den Linux Kernel ist erstmals eine neue Programmiersprache offiziell Teil des Kernels geworden. Dadurch entsteht ein relevantes Forschungs- und Entwicklungsfeld, das sowohl für die Open-Source-Community als auch für zukünftige Entwickler von großer Bedeutung ist.
+Der Nutzen dieser Diplomarbeit liegt vor allem in der praktischen Untersuchung eines aktuellen Themas der Systemprogrammierung. Mit der Integration von Rust in den Linux-Kernel ist erstmals eine neue Programmiersprache offiziell Teil des Kernels geworden. Dadurch entsteht ein relevantes Forschungs- und Entwicklungsfeld, das sowohl für die Open-Source-Community als auch für zukünftige Entwickler von großer Bedeutung ist.
 
 Durch die Entwicklung zweier funktional vergleichbarer Kernelmodule in C und Rust wird ein direkter Vergleich der beiden Ansätze möglich. Die Arbeit zeigt dabei nicht nur theoretische Unterschiede zwischen den Programmiersprachen, sondern dokumentiert auch die praktischen Herausforderungen beim Aufbau der Entwicklungsumgebung, beim Kompilieren des Kernels sowie bei der Implementierung eines Treibers.
 
 Für die Schule entsteht dadurch eine nachvollziehbare Dokumentation der Linux-Treiberentwicklung, die als Lernmaterial für zukünftige Schüler oder Projekte dienen kann. Besonders im Bereich der Systemprogrammierung ist praxisnahes Beispielmaterial selten, weshalb eine verständliche Aufarbeitung dieses Themas einen zusätzlichen Mehrwert bietet.
 
-Darüber hinaus liefert die Arbeit einen Einblick in moderne Entwicklungen der Kernelprogrammierung und zeigt, inwiefern Rust als sichere Systemprogrammiersprache langfristig zur Verbesserung der Stabilität und Sicherheit des Linux Kernels beitragen könnte.
+Darüber hinaus liefert die Arbeit einen Einblick in moderne Entwicklungen der Kernelprogrammierung und zeigt, inwiefern Rust als sichere Systemprogrammiersprache langfristig zur Verbesserung der Stabilität und Sicherheit des Linux-Kernels beitragen könnte.
 
 #### Projektauftraggeber/in
 
@@ -86,7 +86,7 @@ Am Ende der Diplomarbeit fügen Sie hier noch eine Liste der tatsächlich angefa
 | Toolchain- oder Versionskonflikte (Rust, Kernel, Compiler) | 35% | Kernel oder Treiber lassen sich nicht kompilieren | Verwendung dokumentierter Versionen und schrittweise Anpassung der Toolchain |
 | Fehler im Kernelmodul | 25% | Systemabstürze oder Kernel Panics während Tests | Entwicklung und Tests ausschließlich in einer virtuellen Maschine |
 | Hoher Zeitaufwand beim Debugging | 30% | Verzögerungen im Projektfortschritt | Frühzeitiges Testen einzelner Komponenten und regelmäßige Zwischentests |
-| Unterschiede zwischen Linux Distributionen | 20% | Unterschiedliches Verhalten von Kernel oder Toolchain | Nutzung dokumentierter Kernelversionen und Anpassung der Entwicklungsumgebung |
+| Unterschiede zwischen Linux-Distributionen | 20% | Unterschiedliches Verhalten von Kernel oder Toolchain | Nutzung dokumentierter Kernelversionen und Anpassung der Entwicklungsumgebung |
 | Verzögerungen im Projektablauf | 15% | Projektabschnitte können nicht rechtzeitig abgeschlossen werden | Regelmäßige Abstimmung im Team und frühzeitige Planung der Arbeitsschritte |
 
 : Projektrisiken
@@ -113,7 +113,7 @@ Am Ende der Diplomarbeit fügen Sie hier noch eine Liste der tatsächlich angefa
 | Projektleiter | Verantwortlicher für Einhaltung des Projektrahmens | Amadeo Wieser  |
 | Auftraggeber | Auftraggeber der externen Diplomarbeit | Thomas Strametz |
 | Betreuer | Schulischer Betreuer | Ing. DI Dr. C. Schindler |
-| Betreuer | Schulischer Betreuer | MAG. A. Lube |
+| Betreuer | Schulischer Betreuer | Mag. A. Lube |
 
 : Projektrollen
 
@@ -208,8 +208,8 @@ Der Entwickler kompiliert ein Kernelmodul (in C oder Rust) mithilfe des Linux Ke
 Der Entwickler startet den Buildprozess über ein Makefile.
 
 #### Vorbedingung
-* Linux Kernel Quellen sind vorhanden
-* Kernel Buildtree ist verfügbar
+* Linux-Kernel-Quellen sind vorhanden
+* Kernel-Buildtree ist verfügbar
 * Compiler und Toolchain sind korrekt installiert
 
 #### Nachbedingung
@@ -222,7 +222,7 @@ Eine kompilierte Kernelmodul-Datei (.ko) wurde erzeugt.
 
 1. Entwickler wechselt in das Verzeichnis des Kernelmoduls
 2. Der Buildbefehl wird ausgeführt
-3. Das Kernel Buildsystem kompiliert den Quellcode
+3. Das Kernel-Buildsystem kompiliert den Quellcode
 4. Das fertige Kernelmodul wird erzeugt
 
 #### Fehlersituationen
@@ -239,7 +239,7 @@ Das Kernelmodul wird nicht erstellt und der Buildprozess bricht mit einer Fehler
 ### Kernelmodul laden
 
 #### Kurzbeschreibung
-Ein zuvor kompiliertes Kernelmodul wird in den laufenden Linux Kernel geladen.
+Ein zuvor kompiliertes Kernelmodul wird in den laufenden Linux-Kernel geladen.
 
 #### Trigger
 Der Entwickler oder Administrator lädt das Modul manuell.
@@ -278,7 +278,7 @@ Das Modul wird nicht geladen und der Kernel bleibt unverändert.
 Ein Programm im Userspace greift über eine Gerätedatei auf den implementierten Kernel-Treiber zu.
 
 #### Trigger
-Ein Userspace Programm öffnet die entsprechende Gerätedatei.
+Ein Userspace-Programm öffnet die entsprechende Gerätedatei.
 
 #### Vorbedingung
 * Kernelmodul ist geladen
@@ -289,16 +289,16 @@ Ein Userspace Programm öffnet die entsprechende Gerätedatei.
 Der Treiber verarbeitet die Anfrage und führt die entsprechende Operation aus.
 
 #### Akteure
-* Userspace Programm
-* Linux Kernel
-* Kernel Treiber
+* Userspace-Programm
+* Linux-Kernel
+* Kernel-Treiber
 
 #### Standardablauf
 
 1. Ein Programm öffnet die Gerätedatei
 2. Der Kernel leitet die Anfrage an den Treiber weiter
 3. Der Treiber verarbeitet die Operation
-4. Das Ergebnis wird an das Userspace Programm zurückgegeben
+4. Das Ergebnis wird an das Userspace-Programm zurückgegeben
 
 #### Fehlersituationen
 

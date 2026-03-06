@@ -1,4 +1,5 @@
-# Diplomarbeit Linux Treiber Dokumentation
+
+# Teilaufgabe Zugaj
 \textauthor{Moritz Zugaj}
 
 ## Vorwort

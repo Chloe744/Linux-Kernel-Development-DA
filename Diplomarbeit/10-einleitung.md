@@ -1,8 +1,9 @@
 # Einleitung
+\textauthor{Wieser}
 
 Der Linux-Kernel ist eines der größten und erfolgreichsten Open-Source-Projekte weltweit. Seine Entwicklung basiert auf einem kollaborativen Modell, bei dem Entwicklerinnen und Entwickler aus unterschiedlichen Ländern, Organisationen und Unternehmen gemeinsam an einer frei zugänglichen Codebasis arbeiten. Dieses offene Entwicklungsmodell ermöglicht eine hohe Transparenz, langfristige Wartbarkeit sowie eine kontinuierliche Weiterentwicklung durch die Gemeinschaft. Open Source stellt damit eine wesentliche Grundlage für nachhaltige und gemeinschaftlich getragene Softwareentwicklung dar.
 
-Traditionell werden Linux-Kernelmodule und Gerätetreiber in der Programmiersprache C entwickelt. C erlaubt eine sehr systemnahe Programmierung und bietet hohe Performance, ist jedoch anfällig für Fehler wie Speicherlecks, Pufferüberläufe oder Race-Conditions. Solche Fehler sind im Kernelspace besonders kritisch, da sie potenziell das gesamte System destabilisieren oder sicherheitsrelevante Schwachstellen verursachen können.
+Traditionell werden Linux-Kernelmodule und Gerätetreiber in der Programmiersprache C entwickelt. C erlaubt eine sehr systemnahe Programmierung und bietet hohe Performance,; ist jedoch anfällig für Fehler wie Speicherlecks, Pufferüberläufe oder Race-Conditions. Solche Fehler sind im Kernelspace besonders kritisch, da sie potenziell das gesamte System destabilisieren oder sicherheitsrelevante Schwachstellen verursachen können.
 
 Als Reaktion auf diese Problematik wurde im Rahmen des Rust-for-Linux-Projekts die Programmiersprache Rust schrittweise in den Linux-Kernel integriert. Rust verfolgt einen modernen Ansatz zur Speicher- und Thread-Sicherheit und zielt darauf ab, viele Fehlerklassen bereits zur Compile-Zeit zu verhindern. Nach einer mehrjährigen Einführungs- und Evaluierungsphase wurde Rust im Dezember 2025 offiziell als stabiler Bestandteil des Linux-Kernels akzeptiert und ist damit nicht länger ausschließlich als experimentelles Feature zu betrachten [@thenewstack_rust_2025; @heise_rust_kernel_2025].
 

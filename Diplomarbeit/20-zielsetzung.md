@@ -1,4 +1,5 @@
 # Zielsetzung
+\textauthor{Wieser}
 
 Der aktuelle Stand im Projekt ist durch eine wachsende Bedeutung von Linux als Open-Source-Betriebssystem geprägt. Die Entwicklung von Linux-Gerätetreibern erfolgt traditionell in der Programmiersprache C, welche zwar eine hohe Kontrolle über Hardware und Systemressourcen ermöglicht, jedoch auch anfällig für typische Fehler in der Speicher- und Nebenläufigkeitsverwaltung ist. Parallel dazu wurde mit Rust eine moderne Programmiersprache in den Linux-Kernel integriert, die neue Ansätze zur Erhöhung von Sicherheit und Codequalität verfolgt.
 

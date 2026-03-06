@@ -1,6 +1,7 @@
 \newpage
 
 ## Dokumentation
+\textauthor{Wieser}
 
 Die Projektdokumentation beschreibt den Fortschritt der Diplomarbeit über den gesamten Projektzeitraum hinweg. Da es sich bei dieser Arbeit hauptsächlich um ein Analyse- und Entwicklungsprojekt im Bereich der Systemprogrammierung handelt, wurde der Fortschritt in mehreren Projektphasen dokumentiert.
 
@@ -11,8 +12,8 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 #### Gesamtstatus
 
 * Projektidee und Themenbereich wurden definiert
-* Grundlagen zur Linux Kernelarchitektur wurden recherchiert
-* Erste Literatur zum Thema Rust im Linux Kernel wurde gesammelt
+* Grundlagen zur Linux-Kernelarchitektur wurden recherchiert
+* Erste Literatur zum Thema Rust im Linux-Kernel wurde gesammelt
 * Projektbeschreibung wurde im DA-Portal eingetragen
 
 | Dimension | Status | Maßnahmen |
@@ -31,7 +32,7 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 #### Nächste Schritte
 
 * Aufbau der Entwicklungsumgebung
-* Vorbereitung der Linux Kernel Quellen
+* Vorbereitung der Linux-Kernel-Quellen
 * erste Tests mit Kernelmodulen
 
 : Projektstatus Stand November 2025
@@ -41,9 +42,9 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 
 #### Gesamtstatus
 
-* Entwicklungsumgebung für Linux Kernelentwicklung eingerichtet
-* Linux Kernel Quellen heruntergeladen
-* eigener Kernel mit aktivierter Rust Unterstützung kompiliert
+* Entwicklungsumgebung für Linux-Kernel-Entwicklung eingerichtet
+* Linux-Kernel-Quellen heruntergeladen
+* eigener Kernel mit aktivierter Rust-Unterstützung kompiliert
 * Grundlagen der Kernelmodulentwicklung praktisch getestet
 
 | Dimension | Status | Maßnahmen |
@@ -62,8 +63,8 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 
 #### Nächste Schritte
 
-* Implementierung des Character Device Treibers in C
-* Analyse der Kernel APIs
+* Implementierung des Character-Device-Treibers in C
+* Analyse der Kernel-APIs
 
 : Projektstatus Stand Januar 2026
 
@@ -73,8 +74,8 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 #### Gesamtstatus
 
 * C-Treiber wurde implementiert und getestet
-* Rust Treiber wurde entwickelt
-* mehrere Kompilierungsversuche mit verschiedenen Toolchain Versionen durchgeführt
+* Rust-Treiber wurde entwickelt
+* mehrere Kompilierungsversuche mit verschiedenen Toolchain-Versionen durchgeführt
 * Unterschiede zwischen den Implementierungen wurden analysiert
 
 | Dimension | Status | Maßnahmen |

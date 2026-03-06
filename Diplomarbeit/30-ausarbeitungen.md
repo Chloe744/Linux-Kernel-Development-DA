@@ -1,4 +1,5 @@
 # Aufgabenstellung
+\textauthor{Wieser}
 
 ## Auftraggeber
 

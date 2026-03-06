@@ -1,7 +1,7 @@
 \newpage
 ## Projektabschlussbericht
 \textauthor{Wieser}
-### Erfolgsmessung
+#### Erfolgsmessung
 
 #### Erreichung Leistungs-/Qualitätsziele
 
@@ -31,7 +31,7 @@ Sowohl der Linux-Kernel als auch die benötigten Entwicklungswerkzeuge wie Compi
 
 Der tatsächliche Aufwand des Projekts lag hauptsächlich im Zeitaufwand für Recherche, Entwicklung und Dokumentation.
 
-### Reflexion / Lessons Learned
+## Reflexion / Lessons Learned
 
 #### Teamarbeit
 
@@ -64,7 +64,7 @@ Dazu gehören unter anderem:
 
 Besonders deutlich wurde, wie komplex die Entwicklung von Kernelsoftware sein kann und wie wichtig eine stabile und kompatible Entwicklungsumgebung ist.
 
-### Nachhaltigkeitsanalyse
+#### Nachhaltigkeitsanalyse
 
 Im Rahmen der Nachhaltigkeitsanalyse wird untersucht, inwiefern diese Diplomarbeit einen Bezug zu den Sustainable Development Goals (SDGs) der Vereinten Nationen aufweist.
 

@@ -117,7 +117,7 @@ Am Ende der Diplomarbeit fügen Sie hier noch eine Liste der tatsächlich angefa
 
 : Projektrollen
 
-### Vorgehen bei Änderungen
+#### Vorgehen bei Änderungen
 
 Damit Änderungen im Projekt strukturiert erfolgen können, wurde ein einheitliches Vorgehen definiert. Änderungen können beispielsweise Anpassungen am Zeitplan, an einzelnen Meilensteinen oder an der technischen Umsetzung betreffen.
 
@@ -138,48 +138,48 @@ Dieses Vorgehen stellt sicher, dass alle Projektmitglieder über Änderungen inf
 
 ## Meilensteine
 
-### 12.09.2025: Eintragung im DA-Portal abgeschlossen
+#### 12.09.2025: Eintragung im DA-Portal abgeschlossen
 
 - Projektidee und Themenbeschreibung wurden im Diplomarbeitsportal eingetragen
 - Projektteam und Betreuer wurden im System erfasst
 - Grundlegende Projektdaten wurden dokumentiert
 
-### 10.11.2025: Erste Projektpräsentation
+#### 10.11.2025: Erste Projektpräsentation
 
 - Vorstellung des aktuellen Projektstandes vor Schülern und Lehrpersonen
 - Präsentation der Projektidee und der geplanten technischen Umsetzung
 - Rückmeldungen und Verbesserungsvorschläge des Betreuers wurden aufgenommen
 
-### 09.01.2026: Erste Version der Diplomarbeit fertiggestellt
+#### 09.01.2026: Erste Version der Diplomarbeit fertiggestellt
 
 - Erste vollständige Version der schriftlichen Arbeit wurde erstellt
 - Dokument wurde elektronisch an den Betreuer übermittelt
 - Feedback für weitere Überarbeitungsschritte wurde eingeholt
 
-### 26.02.2026: Zweite Projektpräsentation
+#### 26.02.2026: Zweite Projektpräsentation
 
 - Präsentation des aktuellen Fortschritts der Diplomarbeit
 - Vorstellung der praktischen Umsetzung und der bisherigen Ergebnisse
 - Präsentation wurde auf Basis des Feedbacks der ersten Präsentation verbessert
 
-### 06.03.2026: Fertigstellung der Diplomarbeit
+#### 06.03.2026: Fertigstellung der Diplomarbeit
 
 - Schriftliche Arbeit wurde final überarbeitet
 - Korrekturen und Verbesserungen wurden eingearbeitet
 - Diplomarbeit liegt in abgabefertiger Form vor
 
-### 23.03.2026: Durchsicht mit dem Betreuer
+#### 23.03.2026: Durchsicht mit dem Betreuer
 
 - Gemeinsame Durchsicht der Diplomarbeit mit dem Betreuer
 - Letzte inhaltliche und formale Anpassungen wurden besprochen
 - Freigabe für die endgültige Abgabe wurde erteilt
 
-### 27.03.2026: Abschluss im DA-Portal
+#### 27.03.2026: Abschluss im DA-Portal
 
 - Alle notwendigen Einträge im Diplomarbeitsportal wurden finalisiert
 - Abschluss des Projekts im Portal gemeinsam mit dem Betreuer durchgeführt
 
-### 07.04.2026: Abgabe der Bibliotheksversion
+#### 07.04.2026: Abgabe der Bibliotheksversion
 
 - Gebundene Version der Diplomarbeit wurde abgegeben
 - Bibliotheksversion wurde offiziell eingereicht
@@ -199,7 +199,7 @@ Die beschriebenen Anwendungsfälle stellen daher typische Szenarien dar, die wä
 
 \newpage
 
-### Kernelmodul kompilieren
+#### Kernelmodul kompilieren
 
 #### Kurzbeschreibung
 Der Entwickler kompiliert ein Kernelmodul (in C oder Rust) mithilfe des Linux Kernel Buildsystems.
@@ -236,7 +236,7 @@ Das Kernelmodul wird nicht erstellt und der Buildprozess bricht mit einer Fehler
 
 \newpage
 
-### Kernelmodul laden
+#### Kernelmodul laden
 
 #### Kurzbeschreibung
 Ein zuvor kompiliertes Kernelmodul wird in den laufenden Linux-Kernel geladen.
@@ -272,7 +272,7 @@ Das Modul wird nicht geladen und der Kernel bleibt unverändert.
 
 \newpage
 
-### Zugriff auf das Gerät über den Treiber
+#### Zugriff auf das Gerät über den Treiber
 
 #### Kurzbeschreibung
 Ein Programm im Userspace greift über eine Gerätedatei auf den implementierten Kernel-Treiber zu.
@@ -310,7 +310,7 @@ Die Operation wird abgebrochen und eine Fehlermeldung wird zurückgegeben.
 
 \newpage
 
-### Vergleich der Implementierungen
+## Vergleich der Implementierungen
 
 #### Kurzbeschreibung
 Die Implementierungen des Treibers in C und Rust werden hinsichtlich Struktur, Speicherverwaltung und Sicherheitsmechanismen analysiert.

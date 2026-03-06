@@ -8,7 +8,7 @@ Das Ziel dieses Dokuments ist die Aufzeichnung meiner Erfahrungen und anderer er
 
 ## Ausarbeitung
 
-### Grundlagen zur Kernelprogrammierung in C
+#### Grundlagen zur Kernelprogrammierung in C
 
 Die 5 wichtigsten Aspekte, die man vor dem Starten der Entwicklung verstehen muss.
 
@@ -51,9 +51,9 @@ sudo apt-get install linux-headers-`uname -r`
 
 #### Risiken
 
-Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg_sysprog21; @virtualbox_docs].
+Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg_sysprog21] [@virtualbox_docs].
 
-### Aufbau eines Treibermoduls
+#### Aufbau eines Treibermoduls
 
 In Linux teilen die meisten Treibermodule einen vorgesehenen Aufbau an Funktionen und anderen wichtigen Merkmalen, die man erlernen kann, jedoch unterscheiden sie sich auch in gewissen Punkten.
 
@@ -132,7 +132,7 @@ Es sollte nicht möglich sein, dass Root ein Treibermodul, das gerade im Linux-K
 
 Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie proc erlauben eine weitere Möglichkeit für den Kernel und die Kernel-Module, Informationen zu senden und zu verarbeiten. Aber proc gibt auch von sich aus wichtige Informationen über den Prozess, wie zum Beispiel Informationen über alle vorhandenen Module oder eine Statistik über die Speicherverwendung [@kernel_docs_proc_fs]. Die Methode, proc zu erstellen und auszuführen, ist sehr ähnlich wie bei den Modulen, da wir eine Struktur erstellen müssen mit allen Informationen der /proc-Datei, sowie Pointern zu allen Funktionen, und zu guter Letzt haben wir wieder die Init-Funktion zum Registrieren und die Cleanup zum Entregistrieren. Im simpelsten Fall haben wir dann noch mindestens eine Read-Methode, damit etwas zurückgegeben wird, wenn wir lesen möchten [@lkmpg_sysprog21].
 
-### Best Practices im Code
+#### Best Practices im Code
 
 Wenn man sich die auf GitHub vorhandenen Treibermodule ansieht, stößt man immer wieder auf kleine Tricks im Code, die die Quality of Life verbessern. Diese Tricks sind leicht zu implementieren und sollten deshalb, wenn möglich, immer angewandt werden.
 
@@ -195,7 +195,7 @@ struct virtual_container *a; //in Ordnung
 
 Dazu kommen noch andere bereits erwähnte Aspekte wie das Bewusstsein bei der Namensgebung der Variablen.
 
-### Schritt-für-Schritt-Vorführung einer Linux-Treiber-Entwicklung in C
+#### Schritt-für-Schritt-Vorführung einer Linux-Treiber-Entwicklung in C
 
 Jetzt wird anhand des bereits besprochenen Aufbaus eines Treibermoduls Theorie in die Praxis umgesetzt und anhand der gesammelten Erfahrung schrittweise ein einfaches Treibermodul erstellt werden. Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt [@virtualbox_docs].
 

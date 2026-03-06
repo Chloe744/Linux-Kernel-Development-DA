@@ -137,7 +137,7 @@ Gerade im Kernelspace, wo Fehler das gesamte Betriebssystem zum Absturz bringen 
 |Toolchain|gcc, Kernel Buildsystem|rustc, bindgen, LLVM, clang|
 |Speicherverwaltung|manuell|Ownership System|
 |Fehlersicherheit|gering|deutlich höher|
-|Integration in Kernel|vollständig etabliert|noch in Entwicklung, Abhängigkeit von C|
+|Integration in Kernel|vollständig etabliert|noch in Entwicklung|
 
 : Vergleich zwischen C und Rust Kernelmodulen
 

@@ -1,4 +1,5 @@
 \newpage
+
 ## Dokumentation
 
 Die Projektdokumentation beschreibt den Fortschritt der Diplomarbeit über den gesamten Projektzeitraum hinweg. Da es sich bei dieser Arbeit hauptsächlich um ein Analyse- und Entwicklungsprojekt im Bereich der Systemprogrammierung handelt, wurde der Fortschritt in mehreren Projektphasen dokumentiert.

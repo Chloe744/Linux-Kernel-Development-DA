@@ -133,11 +133,11 @@ Gerade im Kernelspace, wo Fehler das gesamte Betriebssystem zum Absturz bringen 
 
 | Kategorie | C Kernelmodul | Rust Kernelmodul |
 |:--|:--|:--|
-| Entwicklungsaufwand | relativ gering | deutlich höher |
-| Toolchain | gcc, Kernel Buildsystem | rustc, bindgen, LLVM, clang |
-| Speicherverwaltung | manuell | Ownership System |
-| Fehlersicherheit | gering | deutlich höher |
-| Integration in Kernel | vollständig etabliert | noch in Entwicklung, Abhängigkeit von C |
+|Entwicklungsaufwand|relativ gering|deutlich höher|
+|Toolchain|gcc, Kernel Buildsystem|rustc, bindgen, LLVM, clang|
+|Speicherverwaltung|manuell|Ownership System|
+|Fehlersicherheit|gering|deutlich höher|
+|Integration in Kernel|vollständig etabliert|noch in Entwicklung, Abhängigkeit von C|
 
 : Vergleich zwischen C und Rust Kernelmodulen
 

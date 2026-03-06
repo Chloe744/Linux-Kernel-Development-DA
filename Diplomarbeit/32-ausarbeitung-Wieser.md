@@ -138,7 +138,7 @@ Fehlerbehandlung erfolgt über typisierte Rückgabewerte, wodurch Fehlersituatio
 
 ## Setup, Kernel-Build und Rust-Modul-Entwicklung
 
-### Ziel des praktischen Teils
+#### Ziel des praktischen Teils
 
 Im praktischen Teil dieser Arbeit wird untersucht, wie sich die Entwicklung eines einfachen Linux Kernel Treibers in der Programmiersprache **Rust** im Vergleich zu **C** gestaltet.
 
@@ -160,7 +160,7 @@ Da mein Projektpartner Ubuntu Linux verwendete, entschied ich mich bewusst für 
 
 Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt.
 
-## Besonderheiten von Rust im Linux Kernel
+#### Besonderheiten von Rust im Linux Kernel
 
 Im Vorfeld ist es wichtig zu verstehen, dass Rust im Linux Kernel nicht als vollständig eigenständige Sprache agiert. Rust Code im Kernel ist eng mit der bestehenden C Infrastruktur verbunden. Viele Funktionen und Schnittstellen, die von Rust Code genutzt werden, sind weiterhin in C implementiert.
 
@@ -172,7 +172,7 @@ bindgen analysiert C Headerdateien und erzeugt daraus entsprechende Rust Struktu
 
 Für diesen Prozess wird zusätzlich die *LLVM / Clang* Toolchain benötigt, da bindgen intern auf *libclang* basiert.
 
-## Vorbereitung der Entwicklungsumgebung
+#### Vorbereitung der Entwicklungsumgebung
 
 Bevor Kernelmodule entwickelt werden können, muss zunächst geprüft werden, welche Kernelversion auf dem System läuft.
 
@@ -193,7 +193,7 @@ Dieser befindet sich normalerweise unter:
 
 `$()` wird im Terminal zur Befehlsausführung innerhalb eines Strings verwendet. Der darin stehende Befehl wird ausgeführt und dessen Ausgabe an dieser Stelle eingefügt.
 
-## Entscheidung für einen eigenen Kernel Build
+#### Entscheidung für einen eigenen Kernel Build
 
 Bei der Untersuchung der standardmäßig installierten Kernelkonfiguration von Manjaro zeigte sich zunächst, dass Rust grundsätzlich vom Kernel unterstützt wird. In der Konfiguration war die Option `HAVE_RUST` bereits auf `y` gesetzt. Diese Option wird automatisch aktiviert, wenn die verwendete Architektur Rust grundsätzlich unterstützt.
 
@@ -203,7 +203,7 @@ Dadurch konnten Rust-basierte Kernelkomponenten oder module nicht kompiliert wer
 
 Aus diesem Grund habe ich mich entschieden, den Linux Kernel selbst zu kompilieren. Dadurch konnte ich die Kernelkonfiguration vollständig kontrollieren und Rustunterstützung gezielt aktivieren.
 
-## Eigenes Kernel kompilieren
+#### Eigenes Kernel kompilieren
 ```
 git clone https://github.com/torvalds/linux.git
 ```
@@ -225,7 +225,7 @@ zcat /proc/config.gz > .config
 
 Damit wird eine `.config` Datei erzeugt, die als Grundlage für den eigenen Kernel Build verwendet werden kann.
 
-## Kernelkonfiguration anpassen
+#### Kernelkonfiguration anpassen
 
 Die Kernelkonfiguration kann anschließend angepasst werden:
 
@@ -239,7 +239,7 @@ Hier können verschiedene Kerneloptionen aktiviert oder deaktiviert werden.
 
 Um Rust-Unterstützung zu aktivieren, muss die Option `RUST` auf `y` gesetzt werden. Zusätzlich sollten alle damit verbundenen Optionen überprüft und entsprechend angepasst werden.
 
-## Rust Verfügbarkeit prüfen
+#### Rust Verfügbarkeit prüfen
 
 Der Kernel bietet einen speziellen Test, um zu überprüfen, ob die Rust Toolchain korrekt erkannt wird.
 
@@ -256,7 +256,7 @@ Dieser Befehl prüft:
 
 Während dieser Überprüfung traten bei mir verschiedene Fehlermeldungen auf.
 
-## Rust Toolchain Setup
+#### Rust Toolchain Setup
 
 Für die Arbeit mit Rust im Linux Kernel wird eine funktionierende Rust Toolchain benötigt.
 
@@ -290,7 +290,7 @@ rustup component add rust-src
 
 Ohne diese Komponente können bestimmte Kernel Builds nicht durchgeführt werden.
 
-## bindgen
+#### bindgen
 
 Die jetzige bindgen Version kann mit folgendem Befehl geprüft werden:
 
@@ -305,7 +305,7 @@ Falls bindgen über cargo installiert wurde, muss der Cargo Binary Pfad zum PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-## Kernel Build
+#### Kernel Build
 
 Nachdem alle Voraussetzungen erfüllt waren, konnte der Kernel Build gestartet werden.
 
@@ -316,7 +316,7 @@ make LLVM=1 -j$(nproc)
 
 Der Befehl `make` startet den Kompilierungsprozess anhand der im Projekt enthaltenen Makefiles. Der Parameter `LLVM=1` sorgt dafür, dass clang / llvm für den Build verwendet werden. Der Parameter `-j$(nproc)` startet einen parallelen Build mit allen verfügbaren CPU Kernen.
 
-## Kernel Installation
+#### Kernel Installation
 
 Nach erfolgreichem Build kann der Kernel installiert werden.
 
@@ -339,7 +339,7 @@ uname -r
 ```
 Der neue Kernel erschien aber nicht direkt im Bootmenü. Ich musste den Bootloader manuell aktualisieren, damit der neue Kernel als Startoption verfügbar war. Nach der Aktualisierung konnte der neue Kernel ausgewählt und gestartet werden.
 
-## Externe Kernelmodule kompilieren
+#### Externe Kernelmodule kompilieren
 
 Kernelmodule können außerhalb des Kernel Source Trees entwickelt werden.
 
@@ -356,12 +356,12 @@ Mit `M=$(pwd)` wird dem Kernel Buildsystem mitgeteilt, dass sich der Quellcode d
 Der Parameter `modules` gibt schließlich an, dass nur die in diesem Verzeichnis enthaltenen Kernelmodule gebaut werden sollen und nicht der komplette Kernel.
 
 
-## Aufgetretene Probleme
+### Aufgetretene Probleme
 
 Während der praktischen Umsetzung traten mehrere Probleme auf.
 Diese standen hauptsächlich im Zusammenhang mit der Rust Toolchain.
 
-### bindgen nicht gefunden
+##### bindgen nicht gefunden
 
 Ein häufiger Fehler war:
 
@@ -371,7 +371,7 @@ Rust bindings generator 'bindgen' could not be found
 
 Dies bedeutet, dass bindgen nicht installiert oder nicht im PATH vorhanden ist.
 
-### Rust Versionskonflikte
+#### Rust Versionskonflikte
 
 Mehrfach traten Konflikte zwischen Kernelversion und rustc Version auf.
 
@@ -382,7 +382,7 @@ rustc is too new
 
 Dies zeigt, dass bestimmte Kernelversionen nur mit bestimmten Rust Versionen getestet wurden.
 
-### Unknown unstable option
+#### Unknown unstable option
 
 ```
 unknown unstable option: no-jump-tables
@@ -390,7 +390,7 @@ unknown unstable option: no-jump-tables
 
 Dieser Fehler entsteht, wenn der Kernel Buildprozess Rust Compiler Optionen verwendet, die von der aktuell installierten Rust Version nicht unterstützt werden.
 
-### Weitere Compiler Probleme
+#### Weitere Compiler Probleme
 
 Zusätzlich traten Fehler im Zusammenhang mit:
 
@@ -402,7 +402,7 @@ auf.
 
 Diese Fehler entstehen häufig durch Unterschiede in Compiler Versionen oder Build Flags.
 
-## Begriffs und Abkürzungsverzeichnis
+### Begriffs und Abkürzungsverzeichnis
 
 *LKM*  
 Loadable Kernel Module. Zur Laufzeit ladbares Kernelmodul zur Erweiterung der Kernel Funktionalität.

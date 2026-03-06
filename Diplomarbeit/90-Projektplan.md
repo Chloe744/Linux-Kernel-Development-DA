@@ -69,8 +69,6 @@ Die Diplomarbeit wird in Zusammenarbeit mit der FH Joanneum durchgeführt. Der e
 
 #### Projektkosten
 
-Hier dokumentieren Sie welche Kosten fallen Für Ihr Projekt an und wer kommt für diese Kosten auf ?
-
 | Meilenstein  | Kostenart | Menge  | Preis   | Gesamtkosten | Deckung durch |
 |:-------------|:---------:|:------:|--------:|-------------:|---------------|
 | Gebundene DA-Abgabe | Druck | 3 | 27.90€ | 83,70€ | Schüler |

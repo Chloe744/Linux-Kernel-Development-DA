@@ -15,7 +15,7 @@ Sowohl der C-Treiber als auch der Rust-Treiber implementieren die gleiche grundl
 
 Das Ziel war es, eine möglichst vergleichbare Implementierung zu erstellen, damit Unterschiede zwischen den beiden Programmiersprachen besser analysiert werden können.
 
-#### Moduldefinition
+### Moduldefinition
 
 Der erste Unterschied zeigt sich bereits bei der Definition des Kernelmoduls.
 
@@ -44,7 +44,7 @@ module! {
 
 Während C einzelne Makros für verschiedene Eigenschaften nutzt, bündelt Rust diese Informationen innerhalb eines einzigen Makros. Dieses registriert das Modul automatisch beim Kernel.
 
-#### Dateioperationen
+### Dateioperationen
 
 In C wird dazu eine Struktur definiert, welche Funktionspointer enthält.
 
@@ -72,7 +72,7 @@ impl FileOperations for CharTestFile {
 
 Statt Funktionspointer in einer Struktur zu speichern, implementiert Rust also eine Schnittstelle (Trait), die benötigten Funktionen vorgibt.
 
-#### Zugriff auf Userspace Speicher
+### Zugriff auf Userspace Speicher
 
 In C erfolgt dies über spezielle Funktionen wie `copy_from_user`.
 

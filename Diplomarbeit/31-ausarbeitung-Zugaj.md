@@ -8,15 +8,15 @@ Das Ziel dieses Dokuments ist die Aufzeichnung meiner Erfahrungen und anderer er
 
 ## Ausarbeitung
 
-#### Grundlagen zur Kernelprogrammierung in C
+### Grundlagen zur Kernelprogrammierung in C
 
 Die 5 wichtigsten Aspekte, die man vor dem Starten der Entwicklung verstehen muss.
 
-#### Linux Kernel
+### Linux Kernel
 
 Der Kernel eines Linux-Betriebssystems ist für die Speicher- und Prozessverwaltung zuständig. Er bildet eine unabhängige Schnittstelle für Software, welche auf die Schnittstelle zugreifen kann, ohne Kenntnis der Hardware zu haben. Der Linux-Kernel ist ein modularer monolithischer Kernel, was so viel bedeutet, dass der Kernel nicht nur Funktionen für die Kommunikation zwischen Prozessen, sondern auch Treiber von Hardware bietet. Noch dazu kommt, dass der Kernel, wie erwähnt, auch modular ist, das bedeutet, er kann durch jegliche Module erweitert werden [@lkmpg_sysprog21].
 
-#### Module
+### Module
 
 Module sind Codeteile, welche auf dem Linux-Kernel geladen und entfernt werden und dienen dazu, die Fähigkeiten des Kernels zu erweitern, ohne dabei einen Systemneustart zu verlangen. Ein Beispiel für ein wichtiges Modul im Linux-Kernel ist der Gerätetreiber, der dafür dient, einen Schnittpunkt zwischen Hardware- und Kernelinteraktion herzustellen [@lkmpg_sysprog21].
 
@@ -24,7 +24,7 @@ Module sind Codeteile, welche auf dem Linux-Kernel geladen und entfernt werden u
 
 Damit ein Modul funktioniert und richtig geladen werden kann, muss es mindestens aus einer Startfunktion `init_module` und einer Endfunktion `cleanup_module` bestehen, damit der Code richtig geladen und komplett entfernt werden kann, so als hätte er niemals existiert [@lkmpg_sysprog21].
 
-#### Makefiles
+### Makefiles
 
 Um die Kompilierung der Quelltextdateien zu Programmmodulen bzw. Objekten zu steuern und nach Belieben anzupassen, verwendet man ein Makefile. Mit Makefile kann eine beliebige Anzahl an Quelltextdateien kompiliert, aber auch miteinander zu einem einzelnen Programm gelinkt werden; das alles funktioniert mit den sogenannten Targets, welche mit einem Doppelpunkt sichtbar markiert sind. Sie zeigen, welche Dateien kompiliert und miteinander verbunden werden sollen, da man auch ein Objekt aus mehreren Quelltextdateien erstellen kann [@kernel_docs_kbuild_modules].
 
@@ -37,7 +37,7 @@ obj_name := sourcefile_name.o
 
 Wichtig bei Makefiles zu beachten ist, dass statt Abständen Tabs verwendet werden müssen [@kernel_docs_kbuild_modules]!
 
-#### Header Files
+### Header Files
 
 Damit die Module fehlerfrei funktionieren, muss man die benötigten Header-Files für den Kernel installieren. Die Header-Files sind im Grunde Interfaces, welche Funktionen definieren, damit der Compiler weiß, ob diese richtig auf Basis der Signatur benutzt werden. Diese Header-Files werden dann direkt als Erweiterung für den Kernel installiert; auf Ubuntu funktioniert das mit den Commands [@kernel_docs_driver_api]:
 
@@ -49,15 +49,15 @@ sudo apt-get install linux-headers-`uname -r`
 
 **Wichtig!** Ich hatte anfangs Probleme mit Packages wie **printk.h**, da meine Konfigurationsdatei (c\_cpp\_properties.json) nicht im Projektordner war.
 
-#### Risiken
+### Risiken
 
 Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg_sysprog21] [@virtualbox_docs].
 
-#### Aufbau eines Treibermoduls
+### Aufbau eines Treibermoduls
 
 In Linux teilen die meisten Treibermodule einen vorgesehenen Aufbau an Funktionen und anderen wichtigen Merkmalen, die man erlernen kann, jedoch unterscheiden sie sich auch in gewissen Punkten.
 
-#### Device Files
+### Device Files
 
 Device Files repräsentieren jeweils eine Art von Hardware, die mit dem Betriebssystem interagieren will bzw. kann; diese Device Files stellen die Mittel zur Verfügung, damit mit der Hardware kommuniziert werden kann. Device Files unter Linux befinden sich im /dev-Folder und sind wie folgt aufgebaut [@oleg_char_driver]:
 
@@ -69,7 +69,7 @@ Die drei wichtigsten Merkmale dieser File sind der erste Buchstabe, welcher die 
 
 Wie schon erwähnt, befinden sich alle Device Files im Ordner /dev. Sobald man also mit seiner eigenen Device File fertig ist, muss man zum Schluss seine File vom Arbeitsordner in /dev verschieben.
 
-#### Dateioperatoren
+### Dateioperatoren
 
 Die Struktur der Dateioperatoren (file operations) ist definiert unter (include/linux/fs.h) und beinhaltet *Pointer* für Funktionen, die im Treiber definiert sind und verschiedene Funktionen auf dem Treiber ausführen. Einer der wichtigsten Operatoren ist das Einlesen vom Gerät, welches in jedem Character-Gerätetreiber definiert ist, da es ein Must-have ist, im Gegensatz zu gewissen Block-Treibern, wo die Funktion einfach mit NULL supplementiert wird [@tldp_char_device].
 
@@ -101,7 +101,7 @@ struct file_operation fops = {
 };
 ```
 
-#### Gerät-Registrierung
+### Gerät-Registrierung
 
 Wenn ein Character-Gerät erreicht werden will, muss eine Geräte-File in /dev vorhanden sein; diese Dateien sind jedoch abstrakt, offen und operieren im Kernel-Space. Um einen fertigen Treiber ins System einzufügen, muss er zuerst im Kernel registriert werden [@kernel_api_register_chrdev]:
 
@@ -124,29 +124,29 @@ Diese abstrakten Dateien sind nicht im *Disk-Space* vorhanden, werden aber von d
 
 Wichtig bei der Registrierung ist noch, dass wir bei der Major-Nummer 0 setzen müssen, damit der Kernel uns eine noch nicht zugewiesene Major-Nummer zur Verfügung gibt, und erst dann können wir folgendermaßen die Gerätedatei (device file) erstellen [@kernel_api_register_chrdev].
 
-#### Gerät-Entregistrierung
+### Gerät-Entregistrierung
 
 Es sollte nicht möglich sein, dass Root ein Treibermodul, das gerade im Linux-Kernel einen Prozess durchläuft, mit rmmod entfernt, da es dann zu großen Problemen im Kernel führen kann, da Code von einem anderen Modul inmitten einer Funktion ausgeführt werden kann. Deshalb gibt es einen Zähler, der darauf achtet, wie oft das Modul gerade verwendet wird; wenn dieser Counter auf 0 ist, also das Modul gerade nicht in Betrieb ist, dann ist es gestattet, auch ein rmmod anzuwenden [@lkmpg_sysprog21].
 
-#### Dateisysteme
+### Dateisysteme
 
 Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie proc erlauben eine weitere Möglichkeit für den Kernel und die Kernel-Module, Informationen zu senden und zu verarbeiten. Aber proc gibt auch von sich aus wichtige Informationen über den Prozess, wie zum Beispiel Informationen über alle vorhandenen Module oder eine Statistik über die Speicherverwendung [@kernel_docs_proc_fs]. Die Methode, proc zu erstellen und auszuführen, ist sehr ähnlich wie bei den Modulen, da wir eine Struktur erstellen müssen mit allen Informationen der /proc-Datei, sowie Pointern zu allen Funktionen, und zu guter Letzt haben wir wieder die Init-Funktion zum Registrieren und die Cleanup zum Entregistrieren. Im simpelsten Fall haben wir dann noch mindestens eine Read-Methode, damit etwas zurückgegeben wird, wenn wir lesen möchten [@lkmpg_sysprog21].
 
-#### Best Practices im Code
+### Best Practices im Code
 
 Wenn man sich die auf GitHub vorhandenen Treibermodule ansieht, stößt man immer wieder auf kleine Tricks im Code, die die Quality of Life verbessern. Diese Tricks sind leicht zu implementieren und sollten deshalb, wenn möglich, immer angewandt werden.
 
-#### Macros
+### Macros
 
 Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Init- und Cleanup-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Macros erlauben den Wegfall der Init- und Cleanup-Funktion nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg_sysprog21].
 
 Ein weiterer Fall, wo Macros hilfreich sind, ist, wenn Daten vom Userspace (Prozess) zum Kernelspace (Linux-Kernel) transportiert werden müssen. Dies wird zum Beispiel bei der Schreibfunktion von Dateisystemen gebraucht und dafür gibt es die Macros `put_user` und `get_user` für einzelne Zeichen, sowie `copy_to_user` und `copy_from_user`. Natürlich war das nur ein Beispiel, da es noch hunderte weitere hilfreiche Macros gibt [@kernel_docs_driver_api].
 
-#### Debugging
+### Debugging
 
 Für die Fehlersuche und Vermeidung können ebenfalls Macros hilfreich sein. Vor allem der Tracepoint-Macro `ftrace` kann Profilabschnitte erstellen, welche benutzt werden können, um komplexe Treiber zu verstehen und eigene zu debuggen [@kernel_docs_ftrace]. Eine Möglichkeit ist es auch, den Kernel neu zu kompilieren, um hilfreiche Funktionen wie `MODULE_FORCE_UNLOAD` zu aktivieren; dies gibt dir die Möglichkeit, jegliches Modul mit dem `sudo rmmod -f`-Befehl zu entladen, selbst wenn der Kernel es als unsicher ansieht.
 
-#### Coding-Stil
+### Coding-Stil
 
 Damit man Code in den Linux-Kernel bekommt, muss man den vorgesehenen Coding-Stil beachten, der perfekt einzuhalten ist, oder man bekommt die Push-Request konsequenterweise abgelehnt [@kernel_docs_process_coding]. Wenn man es nicht beabsichtigt, seinen Code in den Linux-Kernel zu committen, ist es zwar nicht zwingend, aber sehr empfohlen, auf den Stil der Autoren zu wechseln. Dazu zählt [@kernel_docs_coding_style]:
 
@@ -195,11 +195,11 @@ struct virtual_container *a; //in Ordnung
 
 Dazu kommen noch andere bereits erwähnte Aspekte wie das Bewusstsein bei der Namensgebung der Variablen.
 
-#### Schritt-für-Schritt-Vorführung einer Linux-Treiber-Entwicklung in C
+## Schritt-für-Schritt-Vorführung einer Linux-Treiber-Entwicklung in C
 
 Jetzt wird anhand des bereits besprochenen Aufbaus eines Treibermoduls Theorie in die Praxis umgesetzt und anhand der gesammelten Erfahrung schrittweise ein einfaches Treibermodul erstellt werden. Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt [@virtualbox_docs].
 
-#### Zielsetzung
+### Zielsetzung
 
 Das Treibermodul soll folgende Funktionen haben:
 
@@ -210,13 +210,13 @@ Das Treibermodul soll folgende Funktionen haben:
 * Eine Lesefunktion.
 * Zum Schluss noch eine Cleanup-Funktion, damit es auch entladen werden kann.
 
-#### Vorgehensweise
+### Vorgehensweise
 
 Bevor man mit dem eigentlichen Modul beginnt, sollte man die Header-Files sowie die benötigten Packages installieren (siehe Abschnitt Header Files).
 
 Insgesamt müssen vor der Erzeugung der Kernel-Objekt-Datei zwei Dateien vorhanden sein: Eine .c-Datei, welche den Quellcode beinhaltet, also alle Funktionen, die das Modul letztendlich beherrschen muss, und die Makefile, welche die .c-Datei als Modul verweist und bei der Kompilierung zur Objektdatei und anschließend Kernel-Objektdatei eine wichtige Rolle spielt, da sie der .o-Datei die benötigten Metadaten hinzufügt [@kernel_docs_kbuild_modules].
 
-#### Umsetzung der C-Datei
+### Umsetzung der C-Datei
 
 Damit man alle notwendigen Bibliotheken hat, fügen wir sie in den Kopfzeilen hinzu:
 
@@ -291,7 +291,7 @@ Zuletzt werden noch die Lade- und Entladefunktionen registriert und die Lizenz-,
 
 ![C-Datei - Modulmetadaten](img/c12.png)
 
-#### Umsetzung der MakeFile
+### Umsetzung der MakeFile
 
 Jetzt, wo die C-Datei fertig ist, braucht es nur noch eine Anleitung für den Kernel, aus welchem Code was erstellt werden soll, und diese Rolle übernimmt die Makefile. Damit der erste Schritt erfüllt werden kann, müssen wir angeben, dass aus "simple-module-example.c" eine Objektdatei und schließlich eine Kernel-Objektdatei erzeugt werden soll [@kernel_docs_kbuild_modules]:
 
@@ -331,7 +331,7 @@ modules
 
 Besagt, dass ein externes ladbares Modul gebaut werden soll. Sobald die Befehle des `clean:`-Targets ausgeführt werden, ändert sich nur der letzte Teil des Befehls zu `clean`, welches das komplette Modul wieder entfernt [@kernel_docs_kbuild_modules].
 
-#### Kompilierung im Linux-Terminal
+### Kompilierung im Linux-Terminal
 
 Wenn die C-Datei sowie die Makefile erstellt worden sind, kann endlich das Kernel-Modul erzeugt werden. Dafür gehen wir in das Quellverzeichnis und führen den make-Command aus.
 

@@ -3,7 +3,7 @@
 
 ## Theoretische Grundlagen der Kernel Treiberentwicklung
 
-#### Einführung
+### Einführung
 
 Der Kernel ist das Herzstück eines Betriebssystems. Er verwaltet alle zentralen Elemente wie Hardware, Prozesse, Speicher und stellt grundlegende Dienste bereit.
 
@@ -14,19 +14,19 @@ Da Treiber im Kernelspace ausgeführt werden, haben sie einen direkten Einfluss 
 
 Ziel dieses Kapitels ist es, die wichtigsten Konzepte der Linux-Treiberentwicklung verständlich darzustellen. Darauf aufbauend soll der spätere Vergleich einer Implementierung in C mit einer Implementierung in Rust nachvollziehbar werden.
 
-#### Kernelspace und Userspace
+### Kernelspace und Userspace
 
 Ein wesentliches Konzept moderner Betriebssysteme ist die Trennung zwischen Userspace und Kernelspace. Anwendungen im Userspace werden mit eingeschränkten Rechten ausgeführt. Fehler in einer Anwendung betreffen normalerweise nur den eigenen Prozess. Der Kernelspace ist dagegen privilegiert. Code im Kernelspace hat direkten Zugriff auf Hardware und Speicher. Fehler können daher das gesamte System destabilisieren oder sicherheitsrelevante Schwachstellen verursachen.
 
 Treiber und Kernelmodule werden im Linux-System typischerweise im Kernelspace ausgeführt. Aus diesem Grund sind Themen wie Speicherverwaltung, Synchronisation nebenläufiger Abläufe, der Umgang mit Interrupts und saubere Fehlerbehandlung besonders wichtig [@docs_driver_basics].
 
-#### Aufbau eines Kernelmoduls
+### Aufbau eines Kernelmoduls
 
 Linux unterstützt Erweiterungen durch *Loadable Kernel Modules*. Solche Module können zur Laufzeit geladen und entladen werden. Dadurch lassen sich Funktionen nachrüsten, ohne das System neu zu starten.
 
 Ein Kernelmodul folgt meist einem klaren Ablauf. Beim Laden wird eine Initialisierung ausgeführt, in der Ressourcen angefordert und Schnittstellen registriert werden. Danach stellt das Modul seine Funktionalität bereit, zum Beispiel über Dateioperationen oder über die Anbindung an ein Kernel-Subsystem. Beim Entladen muss die gesamte Registrierung zurückgenommen und belegter Speicher wieder freigegeben werden. Für die Moduleinbindung werden in C unter anderem `module_init` und `module_exit` verwendet [@docs_driver_basics]. Das Erstellen und Bauen von Modulen erfolgt über *KBuild* [@docs_kbuild_external_modules].
 
-#### Rust im Linux Kernel
+### Rust im Linux Kernel
 
 Rust wurde entwickelt, um systemnahe Programmierung mit erhöhten Sicherheitsgarantien zu ermöglichen. Konzepte wie *Ownership*, *Borrowing* und *Lifetimes* sollen typische Fehlerklassen wie *Use after free*, *ungültige Zeigerzugriffe* oder *Datenrennen* bereits zur Compile Zeit reduzieren.
 
@@ -34,26 +34,26 @@ Rust ist seit Linux Kernel Version 6.1 im Mainline Kernel enthalten. Nach einer 
 
 Die Rust-Schnittstellen im Kernel sind vorhanden und werden weiter ausgebaut. Gleichzeitig sind nicht alle Subsysteme vollständig über Rust erreichbar. Die offizielle Kernel-Dokumentation enthält alle grundlegenden Informationen für den Einstieg in die Rust-Kernel-Entwicklung und alle Programmiernormen, welche befolgt werden müssen[@docs_kernel_rust_index] [@docs_kernel_rust_quickstart].
 
-#### Vorteile von Rust im Kernelkontext
+### Vorteile von Rust im Kernelkontext
 
 Ein zentraler Vorteil von Rust liegt in der strikten Typ und Speichersicherheit. Viele Fehler, die in C erst zur Laufzeit auftreten, werden durch den Rust-Compiler verhindert oder zumindest schwerer möglich gemacht. Gerade im Kernelspace ist das besonders hilfreich.
 
 Rust bietet zudem eine klare Strukturierung durch Module, Traits und explizite Fehlerbehandlung mit `Result` und `Option`, was Wartbarkeit und Lesbarkeit verbessert.
 
-#### Herausforderungen bei der Nutzung von Rust
+### Herausforderungen bei der Nutzung von Rust
 
 Der Einsatz von Rust im Linux-Kernel ist mit Voraussetzungen verbunden. Die Kernel-Konfiguration muss Rust Unterstützung aktivieren, und die Toolchain muss zu Kernel und Buildsystem passen. Informationen dazu findet man wieder in den Rust-Dokumentationen [@docs_kernel_rust_quickstart]. Zusätzlich ist zu beachten, dass C- und Rust-Code im Kernel koexistieren. Das beeinflusst Workflows, Reviews und Schnittstellen, da der Kernel auf C ausgerichtet ist.
 
-## Kernelarchitektur und Funktionsweise
+### Kernelarchitektur und Funktionsweise
 
 Der Linux-Kernel ist monolithisch aufgebaut, bietet aber durch Module eine modulare Erweiterbarkeit. Zentrale Komponenten wie Prozessverwaltung, Speicherverwaltung, Dateisysteme, Netzwerk und Gerätetreiber laufen im selben *Adressraum*.
 
 Treiber sind ein integraler Bestandteil des Systems. Systemaufrufe aus dem Userspace gelangen über definierte Schnittstellen in den Kernel und werden dort von Subsystemen oder Treibern verarbeitet. Da Kernel-Subsysteme und Treiber eng zusammenarbeiten, wirken sich Fehler in einem Teil schnell auf das gesamte System aus. Deshalb sind Codequalität, Speichersicherheit und korrekte Synchronisation in der Kernelentwicklung besonders wichtig.
 
 
-## Kernel-Buildsystem und Modulkompilierung
+### Kernel-Buildsystem und Modulkompilierung
 
-#### KBuild und externe Module
+### KBuild und externe Module
 
 Das Linux-Kernel Buildsystem basiert auf `make` und dem KBuild-System. Externe Module, die nicht direkt in den Kernel-Quellcode integriert sind, werden als Out-of-Tree-Module gegen die installierten Kernel-Header und die passende Kernel-Konfiguration gebaut [@docs_kbuild_external_modules].
 
@@ -67,21 +67,21 @@ clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
 
-#### Buildprozess eines Moduls
+### Buildprozess eines Moduls
 
 Der Buildprozess umfasst Vorverarbeitung, Kompilation und das Erzeugen einer Kernel Objektdatei. Danach kann ein Modul geladen und entladen werden. Für die Praxis sind Werkzeuge wie `insmod`, `modprobe`, `lsmod`, `modinfo` und `dmesg` relevant, da sie Laden, Status und Logs sichtbar machen [@docs_kbuild_external_modules].
 
-#### Besonderheiten beim Rust-Build
+### Besonderheiten beim Rust-Build
 
 Rust-Module werden im Kernel nicht mit Cargo gebaut, sondern über KBuild. Der Rust-Compiler wird dabei vom Kernel-Buildsystem angesteuert. Rust-Code im Kernel wird ohne die Rust-Standardbibliothek kompiliert. Stattdessen werden `core` und, falls Heap genutzt wird, `alloc` verwendet [@rust_alloc_docs] [@docs_kernel_rust_index] [@docs_kernel_rust_general_info].
 
 ## Praktische Arbeit in Rust
 
-#### Rust-for-Linux-Projekt
+### Rust-for-Linux-Projekt
 
 Das Rust-for-Linux-Projekt verfolgt das Ziel, Kernelmodule und Treiber sicherer zu implementieren, ohne die Kontrolle und Performance systemnaher Entwicklung zu verlieren [@docs_kernel_rust_index] [@docs_kernel_rust_general_info] [@docs_kernel_rust_quickstart]. Rust war innerhalb des Kernels lange Zeit im experimentellen Zustand. Mit Ende 2025 hat Rust jedoch offiziellen Support im Linux-Kernel erhalten und ist damit auch die erste weitere Programmiersprache, der dies gelungen ist [@thenewstack_rust_2025] [@heise_rust_kernel_2025] [@lwn_rust_debate_2025].
 
-#### Aufbau eines Rust-Kernelmoduls
+### Aufbau eines Rust-Kernelmoduls
 
 Im Gegensatz zu C nutzt Rust kein Header-System. Die Strukturierung erfolgt über Module. Die Registrierung geschieht über ein zentrales Makro, während Initialisierung und Aufräumen über definierte Schnittstellen abgebildet werden[@docs_kernel_rust_index] [@docs_kernel_rust_quickstart].
 
@@ -114,7 +114,7 @@ impl Drop for HelloRust {
 }
 ```
 
-#### Erklärung des Beispielmoduls
+### Erklärung des Beispielmoduls
 
 Das Modul besteht aus mehreren klar getrennten Teilen.
 
@@ -130,7 +130,7 @@ Das Modul besteht aus mehreren klar getrennten Teilen.
 
 6. `Drop` wird beim Entladen des Moduls ausgeführt. Hier können Ressourcen freigegeben werden. Im Beispiel wird ebenfalls nur geloggt.
 
-#### Rust-spezifische Eigenschaften im Kernel
+### Rust-spezifische Eigenschaften im Kernel
 
 Rust erzwingt eine explizite Behandlung von Besitz und Lebensdauern. Das reduziert typische Speicherfehler, die in C durch rohe Pointer entstehen können. Für hardwarenahe Operationen ist weiterhin `unsafe` möglich,; es wird aber bewusst markiert und kann dadurch in Reviews leichter geprüft werden.
 
@@ -278,7 +278,7 @@ impl FileOperations for CharTestFile {
     }
 }
 ```
-##### Aufbau des Treibers
+### Aufbau des Treibers
 
 1. **Moduldefinition**
 
@@ -300,9 +300,9 @@ impl FileOperations for CharTestFile {
 
    Ein statischer Speicherbereich dient als einfacher Datenspeicher für die Kommunikation zwischen Userspace und Kernel.
 
-## Setup, Kernel-Build und Rust-Modul-Entwicklung
+### Setup, Kernel-Build und Rust-Modul-Entwicklung
 
-#### Ziel des praktischen Teils
+### Ziel des praktischen Teils
 
 Im praktischen Teil dieser Arbeit wird untersucht, wie sich die Entwicklung eines einfachen Linux-Kernel-Treibers in der Programmiersprache **Rust** im Vergleich zu **C** gestaltet.
 
@@ -324,7 +324,7 @@ Da mein Projektpartner Ubuntu Linux verwendete, entschied ich mich bewusst für 
 
 Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt[@virtualbox_docs].
 
-#### Besonderheiten von Rust im Linux-Kernel
+### Besonderheiten von Rust im Linux-Kernel
 
 Im Vorfeld ist es wichtig zu verstehen, dass Rust im Linux-Kernel nicht als vollständig eigenständige Sprache agiert. Rust-Code im Kernel ist eng mit der bestehenden C-Infrastruktur verbunden. Viele Funktionen und Schnittstellen, die von Rust-Code genutzt werden, sind weiterhin in C implementiert[@futuretim_rust_kernel_blog].
 
@@ -336,7 +336,7 @@ bindgen analysiert C-Headerdateien und erzeugt daraus entsprechende Rust-Struktu
 
 Für diesen Prozess wird zusätzlich die *LLVM / Clang*-Toolchain benötigt, da bindgen intern auf *libclang* basiert[@llvm_libclang_docs].
 
-#### Vorbereitung der Entwicklungsumgebung
+## Vorbereitung der Entwicklungsumgebung
 
 Bevor Kernelmodule entwickelt werden können, muss zunächst geprüft werden, welche Kernelversion auf dem System läuft.
 
@@ -357,7 +357,7 @@ Dieser befindet sich normalerweise unter:
 
 `$()` wird im Terminal zur Befehlsausführung innerhalb eines Strings verwendet. Der darin stehende Befehl wird ausgeführt und dessen Ausgabe an dieser Stelle eingefügt.
 
-#### Entscheidung für einen eigenen Kernel-Build
+### Entscheidung für einen eigenen Kernel-Build
 
 Bei der Untersuchung der standardmäßig installierten Kernelkonfiguration von Manjaro zeigte sich zunächst, dass Rust grundsätzlich vom Kernel unterstützt wird. In der Konfiguration war die Option `HAVE_RUST` bereits auf `y` gesetzt. Diese Option wird automatisch aktiviert, wenn die verwendete Architektur Rust grundsätzlich unterstützt.
 
@@ -367,7 +367,7 @@ Dadurch konnten Rust-basierte Kernelkomponenten oder Module nicht kompiliert wer
 
 Aus diesem Grund habe ich mich entschieden, den Linux-Kernel selbst zu kompilieren. Dadurch konnte ich die Kernelkonfiguration vollständig kontrollieren und Rust-Unterstützung gezielt aktivieren.
 
-#### Eigenes Kernel kompilieren
+### Eigenes Kernel kompilieren
 ```
 git clone https://github.com/torvalds/linux.git
 ```
@@ -389,7 +389,7 @@ zcat /proc/config.gz > .config
 
 Damit wird eine `.config` -Datei erzeugt, die als Grundlage für den eigenen Kernel-Build verwendet werden kann.
 
-#### Kernelkonfiguration anpassen
+### Kernelkonfiguration anpassen
 
 Die Kernelkonfiguration kann anschließend angepasst werden:
 
@@ -403,7 +403,7 @@ Hier können verschiedene Kerneloptionen aktiviert oder deaktiviert werden.
 
 Um Rust-Unterstützung zu aktivieren, muss die Option `RUST` auf `y` gesetzt werden. Zusätzlich sollten alle damit verbundenen Optionen überprüft und entsprechend angepasst werden.
 
-#### Rust-Verfügbarkeit prüfen
+### Rust-Verfügbarkeit prüfen
 
 Der Kernel bietet einen speziellen Test, um zu überprüfen, ob die Rust-Toolchain korrekt erkannt wird.
 
@@ -420,7 +420,7 @@ Dieser Befehl prüft:
 
 Während dieser Überprüfung traten bei mir verschiedene Fehlermeldungen auf.
 
-#### Rust-Toolchain-Setup
+### Rust-Toolchain-Setup
 
 Für die Arbeit mit Rust im Linux-Kernel wird eine funktionierende Rust-Toolchain benötigt.
 
@@ -454,7 +454,7 @@ rustup component add rust-src
 
 Ohne diese Komponente können bestimmte Kernel-Builds nicht durchgeführt werden.
 
-#### bindgen
+### bindgen
 
 Die jetzige bindgen-Version kann mit folgendem Befehl geprüft werden:
 
@@ -469,7 +469,7 @@ Falls bindgen über cargo installiert wurde, muss der Cargo-Binary-Pfad zum PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-#### Kernel-Build
+### Kernel-Build
 
 Nachdem alle Voraussetzungen erfüllt waren, konnte der Kernel-Build gestartet werden.
 
@@ -480,7 +480,7 @@ make LLVM=1 -j$(nproc)
 
 Der Befehl `make` startet den Kompilierungsprozess anhand der im Projekt enthaltenen Makefiles. Der Parameter `LLVM=1` sorgt dafür, dass clang / llvm für den Build verwendet werden. Der Parameter `-j$(nproc)` startet einen parallelen Build mit allen verfügbaren CPU-Kernen.
 
-#### Kernel-Installation
+### Kernel-Installation
 
 Nach erfolgreichem Build kann der Kernel installiert werden.
 
@@ -503,7 +503,7 @@ uname -r
 ```
 Der neue Kernel erschien aber nicht direkt im Bootmenü. Ich musste den Bootloader manuell aktualisieren, damit der neue Kernel als Startoption verfügbar war. Nach der Aktualisierung konnte der neue Kernel ausgewählt und gestartet werden.
 
-#### Externe Kernelmodule kompilieren
+### Externe Kernelmodule kompilieren
 
 Kernelmodule können außerhalb des Kernel-Source-Trees entwickelt werden.
 
@@ -520,12 +520,12 @@ Mit `M=$(pwd)` wird dem Kernel-Buildsystem mitgeteilt, dass sich der Quellcode d
 Der Parameter `modules` gibt schließlich an, dass nur die in diesem Verzeichnis enthaltenen Kernelmodule gebaut werden sollen und nicht der komplette Kernel.
 
 
-#### Aufgetretene Probleme
+### Aufgetretene Probleme
 
 Während der praktischen Umsetzung traten mehrere Probleme auf.
 Diese standen hauptsächlich im Zusammenhang mit der Rust-Toolchain.
 
-##### bindgen nicht gefunden
+#### bindgen nicht gefunden
 
 Ein häufiger Fehler war:
 
@@ -535,7 +535,7 @@ Rust bindings generator 'bindgen' could not be found
 
 Dies bedeutet, dass bindgen nicht installiert oder nicht im PATH vorhanden ist.
 
-#### Rust-Versionskonflikte
+### Rust-Versionskonflikte
 
 Mehrfach traten Konflikte zwischen Kernelversion und rustc-Version auf.
 
@@ -546,7 +546,7 @@ rustc is too new
 
 Dies zeigt, dass bestimmte Kernelversionen nur mit bestimmten Rust-Versionen getestet wurden.
 
-#### Unknown unstable option
+### Unknown unstable option
 
 ```
 unknown unstable option: no-jump-tables
@@ -554,7 +554,7 @@ unknown unstable option: no-jump-tables
 
 Dieser Fehler entsteht, wenn der Kernel-Buildprozess Rust-Compiler-Optionen verwendet, die von der aktuell installierten Rust-Version nicht unterstützt werden.
 
-#### Weitere Compiler-Probleme
+### Weitere Compiler-Probleme
 
 Zusätzlich traten Fehler im Zusammenhang mit:
 

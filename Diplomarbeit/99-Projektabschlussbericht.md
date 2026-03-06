@@ -1,9 +1,9 @@
 \newpage
-## Projektabschlussbericht
+# Projektabschlussbericht
 \textauthor{Wieser}
-#### Erfolgsmessung
+## Erfolgsmessung
 
-#### Erreichung Leistungs-/Qualitätsziele
+### Erreichung Leistungs-/Qualitätsziele
 
 Das grundlegende Ziel dieser Diplomarbeit bestand darin, die Entwicklung von Linux-Kernel-Treibern zu untersuchen und zwei funktional vergleichbare Implementierungen in den Programmiersprachen C und Rust zu erstellen. Zusätzlich sollte der Entwicklungsprozess dokumentiert und ein Vergleich zwischen den beiden Ansätzen durchgeführt werden.
 
@@ -15,7 +15,7 @@ Obwohl der Rust-Treiber nicht in allen Fällen vollständig getestet werden konn
 
 Aus diesem Grund kann das ursprüngliche Projektziel – die praktische Untersuchung und der Vergleich der beiden Ansätze – insgesamt als erreicht betrachtet werden.
 
-#### Erreichung Terminziele
+### Erreichung Terminziele
 
 Die geplanten Meilensteine des Projekts konnten größtenteils eingehalten werden. Die einzelnen Projektphasen, insbesondere die Recherche, die Entwicklung der Treiber sowie die Erstellung der schriftlichen Dokumentation, wurden innerhalb des vorgesehenen Zeitrahmens durchgeführt.
 
@@ -23,7 +23,7 @@ In einigen Projektabschnitten kam es jedoch zu einem erhöhten Zeitaufwand, insb
 
 Trotz dieser Schwierigkeiten konnte der Gesamtzeitplan eingehalten werden und die Diplomarbeit wurde fristgerecht fertiggestellt.
 
-#### Erreichung Kosten-/Aufwandsziele
+### Erreichung Kosten-/Aufwandsziele
 
 Für die Durchführung dieses Projekts waren keine nennenswerten finanziellen Kosten erforderlich. Die gesamte Entwicklung erfolgte auf vorhandener Hardware sowie mit frei verfügbarer Open-Source-Software.
 
@@ -33,7 +33,7 @@ Der tatsächliche Aufwand des Projekts lag hauptsächlich im Zeitaufwand für Re
 
 ## Reflexion / Lessons Learned
 
-#### Teamarbeit
+### Teamarbeit
 
 Die Zusammenarbeit im Projektteam verlief insgesamt sehr positiv. Die Aufgaben wurden zwischen den Projektmitgliedern aufgeteilt, wobei sich einer von uns stärker auf die Implementierung des C-Treibers konzentrierte, während der andere den Rust-Treiber entwickelte.
 
@@ -41,7 +41,7 @@ Durch diese Aufgabenteilung konnte eine parallele Bearbeitung der beiden Impleme
 
 Diese Zusammenarbeit ermöglichte es, unterschiedliche Perspektiven auf die Treiberentwicklung zu gewinnen und die Ergebnisse gemeinsam zu analysieren.
 
-#### Projektmanagement
+### Projektmanagement
 
 Im Verlauf des Projekts zeigte sich, wie wichtig eine strukturierte Planung und klare Aufgabenteilung ist. Besonders bei technischen Projekten kann es immer wieder zu unerwarteten Problemen kommen, beispielsweise durch inkompatible Softwareversionen oder unzureichend dokumentierte Schnittstellen.
 
@@ -49,7 +49,7 @@ Ein wichtiger Teil des Projektmanagements bestand daher darin, flexibel auf solc
 
 Die Dokumentation der einzelnen Arbeitsschritte stellte dabei sicher, dass der Fortschritt des Projekts jederzeit nachvollziehbar blieb.
 
-#### Sonstige Lernerfahrungen
+### Sonstige Lernerfahrungen
 
 Während der Arbeit an diesem Projekt konnten umfangreiche Kenntnisse im Bereich der Systemprogrammierung und der Linux-Kernelentwicklung gewonnen werden.
 
@@ -64,7 +64,7 @@ Dazu gehören unter anderem:
 
 Besonders deutlich wurde, wie komplex die Entwicklung von Kernelsoftware sein kann und wie wichtig eine stabile und kompatible Entwicklungsumgebung ist.
 
-#### Nachhaltigkeitsanalyse
+### Nachhaltigkeitsanalyse
 
 Im Rahmen der Nachhaltigkeitsanalyse wird untersucht, inwiefern diese Diplomarbeit einen Bezug zu den Sustainable Development Goals (SDGs) der Vereinten Nationen aufweist.
 

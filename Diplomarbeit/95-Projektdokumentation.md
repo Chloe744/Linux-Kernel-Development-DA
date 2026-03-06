@@ -1,15 +1,15 @@
 \newpage
 
-## Dokumentation
+# Dokumentation
 \textauthor{Wieser}
 
 Die Projektdokumentation beschreibt den Fortschritt der Diplomarbeit über den gesamten Projektzeitraum hinweg. Da es sich bei dieser Arbeit hauptsächlich um ein Analyse- und Entwicklungsprojekt im Bereich der Systemprogrammierung handelt, wurde der Fortschritt in mehreren Projektphasen dokumentiert.
 
 Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inhaltlichen Arbeitsschritten der Diplomarbeit.
 
-### Projektfortschritt September 2025 bis November 2025
+## Projektfortschritt September 2025 bis November 2025
 
-#### Gesamtstatus
+### Gesamtstatus
 
 * Projektidee und Themenbereich wurden definiert
 * Grundlagen zur Linux-Kernelarchitektur wurden recherchiert
@@ -25,11 +25,11 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 
 : Projektstatus November 2025
 
-#### Notwendige Entscheidungen
+### Notwendige Entscheidungen
 
 * Festlegung der konkreten technischen Umsetzung
 
-#### Nächste Schritte
+### Nächste Schritte
 
 * Aufbau der Entwicklungsumgebung
 * Vorbereitung der Linux-Kernel-Quellen
@@ -38,9 +38,9 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 : Projektstatus Stand November 2025
 
 
-### Projektfortschritt November 2025 bis Januar 2026
+## Projektfortschritt November 2025 bis Januar 2026
 
-#### Gesamtstatus
+### Gesamtstatus
 
 * Entwicklungsumgebung für Linux-Kernel-Entwicklung eingerichtet
 * Linux-Kernel-Quellen heruntergeladen
@@ -56,12 +56,12 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 
 : Projektstatus Januar 2026
 
-#### Notwendige Entscheidungen
+### Notwendige Entscheidungen
 
 * Anpassung der Entwicklungsumgebung aufgrund von Toolchain-Problemen
 * Auswahl kompatibler Versionen von Rust und Kernel
 
-#### Nächste Schritte
+### Nächste Schritte
 
 * Implementierung des Character-Device-Treibers in C
 * Analyse der Kernel-APIs
@@ -69,9 +69,9 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 : Projektstatus Stand Januar 2026
 
 
-### Projektfortschritt Januar 2026 bis Februar 2026
+## Projektfortschritt Januar 2026 bis Februar 2026
 
-#### Gesamtstatus
+### Gesamtstatus
 
 * C-Treiber wurde implementiert und getestet
 * Rust-Treiber wurde entwickelt
@@ -87,12 +87,12 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 
 : Projektstatus Februar 2026
 
-#### Notwendige Entscheidungen
+### Notwendige Entscheidungen
 
 * Schwerpunkt der Arbeit stärker auf Analyse und Vergleich legen
 * Dokumentation der praktischen Erfahrungen mit Rust im Kernel
 
-#### Nächste Schritte
+### Nächste Schritte
 
 * Vergleich der beiden Implementierungen
 * Fertigstellung der schriftlichen Arbeit

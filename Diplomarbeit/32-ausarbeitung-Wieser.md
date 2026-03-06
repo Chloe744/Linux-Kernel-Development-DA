@@ -5,7 +5,7 @@
 
 ### Einführung
 
-Der Kernel bildet das zentrale Element eines Betriebssystems. Er verwaltet Hardware Ressourcen, steuert Prozesse und stellt grundlegende Systemdienste bereit. Als systemnahe Schicht sorgt er dafür, dass Anwendungen kontrolliert und sicher auf Ressourcen wie Speicher, Geräte und Dateien zugreifen können.
+Der Kernel ist das Herzstück eines Betriebssystems. Es verwaltet alle zentralen Elemente wie Hardware, Prozesse, Speicher und stellt grundlegende Dienste bereit.
 
 Ein Gerätetreiber ist eine Softwarekomponente, die dem Kernel die Kommunikation mit konkreter Hardware oder einer Gerätekategorie ermöglicht. Typische Beispiele sind Netzwerkschnittstellen oder USB Geräte. Im Linux Kernel wird dabei zwischen Kernel Subsystemen und Gerätetreibern unterschieden. Kernel Subsysteme stellen eine allgemeine Infrastruktur für bestimmte Aufgabenbereiche bereit, etwa für Geräteverwaltung oder Netzwerke, und definieren dabei Schnittstellen sowie grundlegende Abläufe. Gerätetreiber nutzen diese Subsysteme, um die hardwareabhängige Logik umzusetzen und ein konkretes Gerät anzubinden.
 
@@ -42,7 +42,7 @@ Rust bietet zudem eine klare Strukturierung durch Module, Traits und explizite F
 
 ### Herausforderungen bei der Nutzung von Rust
 
-Der Einsatz von Rust im Linux Kernel ist mit Voraussetzungen verbunden. Die Kernel Konfiguration muss Rust Unterstützung aktivieren, und die Toolchain muss zu Kernel und Buildsystem passen. Informationen dazu findet man wieder in den Rust Dokumentationen [@docs_kernel_rust_quickstart]. Zusätzlich ist zu beachten, dass C und Rust Code im Kernel koexistieren. Das beeinflusst Workflows, Reviews und Schnittstellen, da große Teile der Kernel Infrastruktur historisch auf C ausgerichtet.
+Der Einsatz von Rust im Linux Kernel ist mit Voraussetzungen verbunden. Die Kernel Konfiguration muss Rust Unterstützung aktivieren, und die Toolchain muss zu Kernel und Buildsystem passen. Informationen dazu findet man wieder in den Rust Dokumentationen [@docs_kernel_rust_quickstart]. Zusätzlich ist zu beachten, dass C und Rust Code im Kernel koexistieren. Das beeinflusst Workflows, Reviews und Schnittstellen, da der Kernel auf C ausgerichtet ist.
 
 ## Kernelarchitektur und Funktionsweise
 
@@ -79,7 +79,7 @@ Rust Module werden im Kernel nicht mit Cargo gebaut, sondern über KBuild. Der R
 
 ### Rust for Linux Projekt
 
-Das Rust for Linux Projekt verfolgt das Ziel, Kernelmodule und Treiber sicherer zu implementieren, ohne die Kontrolle und Performance systemnaher Entwicklung zu verlieren [@docs_kernel_rust_index] [@docs_kernel_rust_general_info] [@docs_kernel_rust_quickstart]. Rust war innerhalb des Kernels eine Lange Zeit im Experimentellen Zustand, wie es bereits C++ vorher war. Mit Ende 2025 hat Rust jedoch offiziellen Support im Linux Kernel erhalten und ist damit auch die erste weitere Programmiersprache der dies gelungen ist [@thenewstack_rust_2025] [@heise_rust_kernel_2025] [@lwn_rust_debate_2025].
+Das Rust for Linux Projekt verfolgt das Ziel, Kernelmodule und Treiber sicherer zu implementieren, ohne die Kontrolle und Performance systemnaher Entwicklung zu verlieren [@docs_kernel_rust_index] [@docs_kernel_rust_general_info] [@docs_kernel_rust_quickstart]. Rust war innerhalb des Kernels eine Lange Zeit im Experimentellen Zustand. Mit Ende 2025 hat Rust jedoch offiziellen Support im Linux Kernel erhalten und ist damit auch die erste weitere Programmiersprache der dies gelungen ist [@thenewstack_rust_2025] [@heise_rust_kernel_2025] [@lwn_rust_debate_2025].
 
 ### Aufbau eines Rust Kernelmoduls
 
@@ -158,19 +158,19 @@ Der Fokus liegt dabei nicht auf der Entwicklung eines komplexen Hardwaretreibers
 
 Da mein Projektpartner Ubuntu Linux verwendete, entschied ich mich bewusst für eine andere Distribution als Entwicklungsumgebung. Da Arch und auf Arch basierende Distributionen wie Manjaro meist sehr aktuelle Versionen des Kernel oder Entwicklungswerkzeugen besitzt entschied ich mir dafür.
 
-Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt.
+Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt[@virtualbox_docs].
 
 #### Besonderheiten von Rust im Linux Kernel
 
-Im Vorfeld ist es wichtig zu verstehen, dass Rust im Linux Kernel nicht als vollständig eigenständige Sprache agiert. Rust Code im Kernel ist eng mit der bestehenden C Infrastruktur verbunden. Viele Funktionen und Schnittstellen, die von Rust Code genutzt werden, sind weiterhin in C implementiert.
+Im Vorfeld ist es wichtig zu verstehen, dass Rust im Linux Kernel nicht als vollständig eigenständige Sprache agiert. Rust Code im Kernel ist eng mit der bestehenden C Infrastruktur verbunden. Viele Funktionen und Schnittstellen, die von Rust Code genutzt werden, sind weiterhin in C implementiert[@futuretim_rust_kernel_blog].
 
-Rust Code greift dabei häufig über sogenannte *Foreign Function Interfaces (FFI)* auf bestehende Kernel Funktionen zu.
+Rust Code greift dabei häufig über sogenannte *Foreign Function Interfaces (FFI)* auf bestehende Kernel Funktionen zu[@docs_kernel_rust_general_info].
 
 Damit Rust auf C Code zugreifen kann, müssen FFI Bindings erzeugt werden. Diese werden automatisch mit dem Tool *bindgen* generiert.
 
-bindgen analysiert C Headerdateien und erzeugt daraus entsprechende Rust Strukturen und Funktionssignaturen.
+bindgen analysiert C Headerdateien und erzeugt daraus entsprechende Rust Strukturen und Funktionssignaturen[@rust_bindgen_docs].
 
-Für diesen Prozess wird zusätzlich die *LLVM / Clang* Toolchain benötigt, da bindgen intern auf *libclang* basiert.
+Für diesen Prozess wird zusätzlich die *LLVM / Clang* Toolchain benötigt, da bindgen intern auf *libclang* basiert[@llvm_libclang_docs].
 
 #### Vorbereitung der Entwicklungsumgebung
 
@@ -199,7 +199,7 @@ Bei der Untersuchung der standardmäßig installierten Kernelkonfiguration von M
 
 Gleichzeitig war die eigentliche Kerneloption `RUST`, welche die Rust-Unterstützung im Kernelbuild aktiviert, auf `n` gesetzt. Das bedeutet, dass Rust zwar theoretisch von der Architektur unterstützt wird, aber im konkreten Kernelbuild nicht aktiviert war.
 
-Dadurch konnten Rust-basierte Kernelkomponenten oder module nicht kompiliert werden, obwohl entsprechende Einträge in der Konfiguration sichtbar waren. Zusätzlich hängen mehrere Rust bezogene Optionen im Kernel von weiteren Voraussetzungen ab, wie einer kompatiblen Toolchain und korrekt gesetzten Abhängigkeiten innerhalb der Kernelkonfiguration.
+Dadurch konnten Rust-basierte Kernelkomponenten oder module nicht kompiliert werden, obwohl entsprechende Einträge in der Konfiguration sichtbar waren. Zusätzlich hängen mehrere Rust bezogene Optionen im Kernel von weiteren Voraussetzungen ab, wie einer kompatiblen Toolchain und korrekt gesetzten Abhängigkeiten innerhalb der Kernelkonfiguration[@rust_kernel_config_guide].
 
 Aus diesem Grund habe ich mich entschieden, den Linux Kernel selbst zu kompilieren. Dadurch konnte ich die Kernelkonfiguration vollständig kontrollieren und Rustunterstützung gezielt aktivieren.
 
@@ -207,7 +207,7 @@ Aus diesem Grund habe ich mich entschieden, den Linux Kernel selbst zu kompilier
 ```
 git clone https://github.com/torvalds/linux.git
 ```
-Mit `git clone` wird der Linux Kernel Quellcode von GitHub heruntergeladen.
+Mit `git clone` wird der Linux Kernel Quellcode von GitHub heruntergeladen[@git_clone_docs].
 
 Um eine stabile Ausgangsbasis zu erhalten, kann die Konfiguration des aktuell laufenden Kernels übernommen werden.
 
@@ -274,7 +274,7 @@ rustc --version
 1.74.1
 ```
 
-Da bestimmte Kernelversionen nur mit bestimmten Rust Versionen kompatibel sind, wird rustup verwendet, um eine passende Rust Version festzulegen.
+Da bestimmte Kernelversionen nur mit bestimmten Rust Versionen kompatibel sind, wird rustup verwendet, um eine passende Rust Version festzulegen[@rustup_docs].
 
 ```
 rustup override set 1.x.x

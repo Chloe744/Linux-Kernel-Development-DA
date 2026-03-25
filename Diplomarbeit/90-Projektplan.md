@@ -196,8 +196,6 @@ Da es sich bei dieser Diplomarbeit nicht um eine klassische Benutzeranwendung ha
 
 Die beschriebenen Anwendungsfälle stellen daher typische Szenarien dar, die während der Entwicklung, dem Laden und der Verwendung eines Kernel-Treibers auftreten.
 
-\newpage
-
 ### Kernelmodul kompilieren
 
 #### Kurzbeschreibung
@@ -233,8 +231,6 @@ Eine kompilierte Kernelmodul-Datei (.ko) wurde erzeugt.
 #### Systemzustand im Fehlerfall
 Das Kernelmodul wird nicht erstellt und der Buildprozess bricht mit einer Fehlermeldung ab.
 
-\newpage
-
 ### Kernelmodul laden
 
 #### Kurzbeschreibung
@@ -268,8 +264,6 @@ Das Kernelmodul ist im Kernel aktiv und kann verwendet werden.
 
 #### Systemzustand im Fehlerfall
 Das Modul wird nicht geladen und der Kernel bleibt unverändert.
-
-\newpage
 
 ### Zugriff auf das Gerät über den Treiber
 
@@ -306,8 +300,6 @@ Der Treiber verarbeitet die Anfrage und führt die entsprechende Operation aus.
 
 #### Systemzustand im Fehlerfall
 Die Operation wird abgebrochen und eine Fehlermeldung wird zurückgegeben.
-
-\newpage
 
 ### Vergleich der Implementierungen
 

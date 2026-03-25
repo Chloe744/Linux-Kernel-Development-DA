@@ -98,7 +98,7 @@ struct file_operation fops = {
 
 #### Gerät-Registrierung
 
-Wenn ein Character-Gerät erreicht werden will, muss eine Geräte-Datei in /dev vorhanden sein; diese Dateien sind abstrakt, offen und operieren im Kernel-Space. Um einen fertigen Treiber ins System einzufügen, muss er zuerst im Kernel registriert werden [@linux_kernel_labs_char_dev]:
+Wenn ein Character-Gerät erreicht werden will, muss eine Geräte-Datei in `/dev` vorhanden sein; diese Dateien sind abstrakt, offen und operieren im Kernel-Space. Um einen fertigen Treiber ins System einzufügen, muss er zuerst im Kernel registriert werden [@linux_kernel_labs_char_dev]:
 
 ```c
 int register_chrdev(unsigned int major, const char *name, 
@@ -131,15 +131,15 @@ Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie `
 
 Wenn man sich die auf GitHub vorhandenen Treibermodule ansieht, stößt man immer wieder auf kleine Tricks im Code, die die Quality of Life verbessern. Diese Tricks sind leicht zu implementieren und sollten deshalb, wenn möglich, immer angewandt werden.
 
-#### Macros
+#### Makros
 
-Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Initialisierungs- und Aufräum-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Macros erlauben den Wegfall der beiden Funktionen nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg].
+Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Initialisierungs- und Aufräum-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Makros erlauben den Wegfall der beiden Funktionen nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg].
 
-Ein weiterer Fall, wo Macros hilfreich sind, ist, wenn Daten vom Userspace (Prozess) zum Kernelspace (Linux-Kernel) transportiert werden müssen. Dies wird zum Beispiel bei der Schreibfunktion von Dateisystemen gebraucht und dafür gibt es die Macros `put_user` und `get_user` für einzelne Zeichen, sowie `copy_to_user` und `copy_from_user`. Natürlich war das nur ein Beispiel, da es noch hunderte weitere hilfreiche Macros gibt [@lkmpg].
+Ein weiterer Fall, wo Makros hilfreich sind, ist, wenn Daten vom Userspace (Prozess) zum Kernelspace (Linux-Kernel) transportiert werden müssen. Dies wird zum Beispiel bei der Schreibfunktion von Dateisystemen gebraucht und dafür gibt es die Makros `put_user` und `get_user` für einzelne Zeichen, sowie `copy_to_user` und `copy_from_user`. Natürlich war das nur ein Beispiel, da es noch hunderte weitere hilfreiche Makros gibt [@lkmpg].
 
 #### Debugging
 
-Für die Fehlersuche und Vermeidung können ebenfalls Macros hilfreich sein. Vor allem der Tracepoint-Macro `ftrace` kann Profilabschnitte erstellen, welche benutzt werden können, um komplexe Treiber zu verstehen und eigene zu debuggen. Eine Möglichkeit ist es auch, den Kernel neu zu kompilieren, um hilfreiche Funktionen wie `MODULE_FORCE_UNLOAD` zu aktivieren; dies bietet die Möglichkeit, jegliches Modul mit dem `sudo rmmod -f`-Befehl zu entladen, selbst wenn der Kernel es als unsicher ansieht. Für die allgemeine Ausgabe von Kernel-Log-Nachrichten wird `printk()` verwendet, welches das Äquivalent zu `printf()` im Kernelspace ist [@docs_printk_basics].
+Für die Fehlersuche und Vermeidung können ebenfalls Makros hilfreich sein. Vor allem der Tracepoint-Macro `ftrace` kann Profilabschnitte erstellen, welche benutzt werden können, um komplexe Treiber zu verstehen und eigene zu debuggen. Eine Möglichkeit ist es auch, den Kernel neu zu kompilieren, um hilfreiche Funktionen wie `MODULE_FORCE_UNLOAD` zu aktivieren; dies bietet die Möglichkeit, jegliches Modul mit dem `sudo rmmod -f`-Befehl zu entladen, selbst wenn der Kernel es als unsicher ansieht. Für die allgemeine Ausgabe von Kernel-Log-Nachrichten wird `printk()` verwendet, welches das Äquivalent zu `printf()` im Kernelspace ist [@docs_printk_basics].
 
 #### Coding-Stil
 
@@ -190,7 +190,7 @@ struct virtual_container *a; //in Ordnung
 
 Dazu kommen noch andere bereits erwähnte Aspekte wie das Bewusstsein bei der Namensgebung der Variablen.
 
-### Schritt-für-Schritt-Entwicklung eines Linux Treibers in C
+### Schritt-für-Schritt Entwicklung eines Linux Treibers in C
 
 Anhand des bereits besprochenen Aufbaus eines Treibermoduls kann man jetzt Theorie in die Praxis umsetzen und mithilfe der gesammelten Erfahrung schrittweise ein einfaches Treibermodul erstellen. Die praktische Implementierung wurde innerhalb einer virtuellen Maschine (VirtualBox) umgesetzt.
 
@@ -223,9 +223,9 @@ Damit man alle notwendigen Bibliotheken hat, fügen wir sie in den Kopfzeilen hi
 #include <linux/kernel.h>
 ```
 
-Die `module.h`-Bibliothek ist das Herzstück des Kernel-Moduls, da sie die wesentlichen Funktionen und Macros bereitstellt; wir verwenden die Bibliothek hauptsächlich für die `init()`- und `exit()`-Funktionen sowie um auf das Modul zu referenzieren. Die Macros für Kernel-Nachrichten wie `pr_alert` oder `pr_info` sind in `printk.h` definiert [@docs_printk_basics]. `fs.h` beinhaltet, wie bereits erwähnt, die File-Operatoren, Pointer zu der File-Struktur sowie die Datei-Registrierungsfunktion. Auch bereits erwähnt wurden die `copy_to_user` und `copy_from_user`-Macros, welche in `uaccess.h` bereitgestellt werden. Abschließend stellt `kernel.h` die benötigten atomaren Typen und Funktionen bereit, die versichern, dass ein Prozess ununterbrochen das Gerät offen haben kann, ohne dabei von anderen gestört zu werden.
+Die `module.h`-Bibliothek ist das Herzstück des Kernel-Moduls, da sie die wesentlichen Funktionen und Makros bereitstellt; wir verwenden die Bibliothek hauptsächlich für die `init()`- und `exit()`-Funktionen sowie um auf das Modul zu referenzieren. Die Makros für Kernel-Nachrichten wie `pr_alert` oder `pr_info` sind in `printk.h` definiert [@docs_printk_basics]. `fs.h` beinhaltet, wie bereits erwähnt, die File-Operatoren, Pointer zu der File-Struktur sowie die Datei-Registrierungsfunktion. Auch bereits erwähnt wurden die `copy_to_user` und `copy_from_user`-Macros, welche in `uaccess.h` bereitgestellt werden. Abschließend stellt `kernel.h` die benötigten atomaren Typen und Funktionen bereit, die versichern, dass ein Prozess ununterbrochen das Gerät offen haben kann, ohne dabei von anderen gestört zu werden.
 
-Als nächstes definieren wir zwei Macros, welche für die Lesefunktion, Schreibfunktion und die Ausgabe gebraucht werden:
+Als nächstes definieren wir zwei Makros, welche für die Lesefunktion, Schreibfunktion und die Ausgabe gebraucht werden:
 
 ```c
 #define BUFFER_SIZE 1024
@@ -246,7 +246,7 @@ enum{
 };
 ```
 
-`CDEV_NOT_USED` ist hierbei 0, was so viel wie frei bedeutet, und `CDEV_EXCLUSIVE_OPEN` ist 1, was besetzt angibt. (CDEV wird hierbei als Alias für Character Device verwendet). `atomic_t` ist eine spezielle Integer-Variable, die in einer *multi-threaded*-Umgebung sicherstellt, dass die Operationen atomar sind und damit verhindert, dass Locks gebraucht werden. `ATOMIC_INIT()` initialisiert die Variable auf den Zustand `CDEV_NOT_USED`. Für komplexere Synchronisierungsszenarien stellt der Kernel Spinlocks und Mutexes zur Verfügung, wobei Spinlocks klein und schnell sind und überall verwendet werden können, während Mutexes das Blockieren erlauben und sich daher für längere kritische Abschnitte eignen [@docs_kernel_locking].
+`CDEV_NOT_USED` ist hierbei 0, was so viel wie frei bedeutet, und `CDEV_EXCLUSIVE_OPEN` ist 1, was besetzt angibt. (CDEV wird hierbei als Alias für Character Device verwendet). `atomic_t` ist eine spezielle Integer-Variable, die in einer *multi-threaded*-Umgebung sicherstellt, dass die Operationen atomar sind und damit verhindert, dass Locks gebraucht werden. `ATOMIC_INIT()` initialisiert die Variable auf den Zustand `CDEV_NOT_USED`. [@docs_kernel_locking].
 
 Jetzt wird die Funktion `device_open` deklariert:
 
@@ -348,7 +348,7 @@ static struct file_operations fops = {
 
 Zum Schluss müssen noch die Start- und Endfunktion definiert werden:
 
-Der Macro `__init` markiert, dass die Funktion *init-only* ist, was bedeutet, dass der Speicher nach der Beendigung freigegeben wird. In der Startfunktion wird die Major-Nummer mithilfe von `register_chrdev()` initialisiert. In dem Fall nutzen wir die simplere Variante, welche nicht behutsam mit den minor-Nummern umgeht, aber um es so einfach wie möglich zu halten, genügt das. Als Parameter wird 0 übergeben, was so viel bedeutet wie, dass die Major-Nummer automatisch zugewiesen wird, und der Name des Geräts. Wenn die Major-Nummer unter 0 ist, wird eine Nachricht an den Kernel-Log geschickt und die Nummer zurückgegeben [@linux_kernel_labs_char_dev].
+Der Makro `__init` markiert, dass die Funktion *init-only* ist, was bedeutet, dass der Speicher nach der Beendigung freigegeben wird. In der Startfunktion wird die Major-Nummer mithilfe von `register_chrdev()` initialisiert. In dem Fall nutzen wir die simplere Variante, welche nicht behutsam mit den minor-Nummern umgeht, aber um es so einfach wie möglich zu halten, genügt das. Als Parameter wird 0 übergeben, was so viel bedeutet wie, dass die Major-Nummer automatisch zugewiesen wird, und der Name des Geräts. Wenn die Major-Nummer unter 0 ist, wird eine Nachricht an den Kernel-Log geschickt und die Nummer zurückgegeben [@linux_kernel_labs_char_dev].
 
 ```c
 static int __init startfunction(void)
@@ -368,7 +368,7 @@ static int __init startfunction(void)
 }
 ```
 
-Der Macro `__exit` markiert, dass es nicht in den Speicher geladen wird, sollte es ein built-in Modul sein. `unregister_chrdev` bereinigt die Geräte-Registration und zum Schluss wird eine abschließende Nachricht an den Kernel-Log geschickt [@lkmpg].
+Der Makro `__exit` markiert, dass es nicht in den Speicher geladen wird, sollte es ein built-in Modul sein. `unregister_chrdev` bereinigt die Geräte-Registration und zum Schluss wird eine abschließende Nachricht an den Kernel-Log geschickt [@lkmpg].
 
 ```c
 static void __exit endfunction(void)
@@ -503,6 +503,13 @@ moritz@moritz-VirtualBox:~/develop$ sudo dmesg | tail
 ```
 
 kann man sich die Kernel-Log-Nachrichten anzeigen lassen und man sollte jetzt die Nachricht, welche von der Startfunktion bei erfolgreicher Registrierung des Moduls zurückgegeben wird, sehen können. Die Kernel-Log-Ausgabe erfolgt über `printk()`, welches alle Nachrichten in einen Ring-Buffer schreibt, der über `/dev/kmsg` im Userspace zugänglich ist [@docs_printk_basics].
+
+```bash
+[  643.014166] simple_module_example: loading out-of-tree module taints kernel.
+[  643.014175] simple_module_example: module verification failed: signature and /or required key missing - tainting kernel
+[  643.036413] begin chartest
+[  690.812582] audit: type=1400 audit(1772753276.814:88): apparmor="DENIED" operation="open" class="file" profile="snap.firefox.firefox" name="/proc/pressure/memory" pid=3566 comm="MemoryPoller" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+```
 
 Wie im Kapitel Gerät-Registrierung besprochen, muss eine Geräte-Datei erstellt werden. Dafür braucht man die Major-Number, die man mithilfe von `cat` aus der Registerliste herauslesen kann:
 

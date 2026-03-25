@@ -502,7 +502,7 @@ uname -r
 ```
 Der neue Kernel erschien aber nicht direkt im Bootmenü. Ich musste den Bootloader manuell aktualisieren, damit der neue Kernel als Startoption verfügbar war. Nach der Aktualisierung konnte der neue Kernel ausgewählt und gestartet werden.
 
-![Manjaro Bootloader mit fehlender zweiter Kerneloption](img/ManjaroBootloader.png)
+![Manjaro Bootloader mit fehlender zweiter Kerneloption](img/ManjaroBootloader.png){width=70%}
 
 ### Externe Kernelmodule kompilieren
 

@@ -46,7 +46,7 @@ sudo apt-get install linux-headers-`uname -r`
 
 #### Risiken
 
-Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg] [@docs_driver_basics].
+Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg_sysprog2] [@docs_driver_basics].
 
 ### Aufbau eines Treibermoduls
 
@@ -54,13 +54,13 @@ In Linux teilen die meisten Treibermodule einen vorgesehenen Aufbau an Funktione
 
 #### Device Files
 
-Device Files repräsentieren jeweils eine Art von Hardware, die mit dem Betriebssystem interagieren will bzw. kann; diese Device Files stellen die Mittel zur Verfügung, damit mit der Hardware kommuniziert werden kann. Device Files unter Linux befinden sich im /dev-Folder und sind wie folgt aufgebaut [@linux_kernel_labs_char_dev]:
+Device Files repräsentieren jeweils eine Art von Hardware, die mit dem Betriebssystem interagieren will bzw. kann; diese Device Files stellen die Mittel zur Verfügung, damit mit der Hardware kommuniziert werden kann. Device Files unter Linux befinden sich im /dev-Folder und sind wie folgt aufgebaut [@linux_kernel_labs_chardev]:
 
 ```bash
 brw-rw----  1 root  disk  8, 1 Apr  9  2025 /dev/sda1
 ```
 
-Die drei wichtigsten Merkmale dieser File sind der erste Buchstabe, welcher die Art des *Device* repräsentiert (b für block und c für character), die erste Ziffer nach disk — in dem Fall 8 — ist die Major-Nummer und besagt, welcher Treiber für die Kommunikation dieses Gerätes zuständig ist, und die Nummer danach, die sogenannte *minor*-Nummer, die für den Treiber wichtig ist, um zwischen seinen zuständigen Geräten zu differenzieren. Die Art des Gerätes ist wie gesagt in Block und Character geteilt, wobei Block einen *Buffer* für Lese- und Schreibmethoden zur Verfügung stellt, was für Speichergeräte von Vorteil ist, während Character die Möglichkeit bietet, die Anzahl der Bytes, die sie nutzen, nach Belieben anzupassen, was Flexibilität fördert und daher der Typ der meisten Geräte ist [@linux_kernel_labs_char_dev].
+Die drei wichtigsten Merkmale dieser File sind der erste Buchstabe, welcher die Art des *Device* repräsentiert (b für block und c für character), die erste Ziffer nach disk — in dem Fall 8 — ist die Major-Nummer und besagt, welcher Treiber für die Kommunikation dieses Gerätes zuständig ist, und die Nummer danach, die sogenannte *minor*-Nummer, die für den Treiber wichtig ist, um zwischen seinen zuständigen Geräten zu differenzieren. Die Art des Gerätes ist wie gesagt in Block und Character geteilt, wobei Block einen *Buffer* für Lese- und Schreibmethoden zur Verfügung stellt, was für Speichergeräte von Vorteil ist, während Character die Möglichkeit bietet, die Anzahl der Bytes, die sie nutzen, nach Belieben anzupassen, was Flexibilität fördert und daher der Typ der meisten Geräte ist [@linux_kernel_labs_chardev].
 
 Wie schon erwähnt, befinden sich alle Device Files im Ordner /dev. Sobald man also mit seiner eigenen Device File fertig ist, muss man zum Schluss seine File vom Arbeitsordner in /dev verschieben.
 
@@ -68,7 +68,7 @@ Wie schon erwähnt, befinden sich alle Device Files im Ordner /dev. Sobald man a
 
 Die Struktur der Dateioperatoren (file operations) ist definiert unter (include/linux/fs.h) und beinhaltet *Pointer* für Funktionen, die im Treiber definiert sind und verschiedene Funktionen auf dem Treiber ausführen. Einer der wichtigsten Operatoren ist das Einlesen vom Gerät, welches in jedem Character-Gerätetreiber definiert ist, da es ein Must-have ist, im Gegensatz zu gewissen Block-Treibern, wo die Funktion einfach mit NULL supplementiert wird [@docs_driver_basics].
 
-Durch gcc (*GNU Compiler Collection*)-Erweiterungen ist es heutzutage deutlich einfacher, etwas zu der Struktur zuzuweisen [@docs_kernel_programming_language]:
+Durch gcc (*GNU Compiler Collection*)-Erweiterungen ist es heutzutage deutlich einfacher, etwas zu der Struktur zuzuweisen:
 
 ```c
 struct file_operation fops = {
@@ -98,14 +98,14 @@ struct file_operation fops = {
 
 #### Gerät-Registrierung
 
-Wenn ein Character-Gerät erreicht werden will, muss eine Geräte-Datei in `/dev` vorhanden sein; diese Dateien sind abstrakt, offen und operieren im Kernel-Space. Um einen fertigen Treiber ins System einzufügen, muss er zuerst im Kernel registriert werden [@linux_kernel_labs_char_dev]:
+Wenn ein Character-Gerät erreicht werden will, muss eine Geräte-Datei in `/dev` vorhanden sein; diese Dateien sind abstrakt, offen und operieren im Kernel-Space. Um einen fertigen Treiber ins System einzufügen, muss er zuerst im Kernel registriert werden [@linux_kernel_labs_chardev]:
 
 ```c
 int register_chrdev(unsigned int major, const char *name, 
 struct file_operations *fops);
 ```
 
-Damit die erstellte Geräte-Datei alle minor-Nummern verwendet, gibt es zwei weitere Interfaces, die sich nur darin unterscheiden, ob man die *major*-Nummer kennt oder eine dynamisch zugewiesene haben will [@linux_kernel_labs_char_dev]:
+Damit die erstellte Geräte-Datei alle minor-Nummern verwendet, gibt es zwei weitere Interfaces, die sich nur darin unterscheiden, ob man die *major*-Nummer kennt oder eine dynamisch zugewiesene haben will [@linux_kernel_labs_chardev]:
 
 ```c
 int register_chrdev_region(dev_t from, unsigned count,
@@ -121,11 +121,11 @@ Wichtig bei der Registrierung ist noch, dass bei der Major-Nummer 0 gesetzt werd
 
 #### Gerät-Deregistrierung
 
-Es sollte nicht möglich sein, dass Root ein Treibermodul, das gerade im Linux-Kernel einen Prozess durchläuft, mit `rmmod` entfernt, da es dann zu großen Problemen im Kernel führen kann, da Code von einem anderen Modul inmitten einer Funktion ausgeführt werden kann. Deshalb gibt es einen Zähler, der darauf achtet, wie oft das Modul gerade verwendet wird; wenn dieser Counter auf 0 ist, also das Modul gerade nicht in Betrieb ist, dann ist es gestattet, auch ein `rmmod` anzuwenden [@lkmpg].
+Es sollte nicht möglich sein, dass Root ein Treibermodul, das gerade im Linux-Kernel einen Prozess durchläuft, mit `rmmod` entfernt, da es dann zu großen Problemen im Kernel führen kann, da Code von einem anderen Modul inmitten einer Funktion ausgeführt werden kann. Deshalb gibt es einen Zähler, der darauf achtet, wie oft das Modul gerade verwendet wird; wenn dieser Counter auf 0 ist, also das Modul gerade nicht in Betrieb ist, dann ist es gestattet, auch ein `rmmod` anzuwenden [@lkmpg_sysprog2].
 
 #### Dateisysteme
 
-Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie `proc` erlauben eine weitere Möglichkeit für den Kernel und die Kernel-Module, Informationen zu senden und zu verarbeiten. Aber `proc` gibt auch von sich aus wichtige Informationen über den Prozess, wie zum Beispiel Informationen über alle vorhandenen Module oder eine Statistik über die Speicherverwendung. Die Methode, `proc` zu erstellen und auszuführen, ist sehr ähnlich wie bei den Modulen, da wir eine Struktur erstellen müssen mit allen Informationen der `/proc`-Datei, sowie Pointern zu allen Funktionen, und zu guter Letzt haben wir wieder die Initialisierungsfunktion zum Registrieren und die Aufräumfunktion zum Entregistrieren. Im simpelsten Fall haben wir dann noch mindestens eine Lesmethode, damit etwas zurückgegeben wird, wenn wir lesen möchten [@lkmpg].
+Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie `proc` erlauben eine weitere Möglichkeit für den Kernel und die Kernel-Module, Informationen zu senden und zu verarbeiten. Aber `proc` gibt auch von sich aus wichtige Informationen über den Prozess, wie zum Beispiel Informationen über alle vorhandenen Module oder eine Statistik über die Speicherverwendung. Die Methode, `proc` zu erstellen und auszuführen, ist sehr ähnlich wie bei den Modulen, da wir eine Struktur erstellen müssen mit allen Informationen der `/proc`-Datei, sowie Pointern zu allen Funktionen, und zu guter Letzt haben wir wieder die Initialisierungsfunktion zum Registrieren und die Aufräumfunktion zum Entregistrieren. Im simpelsten Fall haben wir dann noch mindestens eine Lesmethode, damit etwas zurückgegeben wird, wenn wir lesen möchten [@lkmpg_sysprog2].
 
 ### Best Practices im Code
 
@@ -133,17 +133,17 @@ Wenn man sich die auf GitHub vorhandenen Treibermodule ansieht, stößt man imme
 
 #### Makros
 
-Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Initialisierungs- und Aufräum-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Makros erlauben den Wegfall der beiden Funktionen nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg].
+Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Initialisierungs- und Aufräum-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Makros erlauben den Wegfall der beiden Funktionen nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg_sysprog2].
 
 Ein weiterer Fall, wo Makros hilfreich sind, ist, wenn Daten vom Userspace (Prozess) zum Kernelspace (Linux-Kernel) transportiert werden müssen. Dies wird zum Beispiel bei der Schreibfunktion von Dateisystemen gebraucht und dafür gibt es die Makros `put_user` und `get_user` für einzelne Zeichen, sowie `copy_to_user` und `copy_from_user`. Natürlich war das nur ein Beispiel, da es noch hunderte weitere hilfreiche Makros gibt [@lkmpg].
 
 #### Debugging
 
-Für die Fehlersuche und Vermeidung können ebenfalls Makros hilfreich sein. Vor allem der Tracepoint-Macro `ftrace` kann Profilabschnitte erstellen, welche benutzt werden können, um komplexe Treiber zu verstehen und eigene zu debuggen. Eine Möglichkeit ist es auch, den Kernel neu zu kompilieren, um hilfreiche Funktionen wie `MODULE_FORCE_UNLOAD` zu aktivieren; dies bietet die Möglichkeit, jegliches Modul mit dem `sudo rmmod -f`-Befehl zu entladen, selbst wenn der Kernel es als unsicher ansieht. Für die allgemeine Ausgabe von Kernel-Log-Nachrichten wird `printk()` verwendet, welches das Äquivalent zu `printf()` im Kernelspace ist [@docs_printk_basics].
+Für die Fehlersuche und Vermeidung können ebenfalls Makros hilfreich sein. Vor allem der Tracepoint-Macro `ftrace` kann Profilabschnitte erstellen, welche benutzt werden können, um komplexe Treiber zu verstehen und eigene zu debuggen. Eine Möglichkeit ist es auch, den Kernel neu zu kompilieren, um hilfreiche Funktionen wie `MODULE_FORCE_UNLOAD` zu aktivieren; dies bietet die Möglichkeit, jegliches Modul mit dem `sudo rmmod -f`-Befehl zu entladen, selbst wenn der Kernel es als unsicher ansieht. Für die allgemeine Ausgabe von Kernel-Log-Nachrichten wird `printk()` verwendet, welches das Äquivalent zu `printf()` im Kernelspace ist.
 
 #### Coding-Stil
 
-Damit man Code in den Linux-Kernel bekommt, muss man den vorgesehenen Coding-Stil beachten, der perfekt einzuhalten ist, oder man bekommt die *Pull-Request* konsequenterweise abgelehnt. Wenn man es nicht beabsichtigt, seinen Code in den Linux-Kernel zu committen, ist es zwar nicht zwingend, aber sehr empfohlen, auf den Stil der Autoren zu wechseln [@docs_coding_style]. Dazu zählt:
+Damit man Code in den Linux-Kernel bekommt, muss man den vorgesehenen Coding-Stil beachten, der perfekt einzuhalten ist, oder man bekommt die *Pull-Request* konsequenterweise abgelehnt. Wenn man es nicht beabsichtigt, seinen Code in den Linux-Kernel zu committen, ist es zwar nicht zwingend, aber sehr empfohlen, auf den Stil der Autoren zu wechseln [@kernel_docs_coding_style]. Dazu zählt:
 
 **Statements** über 80 Zeichen sollten geteilt werden, damit man die Lesbarkeit verbessert.
 
@@ -290,7 +290,7 @@ static int device_release(struct inode *inode, struct file *file)
 
 Mithilfe von `atomic_set()` wird der Status zu nicht benutzt zurückgesetzt und eine Nachricht des Schließereignisses wird im Kernel-Log ausgegeben.
 
-Um die Schreib- und Lesefunktion richtig verwenden zu können, muss der vorhin definierte 1024-Byte-Buffer im Kernelspace zugeteilt werden. Für die dynamische Speicherverwaltung im Kernelspace wird `kmalloc()` verwendet, welches physisch zusammenhängenden Speicher zurückgibt, und mit `kfree()` wieder freigegeben werden muss [@docs_memory_allocation].
+Um die Schreib- und Lesefunktion richtig verwenden zu können, muss der vorhin definierte 1024-Byte-Buffer im Kernelspace zugeteilt werden. Für die dynamische Speicherverwaltung im Kernelspace wird `kmalloc()` verwendet, welches physisch zusammenhängenden Speicher zurückgibt, und mit `kfree()` wieder freigegeben werden muss.
 
 ```c
 static char kernel_buffer[BUFFER_SIZE];
@@ -348,7 +348,7 @@ static struct file_operations fops = {
 
 Zum Schluss müssen noch die Start- und Endfunktion definiert werden:
 
-Der Makro `__init` markiert, dass die Funktion *init-only* ist, was bedeutet, dass der Speicher nach der Beendigung freigegeben wird. In der Startfunktion wird die Major-Nummer mithilfe von `register_chrdev()` initialisiert. In dem Fall nutzen wir die simplere Variante, welche nicht behutsam mit den minor-Nummern umgeht, aber um es so einfach wie möglich zu halten, genügt das. Als Parameter wird 0 übergeben, was so viel bedeutet wie, dass die Major-Nummer automatisch zugewiesen wird, und der Name des Geräts. Wenn die Major-Nummer unter 0 ist, wird eine Nachricht an den Kernel-Log geschickt und die Nummer zurückgegeben [@linux_kernel_labs_char_dev].
+Der Makro `__init` markiert, dass die Funktion *init-only* ist, was bedeutet, dass der Speicher nach der Beendigung freigegeben wird. In der Startfunktion wird die Major-Nummer mithilfe von `register_chrdev()` initialisiert. In dem Fall nutzen wir die simplere Variante, welche nicht behutsam mit den minor-Nummern umgeht, aber um es so einfach wie möglich zu halten, genügt das. Als Parameter wird 0 übergeben, was so viel bedeutet wie, dass die Major-Nummer automatisch zugewiesen wird, und der Name des Geräts. Wenn die Major-Nummer unter 0 ist, wird eine Nachricht an den Kernel-Log geschickt und die Nummer zurückgegeben [@linux_kernel_labs_chardev].
 
 ```c
 static int __init startfunction(void)
@@ -368,7 +368,7 @@ static int __init startfunction(void)
 }
 ```
 
-Der Makro `__exit` markiert, dass es nicht in den Speicher geladen wird, sollte es ein built-in Modul sein. `unregister_chrdev` bereinigt die Geräte-Registration und zum Schluss wird eine abschließende Nachricht an den Kernel-Log geschickt [@lkmpg].
+Der Makro `__exit` markiert, dass es nicht in den Speicher geladen wird, sollte es ein built-in Modul sein. `unregister_chrdev` bereinigt die Geräte-Registration und zum Schluss wird eine abschließende Nachricht an den Kernel-Log geschickt [@lkmpg_sysprog2].
 
 ```c
 static void __exit endfunction(void)
@@ -467,7 +467,7 @@ Makefile      simple-module-example.ko  simple-module-example.o
 modules.order simple-module-example.mod
 ```
 
-Ein Problem, das ich zu diesem Zeitpunkt hatte, war, dass mein Kernel mit gcc Version 12 (`gcc-12`) zusammengestellt wurde und daher versucht hat, den gleichen *Compiler* für das Modul zu benutzen. Die einfachste Lösung war es, die gcc-Version zu installieren, die vom Kernel benutzt wird [@docs_kernel_programming_language].
+Ein Problem, das ich zu diesem Zeitpunkt hatte, war, dass mein Kernel mit gcc Version 12 (`gcc-12`) zusammengestellt wurde und daher versucht hat, den gleichen *Compiler* für das Modul zu benutzen. Die einfachste Lösung war es, die gcc-Version zu installieren, die vom Kernel benutzt wird.
 
 ```bash
 sudo apt update

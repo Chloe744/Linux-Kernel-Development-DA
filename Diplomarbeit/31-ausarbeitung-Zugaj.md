@@ -582,5 +582,4 @@ moritz@moritz-VirtualBox:~/develop$ sudo rmmod simple-module-exmaple
 ```bash
 [ 2677.696785] finished chartest
 ```
-
 Nach Belieben kann man jetzt noch `make clean` ausführen, um erstellte Dateien zu entfernen.

@@ -13,11 +13,11 @@ Der Kernel eines Linux-Betriebssystems ist für die Speicher- und Prozessverwalt
 
 #### Module
 
-Module sind Codeteile, welche auf dem Linux-Kernel geladen und entfernt werden und dienen dazu, die Fähigkeiten des Kernels zu erweitern, ohne dabei einen Systemneustart zu verlangen. Ein Beispiel für ein wichtiges Modul im Linux-Kernel ist der Gerätetreiber, der dazu dient, einen Schnittpunkt zwischen Hardware- und Kernelinteraktion herzustellen [@lkmpg].
+Module sind Codeteile, welche auf dem Linux-Kernel geladen und entfernt werden und dienen dazu, die Fähigkeiten des Kernels zu erweitern, ohne dabei einen Systemneustart zu verlangen. Ein Beispiel für ein wichtiges Modul im Linux-Kernel ist der Gerätetreiber, der dazu dient, einen Schnittpunkt zwischen Hardware- und Kernelinteraktion herzustellen [@lkmpg_sysprog21].
 
 ![Module im Linux Kernel](img/g1.png)
 
-Damit ein Modul funktioniert und richtig geladen werden kann, muss es mindestens aus einer Startfunktion `init_module` und einer Endfunktion `cleanup_module` bestehen, damit der Code richtig geladen und komplett entfernt werden kann, so als hätte er niemals existiert [@lkmpg].
+Damit ein Modul funktioniert und richtig geladen werden kann, muss es mindestens aus einer Startfunktion `init_module` und einer Endfunktion `cleanup_module` bestehen, damit der Code richtig geladen und komplett entfernt werden kann, so als hätte er niemals existiert [@lkmpg_sysprog21].
 
 #### Makefiles
 
@@ -46,7 +46,7 @@ sudo apt-get install linux-headers-`uname -r`
 
 #### Risiken
 
-Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg_sysprog2] [@docs_driver_basics].
+Die Stärke der Modulprogrammierung ist der Einfluss, welchen das Modul auf den Kernel haben kann, was jedoch schnell auch zur Schwäche werden kann, da eine Zugriffsverletzung bei dem Modul auch zu einer Zugriffsverletzung am Kernel führen kann, da Module nicht ihren eigenen Codebereich haben, sondern den des Kernels teilen. Dazu kommt noch, wenn der Code des Moduls in den Kernel geladen wird, dass es passieren kann, dass Variablennamen gleich sind, was zu *Namespace-Pollution* führen kann. Deshalb ist es empfehlenswert, Module auf einer virtuellen Maschine oder in einer anderen sicheren Umgebung zu testen, damit der mögliche Schaden keine Rolle spielt [@lkmpg_sysprog21] [@docs_driver_basics].
 
 ### Aufbau eines Treibermoduls
 
@@ -121,11 +121,11 @@ Wichtig bei der Registrierung ist noch, dass bei der Major-Nummer 0 gesetzt werd
 
 #### Gerät-Deregistrierung
 
-Es sollte nicht möglich sein, dass Root ein Treibermodul, das gerade im Linux-Kernel einen Prozess durchläuft, mit `rmmod` entfernt, da es dann zu großen Problemen im Kernel führen kann, da Code von einem anderen Modul inmitten einer Funktion ausgeführt werden kann. Deshalb gibt es einen Zähler, der darauf achtet, wie oft das Modul gerade verwendet wird; wenn dieser Counter auf 0 ist, also das Modul gerade nicht in Betrieb ist, dann ist es gestattet, auch ein `rmmod` anzuwenden [@lkmpg_sysprog2].
+Es sollte nicht möglich sein, dass Root ein Treibermodul, das gerade im Linux-Kernel einen Prozess durchläuft, mit `rmmod` entfernt, da es dann zu großen Problemen im Kernel führen kann, da Code von einem anderen Modul inmitten einer Funktion ausgeführt werden kann. Deshalb gibt es einen Zähler, der darauf achtet, wie oft das Modul gerade verwendet wird; wenn dieser Counter auf 0 ist, also das Modul gerade nicht in Betrieb ist, dann ist es gestattet, auch ein `rmmod` anzuwenden [@lkmpg_sysprog21].
 
 #### Dateisysteme
 
-Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie `proc` erlauben eine weitere Möglichkeit für den Kernel und die Kernel-Module, Informationen zu senden und zu verarbeiten. Aber `proc` gibt auch von sich aus wichtige Informationen über den Prozess, wie zum Beispiel Informationen über alle vorhandenen Module oder eine Statistik über die Speicherverwendung. Die Methode, `proc` zu erstellen und auszuführen, ist sehr ähnlich wie bei den Modulen, da wir eine Struktur erstellen müssen mit allen Informationen der `/proc`-Datei, sowie Pointern zu allen Funktionen, und zu guter Letzt haben wir wieder die Initialisierungsfunktion zum Registrieren und die Aufräumfunktion zum Entregistrieren. Im simpelsten Fall haben wir dann noch mindestens eine Lesmethode, damit etwas zurückgegeben wird, wenn wir lesen möchten [@lkmpg_sysprog2].
+Ein verwandtes Thema der erwähnten Inodes sind Dateisysteme. Dateisysteme wie `proc` erlauben eine weitere Möglichkeit für den Kernel und die Kernel-Module, Informationen zu senden und zu verarbeiten. Aber `proc` gibt auch von sich aus wichtige Informationen über den Prozess, wie zum Beispiel Informationen über alle vorhandenen Module oder eine Statistik über die Speicherverwendung. Die Methode, `proc` zu erstellen und auszuführen, ist sehr ähnlich wie bei den Modulen, da wir eine Struktur erstellen müssen mit allen Informationen der `/proc`-Datei, sowie Pointern zu allen Funktionen, und zu guter Letzt haben wir wieder die Initialisierungsfunktion zum Registrieren und die Aufräumfunktion zum Entregistrieren. Im simpelsten Fall haben wir dann noch mindestens eine Lesmethode, damit etwas zurückgegeben wird, wenn wir lesen möchten [@lkmpg_sysprog21].
 
 ### Best Practices im Code
 
@@ -133,9 +133,9 @@ Wenn man sich die auf GitHub vorhandenen Treibermodule ansieht, stößt man imme
 
 #### Makros
 
-Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Initialisierungs- und Aufräum-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Makros erlauben den Wegfall der beiden Funktionen nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg_sysprog2].
+Wie schon früher erwähnt, braucht ein jedes Modul mindestens eine Initialisierungs- und Aufräum-Funktion, damit sie richtig vom System registriert und unregistriert werden können. Die `__init`- und `__exit`-Makros erlauben den Wegfall der beiden Funktionen nach der Verwendung bzw. wenn die Funktion nicht gebraucht wird, um RAM-Speicher freizuräumen. Dies ist natürlich nur bei sogenannten *built-in*-Modulen möglich, da bei ladbaren Modulen die Funktionen nicht einfach weggeworfen werden dürfen, da diese für Laufzeitverwaltung und Entladeoperationen notwendig sind [@lkmpg_sysprog21].
 
-Ein weiterer Fall, wo Makros hilfreich sind, ist, wenn Daten vom Userspace (Prozess) zum Kernelspace (Linux-Kernel) transportiert werden müssen. Dies wird zum Beispiel bei der Schreibfunktion von Dateisystemen gebraucht und dafür gibt es die Makros `put_user` und `get_user` für einzelne Zeichen, sowie `copy_to_user` und `copy_from_user`. Natürlich war das nur ein Beispiel, da es noch hunderte weitere hilfreiche Makros gibt [@lkmpg].
+Ein weiterer Fall, wo Makros hilfreich sind, ist, wenn Daten vom Userspace (Prozess) zum Kernelspace (Linux-Kernel) transportiert werden müssen. Dies wird zum Beispiel bei der Schreibfunktion von Dateisystemen gebraucht und dafür gibt es die Makros `put_user` und `get_user` für einzelne Zeichen, sowie `copy_to_user` und `copy_from_user`. Natürlich war das nur ein Beispiel, da es noch hunderte weitere hilfreiche Makros gibt [@lkmpg_sysprog21].
 
 #### Debugging
 
@@ -368,7 +368,7 @@ static int __init startfunction(void)
 }
 ```
 
-Der Makro `__exit` markiert, dass es nicht in den Speicher geladen wird, sollte es ein built-in Modul sein. `unregister_chrdev` bereinigt die Geräte-Registration und zum Schluss wird eine abschließende Nachricht an den Kernel-Log geschickt [@lkmpg_sysprog2].
+Der Makro `__exit` markiert, dass es nicht in den Speicher geladen wird, sollte es ein built-in Modul sein. `unregister_chrdev` bereinigt die Geräte-Registration und zum Schluss wird eine abschließende Nachricht an den Kernel-Log geschickt [@lkmpg_sysprog21].
 
 ```c
 static void __exit endfunction(void)

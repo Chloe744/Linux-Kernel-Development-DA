@@ -91,10 +91,3 @@ Diese Phasen orientieren sich an den definierten Meilensteinen sowie an den inha
 
 * Schwerpunkt der Arbeit stärker auf Analyse und Vergleich legen
 * Dokumentation der praktischen Erfahrungen mit Rust im Kernel
-
-### Nächste Schritte
-
-* Vergleich der beiden Implementierungen
-* Fertigstellung der schriftlichen Arbeit
-
-: Projektstatus Stand Februar 2026

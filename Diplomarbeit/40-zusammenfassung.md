@@ -1,3 +1,4 @@
+
 # Zusammenfassung
 \textauthor{Amadeo Wieser}
 Im Rahmen dieser Diplomarbeit wurde die Entwicklung von Linux-Kernel-Treibern untersucht und analysiert. Ausgangspunkt der Arbeit war die Frage, inwiefern sich die klassische Treiberentwicklung in der Programmiersprache C von einer Implementierung in der modernen Systemsprache Rust unterscheidet. Dabei sollte nicht nur ein theoretischer Vergleich erfolgen, sondern auch eine praktische Umsetzung, um den Entwicklungsprozess sowie mögliche Herausforderungen nachvollziehen zu können.
@@ -10,7 +11,11 @@ Während der praktischen Arbeit zeigte sich, dass die Entwicklung eines Kernelmo
 
 Die Entwicklung des Rust-Treibers gestaltete sich hingegen deutlich komplexer. Obwohl Rust inzwischen offiziell Teil des Linux-Kernels ist, befindet sich die Integration der Sprache noch in einem relativ frühen Entwicklungsstadium. Besonders die Einrichtung der Entwicklungsumgebung erwies sich als aufwendig. Für die Implementierung war es notwendig, einen eigenen Linux-Kernel mit aktivierter Rust-Unterstützung zu kompilieren sowie mehrere zusätzliche Werkzeuge wie die Rust-Toolchain, bindgen sowie die LLVM/Clang-Toolchain einzurichten.
 
-Während dieser Phase traten mehrfach Kompatibilitätsprobleme zwischen Kernelversion, Rust-Compiler und verschiedenen Buildwerkzeugen auf. Diese Schwierigkeiten machten deutlich, dass die Entwicklung von Rust-Kernelmodulen aktuell noch empfindlicher auf Versionsunterschiede reagiert als klassische C-Implementierungen.
+Während dieser Phase traten wiederholt Versionskonflikte zwischen Kernelversion, Rust-Compiler und verschiedenen Buildwerkzeugen auf. Eine Änderung der Rust-Version konnte zwar einen bestimmten Fehler beheben, führte jedoch gleichzeitig zu neuen Problemen an anderer Stelle im Buildprozess.
+
+Beispielsweise konnte eine neuere Rust-Version notwendig sein, um bestimmte Compiler-Optionen zu unterstützen, während der Kernel selbst nur mit einer älteren Version kompatibel war. Dadurch entstand eine Art „Teufelskreis“, in dem sich Fehler gegenseitig bedingten.
+
+In der Praxis bedeutete dies, dass nicht einfach eine aktuelle oder beliebige Version verwendet werden konnte, sondern eine sehr spezifische Kombination aus Kernel, Rust-Compiler und Toolchain gefunden werden musste, bei der alle Komponenten zusammen funktionieren. Dieses „Austesten“ und Abstimmen der passenden Versionen erwies sich als aufwendig und teilweise frustrierend. Diese Erfahrung zeigt, dass die Entwicklung von Rust-Kernelmodulen aktuell noch stark von einer exakt abgestimmten Toolchain abhängt und deutlich empfindlicher auf Versionsunterschiede reagiert als klassische C-Implementierungen.
 
 Trotz dieser Herausforderungen konnten wichtige Erkenntnisse über den aktuellen Stand der Rust-Integration im Linux-Kernel gewonnen werden. Besonders deutlich wurde, dass Rust viele Vorteile im Bereich der Speichersicherheit bietet. Mechanismen wie das Ownership-System und der Borrow-Checker können helfen, typische Fehler der Systemprogrammierung bereits während der Kompilierung zu verhindern.
 

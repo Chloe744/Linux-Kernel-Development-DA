@@ -86,7 +86,7 @@ Rust verwendet stattdessen abstrahierte Kernel APIs.
 reader.read_slice(&mut buf[..n])?;
 ```
 
-Diese abstrahierten Funktionen reduzieren das Risiko von typischen Speicherfehlern.
+Diese abstrahierten Funktionen reduzieren das Risiko von typischen Speicherfehlern. In C könnte beispielsweise ein Fehler in der Länge oder im Zeiger zu einem Buffer Overflow führen, während Rust durch sein Typsystem und die Fehlerbehandlung solche Probleme bereits zur Compilezeit verhindert.
 
 ## Entwicklungsaufwand
 

@@ -1,6 +1,8 @@
 \newpage
+
 # Projektabschlussbericht
 \textauthor{Wieser}
+
 ## Erfolgsmessung
 
 ### Erreichung Leistungs-/Qualitätsziele

@@ -28,7 +28,7 @@ Ein Kernelmodul folgt meist einem klaren Ablauf. Beim Laden wird eine Initialisi
 
 ### Rust im Linux Kernel
 
-Rust wurde entwickelt, um systemnahe Programmierung mit erhöhten Sicherheitsgarantien zu ermöglichen. Konzepte wie *Ownership*, *Borrowing* und *Lifetimes* sollen typische Fehlerklassen wie *Use after free*, *ungültige Zeigerzugriffe* oder *Datenrennen* bereits zur Compile Zeit reduzieren.
+Rust wurde entwickelt, um systemnahe Programmierung mit erhöhten Sicherheitsgarantien zu ermöglichen. Konzepte wie *Ownership*, *Borrowing* und *Lifetimes* sollen typische Fehlerklassen wie *Use after free*, *ungültige Zeigerzugriffe* oder *Datenrennen* bereits zur Kompilierzeit reduzieren.
 
 Rust ist seit Linux Kernel Version 6.1 im Mainline Kernel enthalten. Nach einer mehrjährigen Integrationsphase wurde Rust im Dezember 2025 als stabil unterstützte Sprache im Kernel akzeptiert. Rust soll C nicht ersetzen, sondern als zusätzliche Option für neue Komponenten und Treiber dienen [@thenewstack_rust_2025] [@heise_rust_kernel_2025].
 
@@ -132,7 +132,7 @@ Das Modul besteht aus mehreren klar getrennten Teilen.
 
 ### Rust-spezifische Eigenschaften im Kernel
 
-Rust erzwingt eine explizite Behandlung von Besitz und Lebensdauern. Das reduziert typische Speicherfehler, die in C durch rohe Pointer entstehen können. Für hardwarenahe Operationen ist weiterhin `unsafe` möglich,; es wird aber bewusst markiert und kann dadurch in Reviews leichter geprüft werden.
+Rust erzwingt eine explizite Behandlung von Besitz und Lebensdauern. Das reduziert typische Speicherfehler, die in C durch rohe Pointer entstehen können. Für hardwarenahe Operationen ist weiterhin `unsafe` möglich, es wird aber bewusst markiert und kann dadurch in Reviews leichter geprüft werden.
 
 Fehlerbehandlung erfolgt über typisierte Rückgabewerte, wodurch Fehlersituationen sichtbar bleiben. Synchronisationsmechanismen sind so gestaltet, dass fehlerhafte Nebenläufigkeit erschwert wird [@docs_kernel_rust_general_info] [@lwn_rust_debate_2025].
 
@@ -140,7 +140,7 @@ Fehlerbehandlung erfolgt über typisierte Rückgabewerte, wodurch Fehlersituatio
 
 Im Rahmen des praktischen Teils dieser Arbeit habe ich einen einfachen Character-Device-Treiber in Rust geschrieben. Ziel dieses Treibers ist es, eine vergleichbare Funktionalität des C-Treibers meines Projektpartners in Rust umzusetzen. Der Treiber ermöglicht es, über eine Gerätedatei Daten in einen Kernelpuffer zu schreiben und wieder auszulesen. Er implementiert die grundlegenden Dateioperationen `open`, `release`, `read` und `write`.
 
-Beim Laden des Moduls registriert sich der Treiber beim Kernel und erstellt ein Character Device. Intern verwendet der Treiber einen einfachen Kernelpuffer, in den Daten geschrieben und aus dem Daten wieder gelesen werden können.
+Beim Laden des Moduls registriert sich der Treiber beim Kernel und erstellt ein Character-Device. Intern verwendet der Treiber einen einfachen Kernelpuffer, in den Daten geschrieben und aus dem Daten wieder gelesen werden können.
 
 Zur Synchronisation werden atomare Variablen sowie ein Mutex verwendet. Diese sorgen dafür, dass parallele Zugriffe korrekt behandelt werden und der Treiber nicht gleichzeitig mehrfach geöffnet werden kann.
 
@@ -168,6 +168,7 @@ const BUFFER_SIZE: usize = 1024;
 
 static ALREADY_OPEN: AtomicBool = AtomicBool::new(false);
 static OPEN_COUNTER: AtomicUsize = AtomicUsize::new(0);
+
 
 // Stores bytes written by userspace. LEN tracks valid bytes in the buffer.
 static KERNEL_BUFFER: Mutex<[u8; BUFFER_SIZE]> = Mutex::new([0u8; BUFFER_SIZE]);
@@ -320,7 +321,7 @@ Beide Treiber implementieren dieselben grundlegenden Funktionen:
 
 Der Fokus liegt dabei nicht auf der Entwicklung eines komplexen Hardwaretreibers, sondern auf der praktischen Untersuchung des Entwicklungsprozesses, der Buildumgebung sowie der Toolchain, die für Programmieren im Linux-Kernel erforderlich ist.
 
-Da mein Projektpartner Ubuntu Linux verwendete, entschied ich mich bewusst für eine andere Distribution als Entwicklungsumgebung. Da Arch und auf Arch basierende Distributionen wie Manjaro meist sehr aktuelle Versionen des Kernels oder Entwicklungswerkzeugen besitzt entschied ich mich dafür.
+Da mein Projektpartner Ubuntu Linux verwendete, entschied ich mich bewusst für eine andere Distribution als Entwicklungsumgebung. Da Arch und auf Arch basierende Distributionen wie Manjaro meist sehr aktuelle Versionen des Kernels oder Entwicklungswerkzeugen besitzt entschied ich mich für Manjaro.
 
 Die praktische Umsetzung wurde innerhalb einer virtuellen Maschine mithilfe von VirtualBox durchgeführt[@virtualbox_docs].
 
@@ -332,7 +333,7 @@ Rust-Code greift dabei häufig über sogenannte *Foreign Function Interfaces (FF
 
 Damit Rust auf C-Code zugreifen kann, müssen FFI Bindings erzeugt werden. Diese werden automatisch mit dem Tool *bindgen* generiert.
 
-bindgen analysiert C-Headerdateien und erzeugt daraus entsprechende Rust-Strukturen und Funktionssignaturen[@rust_bindgen_docs].
+*bindgen* analysiert C-Headerdateien und erzeugt daraus entsprechende Rust-Strukturen und Funktionssignaturen[@rust_bindgen_docs].
 
 Für diesen Prozess wird zusätzlich die *LLVM / Clang*-Toolchain benötigt, da bindgen intern auf *libclang* basiert[@llvm_libclang_docs].
 
@@ -367,7 +368,7 @@ Dadurch konnten Rust-basierte Kernelkomponenten oder Module nicht kompiliert wer
 
 Aus diesem Grund habe ich mich entschieden, den Linux-Kernel selbst zu kompilieren. Dadurch konnte ich die Kernelkonfiguration vollständig kontrollieren und Rust-Unterstützung gezielt aktivieren.
 
-### Eigenes Kernel kompilieren
+### Eigenen Kernel kompilieren
 ```
 git clone https://github.com/torvalds/linux.git
 ```
@@ -418,13 +419,11 @@ Dieser Befehl prüft:
 - clang / llvm Installation
 - rust source Komponenten
 
-Während dieser Überprüfung traten bei mir verschiedene Fehlermeldungen auf.
+Während dieser Überprüfung traten bei mir verschiedene Fehlermeldungen auf. Diese waren hautpsächlich Versionkonflikte zwischen der installierten Rust-Version und den Anforderungen des Kernels. Zusätzlich gab es Probleme mit der Erkennung von bindgen, da dieses nicht korrekt installiert oder im PATH verfügbar war. Diese Probleme wurden durch die Installation einer passenden Rust-Version und die Sicherstellung, dass bindgen korrekt installiert und im PATH verfügbar ist, behoben.
 
 ### Rust-Toolchain-Setup
 
-Für die Arbeit mit Rust im Linux-Kernel wird eine funktionierende Rust-Toolchain benötigt.
-
-Das umfasst:
+Für die Arbeit mit Rust im Linux-Kernel wird eine funktionierende Rust-Toolchain benötigt, die folgende Werkzeuge umfasst:
 
 - rustc
 - cargo
@@ -503,6 +502,8 @@ uname -r
 ```
 Der neue Kernel erschien aber nicht direkt im Bootmenü. Ich musste den Bootloader manuell aktualisieren, damit der neue Kernel als Startoption verfügbar war. Nach der Aktualisierung konnte der neue Kernel ausgewählt und gestartet werden.
 
+![Manjaro Bootloader mit fehlender zweiter Kerneloption](img/ManjaroBootloader.png)
+
 ### Externe Kernelmodule kompilieren
 
 Kernelmodule können außerhalb des Kernel-Source-Trees entwickelt werden.
@@ -513,7 +514,7 @@ Dies wird als **Out-of-tree-Build** bezeichnet.
 make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
 ```
 
-Der Parameter `-C /lib/modules/$(uname -r)/build` weist `make` an, zunächst in das Buildverzeichnis des aktuell laufenden Kernels zu wechseln. Dort befindet sich der KernelB-uildtree mit den benötigten Makefiles und Konfigurationsdateien.
+Der Parameter `-C /lib/modules/$(uname -r)/build` weist `make` an, zunächst in das Buildverzeichnis des aktuell laufenden Kernels zu wechseln. Dort befindet sich der Kernel-Buildtree mit den benötigten Makefiles und Konfigurationsdateien.
 
 Mit `M=$(pwd)` wird dem Kernel-Buildsystem mitgeteilt, dass sich der Quellcode des zu kompilierenden Moduls im aktuellen Verzeichnis befindet (`pwd` gibt den aktuellen Ordner aus).
 
@@ -533,7 +534,7 @@ Ein häufiger Fehler war:
 Rust bindings generator 'bindgen' could not be found
 ```
 
-Dies bedeutet, dass bindgen nicht installiert oder nicht im PATH vorhanden ist.
+Dies bedeutet, dass bindgen nicht installiert oder nicht im Pfad vorhanden ist.
 
 ### Rust-Versionskonflikte
 
@@ -552,7 +553,7 @@ Dies zeigt, dass bestimmte Kernelversionen nur mit bestimmten Rust-Versionen get
 unknown unstable option: no-jump-tables
 ```
 
-Dieser Fehler entsteht, wenn der Kernel-Buildprozess Rust-Compiler-Optionen verwendet, die von der aktuell installierten Rust-Version nicht unterstützt werden.
+Dieser Fehler entsteht, wenn der Kernel-Buildprozess Rust-Compiler-Optionen verwendet, die von der aktuell installierten Rust-Version nicht unterstützt werden. Um das Problem zu beheben, muss entweder die Rust-Version aktualisiert oder auf eine Version zurückgesetzt werden, die mit den verwendeten Compiler-Optionen kompatibel ist.
 
 ### Weitere Compiler-Probleme
 
@@ -564,50 +565,4 @@ Zusätzlich traten Fehler im Zusammenhang mit:
 
 auf.
 
-Diese Fehler entstehen häufig durch Unterschiede in Compiler-Versionen oder Build-Flags.
-
-## Glossar
-
-*LKM*  
-Loadable Kernel Module. Zur Laufzeit ladbares Kernelmodul zur Erweiterung der Kernel-Funktionalität.
-
-*KBuild*  
-Buildsystem des Linux-Kernels, das unter anderem das Bauen externer Module ermöglicht [@docs_kbuild_external_modules].
-
-*VFS*  
-Virtual File System. Abstraktionsschicht über verschiedene Dateisysteme.
-
-*MMU*  
-Memory Management Unit. Hardwareeinheit für virtuelle und physische Adressierung.
-
-*Interrupt*  
-Asynchrones Hardwareereignis, das vom Kernel über Handler verarbeitet wird.
-
-*Ownership, Borrowing, Lifetimes*  
-Rust Konzepte zur Kontrolle von Besitz, Referenzen und Lebensdauern, die Speicherfehler reduzieren.
-
-*no std*  
-Kompilation ohne Rust-Standardbibliothek. Nutzung von `core` und bei Heap-Bedarf von `alloc` [@rust_alloc_docs].
-
-*Out-of-Tree-Modul*  
-Externes Kernelmodul, das getrennt vom Kernel-Quellcode gebaut wird und über KBuild gegen Kernel-Header kompiliert [@docs_kbuild_external_modules].
-
-*Use after free*  
-Fehler, bei dem auf Speicher zugegriffen wird, der zuvor freigegeben wurde. Das kann zu Abstürzen, Datenkorruption oder Sicherheitslücken führen.
-
-*Ungültiger Zeigerzugriff*  
-Zugriff über einen Zeiger, der auf keine gültige Speicheradresse zeigt, zum Beispiel durch Nullzeiger, nicht initialisierte Zeiger oder bereits freigegebene Speicherbereiche.
-
-*Datenrennen*  
-Fehler in nebenläufigen Programmen, bei dem mehrere Threads gleichzeitig auf dieselben Daten zugreifen und mindestens ein Zugriff schreibend ist, ohne ausreichende Synchronisation. Das Ergebnis ist oft nicht deterministisch und schwer zu debuggen.
-
-*Adressraum*  
-Bereich von Speicheradressen, den ein Programm oder der Kernel verwenden kann. Im Userspace hat jeder Prozess einen eigenen virtuellen Adressraum. Im Kernelspace teilen sich Kernel und Treiber einen gemeinsamen Adressraum mit privilegiertem Zugriff.
-
-LLVM (*Low Level Virtual Machine*) ist eine modulare Compilerinfrastruktur, die aus verschiedenen Komponenten besteht und von vielen modernen Programmiersprachen verwendet wird. LLVM stellt unter anderem Backend-Technologien bereit, die für die Codeoptimierung und die Generierung von Maschinencode zuständig sind.
-
-*Clang* ist ein Frontend für die Programmiersprachen C, C++ und Objective-C, das auf LLVM aufbaut. Es übernimmt das Parsen und Analysieren von Quellcode und übersetzt diesen in eine Zwischendarstellung, die anschließend von LLVM weiterverarbeitet wird.
-
-*libclang* ist eine Bibliothek, die Funktionen von Clang als Programmierschnittstelle bereitstellt. Werkzeuge wie *bindgen* können damit C-Headerdateien analysieren und deren Strukturen automatisiert in andere Formate – in diesem Fall Rust-Bindings – übersetzen.
-
-*Buildtree* bezeichnet im Kontext des Linux-Kernels das Verzeichnis, das alle für den Kompilierungsprozess benötigten und während des Builds erzeugten Dateien enthält. Dazu gehören beispielsweise generierte Headerdateien, Objektdateien, Konfigurationsdateien sowie Makefiles und weitere Buildskripte. Der Buildtree stellt somit die Arbeitsumgebung des Kernel-Buildsystems dar. Bei der Entwicklung externer Kernelmodule wird in der Regel der Buildtree des aktuell laufenden Kernels verwendet, um sicherzustellen, dass das Modul mit derselben Kernelkonfiguration und denselben Headerdateien kompiliert wird wie der Kernel selbst. Dieser befindet sich üblicherweise im Verzeichnis `/lib/modules/<kernelversion>/build`.
+Diese Fehler entstehen häufig durch Unterschiede in Compiler-Versionen oder Build-Flags. Die Lösung besteht darin, die verwendeten Compiler und deren Versionen zu überprüfen und sicherzustellen, dass sie mit den Anforderungen des Kernel-Builds kompatibel sind.

@@ -284,7 +284,6 @@ static int device_release(struct inode *inode, struct file *file)
     atomic_set(&already_open, CDEV_NOT_USED);
 
     pr_info("closed\n");
-
     return 0;
 }
 ```
@@ -308,7 +307,6 @@ Sobald Leseaufrufe vom Userspace kommen, muss die Lesefunktion aufgerufen werden
 static ssize_t device_read(struct file *file, char __user *buff,
     size_t length, loff_t *offset)
 {
-
     return simple_read_from_buffer(buff, length, offset, 
         kernel_buffer, BUFFER_SIZE);
 }
@@ -328,7 +326,6 @@ static ssize_t device_write(struct file *file, const char __user *buff,
         return -EFAULT;
 
     pr_info("successfully written into %s\n", DEVICE_NAME);
-
     return len;
 }
 ```

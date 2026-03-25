@@ -10,21 +10,25 @@ da-keywords: HTLLE, FH Joanneum
 bibliography: [literatur.bib]
 
 da-author:
-- vorname: Amadeo 
+- vorname: Amadeo
   nachname: Wieser
   klasse: 5AHWIN
-  thema: Theoretische Ausarbeitung des Linux Kernel Developments \n und die Entwicklung eines Test Treibers in Rust
+  thema: |-
+    Theoretische Ausarbeitung des Linux Kernel Developments
+    und die Entwicklung eines Test Treibers in Rust
   ki-tools:
-  - name: 
-    zweck: 
+  - name:
+    zweck:
 
-- vorname: Moritz 
+- vorname: Moritz
   nachname: Zugaj
   klasse: 5AHWIN
-  thema: Theoretische Ausarbeitung des Linux Kernel Developments \n und die Entwicklung eines Test Treibers in C
+  thema: |-
+    Theoretische Ausarbeitung des Linux Kernel Developments
+    und die Entwicklung eines Test Treibers in C
   ki-tools:
-  - name: 
-    zweck: 
+  - name:
+    zweck:
 
 da-betreuer:
 - paraffe: SCHR 

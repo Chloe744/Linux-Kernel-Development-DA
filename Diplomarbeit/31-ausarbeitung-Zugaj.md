@@ -446,7 +446,25 @@ Besagt, dass ein externes ladbares Modul gebaut werden soll. Sobald die Befehle 
 Wenn die C-Datei sowie die Makefile erstellt worden sind, kann endlich das Kernel-Modul erzeugt werden. Dafür gehen wir in das Quellverzeichnis und führen den make-Command aus.
 
 ```bash
-make
+moritz@moritz-VirtualBox:~$ cd develop
+moritz@moritz-VirtualBox:~/develop$ make
+make -C /lib/modules/6.8.0-90-generic/build M=/home/moritz/develop modules
+make[1]: Verzeichnis „/usr/src/linux-headers-6.8.0-90-generic" wird betreten
+warning: the compiler differs from the one used to build the kernel
+  The kernel was built by: x86_64-linux-gnu-gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04.2) 12.3.0
+  You are using:           gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04.2) 12.3.0
+CC [M]  /home/moritz/develop/simple-module-example.o
+MODPOST /home/moritz/develop/Module.symvers
+CC [M]  /home/moritz/develop/simple-module-example.mod.o
+LD [M]  /home/moritz/develop/simple-module-example.ko
+BTF [M] /home/moritz/develop/simple-module-example.ko
+Skipping BTF generation for /home/moritz/develop/simple-module-example.ko due to unavailability of vmlinux
+make[1]: Verzeichnis „/usr/src/linux-headers-6.8.0-90-generic" wird verlassen
+moritz@moritz-VirtualBox:~/develop$ ls
+hello-1       Module.symvers            simple-module-example.mod.c
+kernel        simple-module-example.c   simple-module-example.mod.o
+Makefile      simple-module-example.ko  simple-module-example.o
+modules.order simple-module-example.mod
 ```
 
 Ein Problem, das ich zu diesem Zeitpunkt hatte, war, dass mein Kernel mit gcc Version 12 (`gcc-12`) zusammengestellt wurde und daher versucht hat, den gleichen *Compiler* für das Modul zu benutzen. Die einfachste Lösung war es, die gcc-Version zu installieren, die vom Kernel benutzt wird [@docs_kernel_programming_language].
@@ -461,7 +479,8 @@ Mit `ls` sieht man jetzt, dass die Objektdatei und die ladbare Kernel-Objektdate
 Damit das Modul jetzt aktiv wird und seinen Zweck erfüllen kann, muss es in den Kernel geladen werden; das geht mit:
 
 ```bash
-sudo insmod simple-module-example.ko
+moritz@moritz-VirtualBox:~/develop$ sudo insmod simple-module-example.ko
+[sudo] Passwort fuer moritz:
 ```
 
 Jetzt kann man mit `lsmod` und gefiltert nach dem Begriff "simple" das geladene Modul finden.
@@ -480,19 +499,18 @@ Die zwei Zahlen nach dem Namen geben die Bytegröße und die Anzahl der Prozesse
 Mit:
 
 ```bash
-dmesg | tail
+moritz@moritz-VirtualBox:~/develop$ sudo dmesg | tail
 ```
 
 kann man sich die Kernel-Log-Nachrichten anzeigen lassen und man sollte jetzt die Nachricht, welche von der Startfunktion bei erfolgreicher Registrierung des Moduls zurückgegeben wird, sehen können. Die Kernel-Log-Ausgabe erfolgt über `printk()`, welches alle Nachrichten in einen Ring-Buffer schreibt, der über `/dev/kmsg` im Userspace zugänglich ist [@docs_printk_basics].
 
-```text
-[  +0.000000] begin chartest
-```
-
 Wie im Kapitel Gerät-Registrierung besprochen, muss eine Geräte-Datei erstellt werden. Dafür braucht man die Major-Number, die man mithilfe von `cat` aus der Registerliste herauslesen kann:
 
 ```bash
-cat /proc/devices
+moritz@moritz-VirtualBox:~/develop$ cat /proc/devices | grep chartest
+240  chartest
+moritz@moritz-VirtualBox:~/develop$ sudo mknod /dev/chartest c 240 0
+moritz@moritz-VirtualBox:~/develop$ sudo chmod 666 /dev/chartest
 ```
 
 Anschließend erstellt man die Geräte-Datei mit `mknod` (*make node*). "chartest" ist der Name des Geräts, c bedeutet, dass es ein Character-Gerät ist, 240 ist die vom Kernel zugewiesene Major-Number und 0 ist die Minor-Number. Zusätzlich geben wir mithilfe von `chmod 666` jedem die Schreib- und Leserechte für das Gerät.
@@ -500,7 +518,8 @@ Anschließend erstellt man die Geräte-Datei mit `mknod` (*make node*). "chartes
 Um die restlichen Funktionen zu testen, benutzen wir die folgenden zwei Befehle:
 
 ```bash
-cat /dev/chartest
+moritz@moritz-VirtualBox:~/develop$ cat /dev/chartest
+moritz@moritz-VirtualBox:~/develop$ echo "hallo kernel" > /dev/chartest
 ```
 
 Mit `cat` rufen wir gleich drei Operationen hintereinander auf:
@@ -512,14 +531,20 @@ Mit `cat` rufen wir gleich drei Operationen hintereinander auf:
 Jetzt wird `echo` benutzt, um einen String auf die Gerätedatei zu schreiben. Hier werden natürlich jetzt die Operationen `device_open`, `device_write` und `device_release` ausgeführt. Bei erneutem Ausführen von `cat` kommt jetzt:
 
 ```bash
-echo "hello" > /dev/chartest
-cat /dev/chartest
+moritz@moritz-VirtualBox:~/develop$ cat /dev/chartest
+hallo kernel
 ```
 
 Der Counter zählt immer mit, wie oft die Öffnungsfunktion seit der Aktivierung des Geräts aufgerufen wurde.
 
-```text
-[  +0.000001] successfully written into chartest
+
+```bash
+[ 1507.001123] You opened this 2 times
+[ 1507.001180] closed
+[ 1540.563729] You opened this 3 times
+[ 1540.563776] closed
+[ 1596.343045] You opened this 4 times
+[ 1596.343140] closed
 ```
 
 Um zu testen, ob die Zugriffsbeschränkung funktioniert, muss einerseits ein Prozess auf das Gerät zugreifen, ohne sofort die `device_release`-Operation auszulösen, und andererseits ein zweiter Prozess versuchen, zur selben Zeit dasselbe Gerät zu öffnen.
@@ -527,14 +552,16 @@ Um zu testen, ob die Zugriffsbeschränkung funktioniert, muss einerseits ein Pro
 Terminal 1:
 
 ```bash
-cat /dev/chartest
+moritz@moritz-VirtualBox:~/develop$ tail -f /dev/chartest
+hallo kernel
 ```
 
 Terminal 2:
 
 ```bash
-cat /dev/chartest
-# returns -EBUSY
+moritz@moritz-VirtualBox:~/develop$ cat /dev/chartest
+cat: /dev/chartest: Das Gerät oder die Ressource ist belegt
+moritz@moritz-VirtualBox:~/develop$
 ```
 
 Sobald der zweite Prozess versucht, auf das Gerät zuzugreifen, wird `-EBUSY` zurückgegeben.
@@ -542,13 +569,14 @@ Sobald der zweite Prozess versucht, auf das Gerät zuzugreifen, wird `-EBUSY` zu
 Um schließlich alles wieder sauber zu entfernen, muss die Device File entfernt werden und das Modul vom Kernel entladen werden; das geht mit:
 
 ```bash
-sudo rmmod simple-module-example
+moritz@moritz-VirtualBox:~/develop$ sudo rm /dev/chartest
+moritz@moritz-VirtualBox:~/develop$ sudo rmmod simple-module-exmaple
 ```
 
 `rmmod` ruft die Endfunktion `cleanup_module` auf, welche für das Entladen des Moduls zuständig ist, und zum Schluss eine Nachricht an den Kernel-Log sendet, dass das Gerät erfolgreich entfernt wurde.
 
-```text
-[  +0.000002] finished chartest
+```bash
+[ 2677.696785] finished chartest
 ```
 
 Nach Belieben kann man jetzt noch `make clean` ausführen, um erstellte Dateien zu entfernen.

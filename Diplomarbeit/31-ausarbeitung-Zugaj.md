@@ -438,6 +438,7 @@ modules
 
 Besagt, dass ein externes ladbares Modul gebaut werden soll. Sobald die Befehle des `clean:`-Targets ausgeführt werden, ändert sich nur der letzte Teil des Befehls zu `clean`, welches das komplette Modul wieder entfernt.
 \newpage
+
 #### Kompilierung im Linux-Terminal
 
 Wenn die C-Datei sowie die Makefile erstellt worden sind, kann endlich das Kernel-Modul erzeugt werden. Dafür gehen wir in das Quellverzeichnis und führen den make-Command aus.
@@ -500,6 +501,7 @@ moritz@moritz-VirtualBox:~/develop$ sudo dmesg | tail
 ```
 
 kann man sich die Kernel-Log-Nachrichten anzeigen lassen und man sollte jetzt die Nachricht, welche von der Startfunktion bei erfolgreicher Registrierung des Moduls zurückgegeben wird, sehen können. Die Kernel-Log-Ausgabe erfolgt über `printk()`, welches alle Nachrichten in einen Ring-Buffer schreibt, der über `/dev/kmsg` im Userspace zugänglich ist.
+\newpage
 
 ```bash
 [  643.014166] simple_module_example: loading out-of-tree module taints kernel.

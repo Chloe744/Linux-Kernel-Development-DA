@@ -77,6 +77,7 @@ Die Diplomarbeit wird in Zusammenarbeit mit der FH Joanneum durchgeführt. Der e
  : Geplante Projektkosten
  
 Tatsächlich angefallene Kosten: 0
+\newpage
 
 ### Projektrisiken
 

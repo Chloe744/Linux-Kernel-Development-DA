@@ -96,7 +96,7 @@ struct file_operation fops = {
   .release = device_release 
 };
 ```
-
+\newpage
 #### Gerät-Registrierung
 
 Wenn ein Character-Gerät erreicht werden will, muss eine Geräte-Datei in `/dev` vorhanden sein; diese Dateien sind abstrakt, offen und operieren im Kernel-Space. Um einen fertigen Treiber ins System einzufügen, muss er zuerst im Kernel registriert werden [@linux_kernel_labs_chardev]:
@@ -224,7 +224,7 @@ Damit man alle notwendigen Bibliotheken hat, fügen wir sie in den Kopfzeilen hi
 #include <linux/kernel.h>
 ```
 
-Die `module.h`-Bibliothek ist das Herzstück des Kernel-Moduls, da sie die wesentlichen Funktionen und Makros bereitstellt; wir verwenden die Bibliothek hauptsächlich für die `init()`- und `exit()`-Funktionen sowie um auf das Modul zu referenzieren. Die Makros für Kernel-Nachrichten wie `pr_alert` oder `pr_info` sind in `printk.h` definiert [@docs_printk_basics]. `fs.h` beinhaltet, wie bereits erwähnt, die File-Operatoren, Pointer zu der File-Struktur sowie die Datei-Registrierungsfunktion. Auch bereits erwähnt wurden die `copy_to_user` und `copy_from_user`-Macros, welche in `uaccess.h` bereitgestellt werden. Abschließend stellt `kernel.h` die benötigten atomaren Typen und Funktionen bereit, die versichern, dass ein Prozess ununterbrochen das Gerät offen haben kann, ohne dabei von anderen gestört zu werden.
+Die `module.h`-Bibliothek ist das Herzstück des Kernel-Moduls, da sie die wesentlichen Funktionen und Makros bereitstellt; wir verwenden die Bibliothek hauptsächlich für die `init()`- und `exit()`-Funktionen sowie um auf das Modul zu referenzieren. Die Makros für Kernel-Nachrichten wie `pr_alert` oder `pr_info` sind in `printk.h` definiert. `fs.h` beinhaltet, wie bereits erwähnt, die File-Operatoren, Pointer zu der File-Struktur sowie die Datei-Registrierungsfunktion. Auch bereits erwähnt wurden die `copy_to_user` und `copy_from_user`-Macros, welche in `uaccess.h` bereitgestellt werden. Abschließend stellt `kernel.h` die benötigten atomaren Typen und Funktionen bereit, die versichern, dass ein Prozess ununterbrochen das Gerät offen haben kann, ohne dabei von anderen gestört zu werden.
 
 Als nächstes definieren wir zwei Makros, welche für die Lesefunktion, Schreibfunktion und die Ausgabe gebraucht werden:
 
@@ -499,7 +499,7 @@ Mit:
 moritz@moritz-VirtualBox:~/develop$ sudo dmesg | tail
 ```
 
-kann man sich die Kernel-Log-Nachrichten anzeigen lassen und man sollte jetzt die Nachricht, welche von der Startfunktion bei erfolgreicher Registrierung des Moduls zurückgegeben wird, sehen können. Die Kernel-Log-Ausgabe erfolgt über `printk()`, welches alle Nachrichten in einen Ring-Buffer schreibt, der über `/dev/kmsg` im Userspace zugänglich ist [@docs_printk_basics].
+kann man sich die Kernel-Log-Nachrichten anzeigen lassen und man sollte jetzt die Nachricht, welche von der Startfunktion bei erfolgreicher Registrierung des Moduls zurückgegeben wird, sehen können. Die Kernel-Log-Ausgabe erfolgt über `printk()`, welches alle Nachrichten in einen Ring-Buffer schreibt, der über `/dev/kmsg` im Userspace zugänglich ist.
 
 ```bash
 [  643.014166] simple_module_example: loading out-of-tree module taints kernel.

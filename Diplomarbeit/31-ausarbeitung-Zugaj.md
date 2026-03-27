@@ -311,7 +311,7 @@ static ssize_t device_read(struct file *file, char __user *buff,
         kernel_buffer, BUFFER_SIZE);
 }
 ```
-
+\newpage
 Wenn das Benutzerprogramm schreibt, muss `device_write()` aufgerufen werden:
 
 ```c

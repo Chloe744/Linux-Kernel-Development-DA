@@ -14,6 +14,7 @@ Sowohl der C-Treiber als auch der Rust-Treiber implementieren die gleiche grundl
 - write
 
 Das Ziel war es, eine möglichst vergleichbare Implementierung zu erstellen, damit Unterschiede zwischen den beiden Programmiersprachen besser analysiert werden können.
+\newpage
 
 ### Moduldefinition
 

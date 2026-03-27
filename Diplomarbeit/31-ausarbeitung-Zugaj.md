@@ -248,7 +248,7 @@ enum{
 ```
 
 `CDEV_NOT_USED` ist hierbei 0, was so viel wie frei bedeutet, und `CDEV_EXCLUSIVE_OPEN` ist 1, was besetzt angibt. (CDEV wird hierbei als Alias für Character Device verwendet). `atomic_t` ist eine spezielle Integer-Variable, die in einer *multi-threaded*-Umgebung sicherstellt, dass die Operationen atomar sind und damit verhindert, dass Locks gebraucht werden. `ATOMIC_INIT()` initialisiert die Variable auf den Zustand `CDEV_NOT_USED`.
-
+\newpage
 Jetzt wird die Funktion `device_open` deklariert:
 
 ```c
